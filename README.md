@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This repository contains the complete project files for the X-Meter, a custom-built, DIY hardware device for automotive diagnostics and real-time data display. The project was developed by "Jerry" around 2007 and appears to be a passion project for the car enthusiast community.
+This repository contains the complete project files for the X-Meter, a custom-built, DIY hardware device for automotive diagnostics and real-time data display. The project was developed around 2007 and appears to be a passion project for the car enthusiast community.
 
 The X-Meter connects to a vehicle's OBD2 port and provides a wealth of information, acting as a multi-gauge, trip computer, and diagnostic scanner.
 
