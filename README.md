@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This repository contains the complete project files for the X-Meter, a custom-built hardware device for automotive diagnostics and real-time data display. This legacy project was developed by "Jerry" around 2007 as a passion project for the car enthusiast community.
+This repository contains the complete project files for the X-Meter, a custom-built hardware device for automotive diagnostics and real-time data display. This legacy project was developed around 2007 as a passion project for the car enthusiast community.
 
 The X-Meter connects to a vehicle's OBD2 port and provides a wealth of information, acting as a multi-gauge, trip computer, and diagnostic scanner.
 
@@ -11,7 +11,7 @@ The X-Meter connects to a vehicle's OBD2 port and provides a wealth of informati
 *   **Microcontroller:** The hardware is powered by an 8051-family microcontroller.
 *   **OBD2 Interface:** It uses an ELM327-compatible chip for vehicle communication.
 *   **Firmware:** The firmware is written in Assembly language.
-*   **PC Software:** The updater and configuration utility was programmed in Delphi 7.
+*   **PC Software:** The updater and configuration utility were programmed in Delphi 7.
 
 ## Features
 
@@ -40,7 +40,7 @@ The X-Meter connects to a vehicle's OBD2 port and provides a wealth of informati
 *   `XFirmware/`: The 8051 assembly source code (`.asm`) and compiled firmware (`.hex`).
 *   `Hex2Const/`: A Delphi 7 project for the PC-based firmware updater and configuration utility.
 *   `XUpdater/`: Files related to the firmware updater tool.
-*   `XMETER_protytype/`: (Outdated) Files from the early prototyping stage.
+*   `XMETER_prototype/`: (Outdated) Files from the early prototyping stage.
 
 ## Disclaimer
 
@@ -48,4 +48,4 @@ This is a legacy project from 2007. The files are provided as-is for historical 
 
 ## Credits
 
-This project was designed and developed by **Jerry**.
+This project was designed and developed by Va&Cob(**Jerry**)
