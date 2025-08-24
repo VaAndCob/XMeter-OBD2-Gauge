@@ -1,0 +1,18 @@
+EAGLE Version 4.16r1 Copyright (c) 1988-2006 CadSoft
+
+Electrical Rule Check for C:/Program Files/EAGLE-4.16r1/projects/X-Meter2/xmeter2.sch at 14/11/2006 10:32:39 
+
+WARNING: Sheet 1/1: unconnected Pin: ISP-3 S
+WARNING: Sheet 1/1: unconnected Pin: ISP-4 S
+WARNING: Sheet 1/1: unconnected Pin: ISP-5 S
+WARNING: Sheet 1/1: unconnected Pin: ISP-9 S
+WARNING: Sheet 1/1: POWER Pin IC2 VSS connected to GND
+WARNING: Sheet 1/1: POWER Pin IC2 VDD connected to VCC
+WARNING: Sheet 1/1: POWER Pin IC2 VSS connected to GND
+WARNING: Sheet 1/1: POWER Pin IC5 GND connected to N$26
+WARNING: Sheet 1/1: POWER Pin IC5 VCC connected to N$43
+
+Board and schematic are consistent
+
+    0 errors
+    9 warnings

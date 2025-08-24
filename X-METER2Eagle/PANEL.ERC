@@ -1,0 +1,14 @@
+EAGLE Version 4.16r1 Copyright (c) 1988-2006 CadSoft
+
+Electrical Rule Check for C:/Program Files/EAGLE-4.16r1/projects/X-Meter2/Panel.sch at 02/06/2007 17:11:15 
+
+WARNING: Sheet 1/1: unconnected Pin: ISP-3 S
+WARNING: Sheet 1/1: unconnected Pin: ISP-4 S
+WARNING: Sheet 1/1: unconnected Pin: ISP-5 S
+WARNING: Sheet 1/1: unconnected Pin: ISP-9 S
+ERROR: Sheet 1/1: unconnected INPUT Pin: IC1 VCLK
+
+Board and schematic are consistent
+
+    1 errors
+    4 warnings

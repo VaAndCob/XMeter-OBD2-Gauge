@@ -1,0 +1,1539 @@
+<html xmlns:v="urn:schemas-microsoft-com:vml"
+xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:w="urn:schemas-microsoft-com:office:word"
+xmlns:st1="urn:schemas-microsoft-com:office:smarttags"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-874">
+<meta name=ProgId content=Word.Document>
+<meta name=Generator content="Microsoft Word 10">
+<meta name=Originator content="Microsoft Word 10">
+<link rel=File-List href="xmeter.files/filelist.xml">
+<link rel=Edit-Time-Data href="xmeter.files/editdata.mso">
+<!--[if !mso]>
+<style>
+v\:* {behavior:url(#default#VML);}
+o\:* {behavior:url(#default#VML);}
+w\:* {behavior:url(#default#VML);}
+.shape {behavior:url(#default#VML);}
+</style>
+<![endif]-->
+<title>X-Meter</title>
+<o:SmartTagType namespaceuri="urn:schemas-microsoft-com:office:smarttags"
+ name="place"/>
+<o:SmartTagType namespaceuri="urn:schemas-microsoft-com:office:smarttags"
+ name="PlaceType"/>
+<o:SmartTagType namespaceuri="urn:schemas-microsoft-com:office:smarttags"
+ name="PlaceName"/>
+<!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>XP</o:Author>
+  <o:Template>Normal</o:Template>
+  <o:LastAuthor>XP</o:LastAuthor>
+  <o:Revision>2</o:Revision>
+  <o:TotalTime>63</o:TotalTime>
+  <o:Created>2007-10-17T09:04:00Z</o:Created>
+  <o:LastSaved>2007-10-17T09:04:00Z</o:LastSaved>
+  <o:Pages>1</o:Pages>
+  <o:Words>853</o:Words>
+  <o:Characters>4865</o:Characters>
+  <o:Lines>40</o:Lines>
+  <o:Paragraphs>11</o:Paragraphs>
+  <o:CharactersWithSpaces>5707</o:CharactersWithSpaces>
+  <o:Version>10.6825</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:SpellingState>Clean</w:SpellingState>
+  <w:GrammarState>Clean</w:GrammarState>
+  <w:Compatibility>
+   <w:BreakWrappedTables/>
+   <w:SnapToGridInCell/>
+   <w:ApplyBreakingRules/>
+   <w:WrapTextWithPunct/>
+   <w:UseAsianBreakRules/>
+   <w:UseFELayout/>
+  </w:Compatibility>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]--><!--[if !mso]><object
+ classid="clsid:38481807-CA0E-42D2-BF39-B33AF135CC4D" id=ieooui></object>
+<style>
+st1\:*{behavior:url(#ieooui) }
+</style>
+<![endif]-->
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:Wingdings;
+	panose-1:5 0 0 0 0 0 0 0 0 0;
+	mso-font-charset:2;
+	mso-generic-font-family:auto;
+	mso-font-pitch:variable;
+	mso-font-signature:0 268435456 0 0 -2147483648 0;}
+@font-face
+	{font-family:SimSun;
+	panose-1:2 1 6 0 3 1 1 1 1 1;
+	mso-font-alt:\5B8B\4F53;
+	mso-font-charset:134;
+	mso-generic-font-family:auto;
+	mso-font-pitch:variable;
+	mso-font-signature:3 135135232 16 0 262145 0;}
+@font-face
+	{font-family:"Angsana New";
+	panose-1:2 2 6 3 5 4 5 2 3 4;
+	mso-font-charset:0;
+	mso-generic-font-family:roman;
+	mso-font-pitch:variable;
+	mso-font-signature:16777219 0 0 0 65537 0;}
+@font-face
+	{font-family:Sylfaen;
+	panose-1:1 10 5 2 5 3 6 3 3 3;
+	mso-font-charset:0;
+	mso-generic-font-family:roman;
+	mso-font-pitch:variable;
+	mso-font-signature:67110535 0 0 0 159 0;}
+@font-face
+	{font-family:Tahoma;
+	panose-1:2 11 6 4 3 5 4 4 2 4;
+	mso-font-charset:0;
+	mso-generic-font-family:swiss;
+	mso-font-pitch:variable;
+	mso-font-signature:1627421319 -2147483648 8 0 66047 0;}
+@font-face
+	{font-family:"Microsoft Sans Serif";
+	panose-1:2 11 6 4 2 2 2 2 2 4;
+	mso-font-charset:0;
+	mso-generic-font-family:swiss;
+	mso-font-pitch:variable;
+	mso-font-signature:1627421663 -2147483648 8 0 66047 0;}
+@font-face
+	{font-family:"CommercialScript BT";
+	panose-1:3 3 8 3 4 8 7 9 12 4;
+	mso-font-charset:0;
+	mso-generic-font-family:script;
+	mso-font-pitch:variable;
+	mso-font-signature:135 0 0 0 27 0;}
+@font-face
+	{font-family:"\@SimSun";
+	panose-1:2 1 6 0 3 1 1 1 1 1;
+	mso-font-charset:134;
+	mso-generic-font-family:auto;
+	mso-font-pitch:variable;
+	mso-font-signature:3 135135232 16 0 262145 0;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{mso-style-parent:"";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	mso-bidi-font-size:14.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:SimSun;
+	mso-bidi-font-family:"Angsana New";
+	mso-fareast-language:ZH-CN;}
+a:link, span.MsoHyperlink
+	{color:blue;
+	text-decoration:underline;
+	text-underline:single;}
+a:visited, span.MsoHyperlinkFollowed
+	{color:purple;
+	text-decoration:underline;
+	text-underline:single;}
+p.MsoDocumentMap, li.MsoDocumentMap, div.MsoDocumentMap
+	{mso-style-noshow:yes;
+	margin:0cm;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	background:navy;
+	font-size:12.0pt;
+	mso-bidi-font-size:14.0pt;
+	font-family:Tahoma;
+	mso-fareast-font-family:SimSun;
+	mso-bidi-font-family:"Angsana New";
+	mso-fareast-language:ZH-CN;}
+span.SpellE
+	{mso-style-name:"";
+	mso-spl-e:yes;}
+span.GramE
+	{mso-style-name:"";
+	mso-gram-e:yes;}
+@page Section1
+	{size:595.3pt 841.9pt;
+	margin:2.0cm 1.0cm 2.0cm 1.0cm;
+	mso-header-margin:35.45pt;
+	mso-footer-margin:35.45pt;
+	mso-paper-source:0;}
+div.Section1
+	{page:Section1;}
+ /* List Definitions */
+ @list l0
+	{mso-list-id:192888068;
+	mso-list-type:hybrid;
+	mso-list-template-ids:785022550 -1030714430 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l0:level1
+	{mso-level-tab-stop:22.5pt;
+	mso-level-number-position:left;
+	margin-left:22.5pt;
+	text-indent:-18.0pt;
+	color:blue;
+	text-decoration:underline;
+	text-underline:single;}
+@list l1
+	{mso-list-id:240263843;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-39427716 923938524 67698691 67698693 67698689 67698691 67698693 67698689 67698691 67698693;}
+@list l1:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:-;
+	mso-level-tab-stop:36.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	mso-ansi-font-size:14.0pt;
+	font-family:"Angsana New";
+	mso-fareast-font-family:SimSun;}
+@list l1:level2
+	{mso-level-tab-stop:72.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;}
+@list l1:level3
+	{mso-level-tab-stop:108.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;}
+@list l1:level4
+	{mso-level-tab-stop:144.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;}
+@list l1:level5
+	{mso-level-tab-stop:180.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;}
+@list l1:level6
+	{mso-level-tab-stop:216.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;}
+@list l1:level7
+	{mso-level-tab-stop:252.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;}
+@list l1:level8
+	{mso-level-tab-stop:288.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;}
+@list l1:level9
+	{mso-level-tab-stop:324.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;}
+@list l2
+	{mso-list-id:396511469;
+	mso-list-template-ids:-83975484;}
+@list l2:level1
+	{mso-level-start-at:3;
+	mso-level-tab-stop:36.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;}
+@list l3
+	{mso-list-id:1289774825;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-780087904 1222556488 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l3:level1
+	{mso-level-tab-stop:36.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	mso-ansi-font-size:14.0pt;}
+@list l3:level2
+	{mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2";
+	mso-level-tab-stop:72.0pt;
+	mso-level-number-position:left;
+	text-indent:-36.0pt;}
+@list l3:level3
+	{mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2\.%3";
+	mso-level-tab-stop:90.0pt;
+	mso-level-number-position:left;
+	margin-left:90.0pt;
+	text-indent:-36.0pt;}
+@list l3:level4
+	{mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2\.%3\.%4";
+	mso-level-tab-stop:126.0pt;
+	mso-level-number-position:left;
+	margin-left:126.0pt;
+	text-indent:-54.0pt;}
+@list l3:level5
+	{mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2\.%3\.%4\.%5";
+	mso-level-tab-stop:162.0pt;
+	mso-level-number-position:left;
+	margin-left:162.0pt;
+	text-indent:-72.0pt;}
+@list l3:level6
+	{mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6";
+	mso-level-tab-stop:180.0pt;
+	mso-level-number-position:left;
+	margin-left:180.0pt;
+	text-indent:-72.0pt;}
+@list l3:level7
+	{mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7";
+	mso-level-tab-stop:216.0pt;
+	mso-level-number-position:left;
+	margin-left:216.0pt;
+	text-indent:-90.0pt;}
+@list l3:level8
+	{mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8";
+	mso-level-tab-stop:252.0pt;
+	mso-level-number-position:left;
+	margin-left:252.0pt;
+	text-indent:-108.0pt;}
+@list l3:level9
+	{mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8\.%9";
+	mso-level-tab-stop:270.0pt;
+	mso-level-number-position:left;
+	margin-left:270.0pt;
+	text-indent:-108.0pt;}
+@list l4
+	{mso-list-id:1372807177;
+	mso-list-template-ids:465334752;}
+@list l4:level1
+	{mso-level-start-at:2;
+	mso-level-tab-stop:36.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;}
+@list l5
+	{mso-list-id:1523323618;
+	mso-list-template-ids:739929238;}
+@list l5:level1
+	{mso-level-tab-stop:36.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;}
+@list l6
+	{mso-list-id:1601523613;
+	mso-list-template-ids:268055536;}
+@list l6:level1
+	{mso-level-start-at:6;
+	mso-level-tab-stop:36.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;}
+@list l7
+	{mso-list-id:1849979271;
+	mso-list-type:hybrid;
+	mso-list-template-ids:989915492 67698703 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l7:level1
+	{mso-level-tab-stop:36.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;}
+@list l8
+	{mso-list-id:1964460684;
+	mso-list-template-ids:954762704;}
+@list l8:level1
+	{mso-level-start-at:4;
+	mso-level-tab-stop:36.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;}
+@list l9
+	{mso-list-id:1994024136;
+	mso-list-template-ids:616971008;}
+@list l9:level1
+	{mso-level-start-at:5;
+	mso-level-tab-stop:36.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;}
+ol
+	{margin-bottom:0cm;}
+ul
+	{margin-bottom:0cm;}
+-->
+</style>
+<!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:ตารางปกติ;
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
+	mso-para-margin:0cm;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";}
+</style>
+<![endif]--><!--[if gte mso 9]><xml>
+ <o:shapedefaults v:ext="edit" spidmax="3074">
+  <o:colormenu v:ext="edit" fillcolor="#f9c"/>
+ </o:shapedefaults></xml><![endif]--><!--[if gte mso 9]><xml>
+ <o:shapelayout v:ext="edit">
+  <o:idmap v:ext="edit" data="1"/>
+ </o:shapelayout></xml><![endif]-->
+</head>
+
+<body bgcolor=black lang=EN-US link=blue vlink=purple style='tab-interval:36.0pt'>
+
+<div class=Section1>
+
+<p class=MsoNormal style='mso-outline-level:1'><b><u><span style='font-size:
+20.0pt;font-family:"Microsoft Sans Serif";color:#FF6600'>PROJECT: OBDII X-Meter
+Version 1 by <span class=GramE>Jerry<span lang=TH>(</span></span><span lang=TH>สินค้าหมดแล้ว)
+</span></span></u></b><b><u><span lang=TH style='font-size:10.0pt;font-family:
+"Microsoft Sans Serif";color:white'><o:p></o:p></span></u></b></p>
+
+<p class=MsoNormal style='mso-outline-level:1'><span style='font-size:16.0pt;
+color:white'><!--[if gte vml 1]><v:shapetype id="_x0000_t75" coordsize="21600,21600"
+ o:spt="75" o:preferrelative="t" path="m@4@5l@4@11@9@11@9@5xe" filled="f"
+ stroked="f">
+ <v:stroke joinstyle="miter"/>
+ <v:formulas>
+  <v:f eqn="if lineDrawn pixelLineWidth 0"/>
+  <v:f eqn="sum @0 1 0"/>
+  <v:f eqn="sum 0 0 @1"/>
+  <v:f eqn="prod @2 1 2"/>
+  <v:f eqn="prod @3 21600 pixelWidth"/>
+  <v:f eqn="prod @3 21600 pixelHeight"/>
+  <v:f eqn="sum @0 0 1"/>
+  <v:f eqn="prod @6 1 2"/>
+  <v:f eqn="prod @7 21600 pixelWidth"/>
+  <v:f eqn="sum @8 21600 0"/>
+  <v:f eqn="prod @7 21600 pixelHeight"/>
+  <v:f eqn="sum @10 21600 0"/>
+ </v:formulas>
+ <v:path o:extrusionok="f" gradientshapeok="t" o:connecttype="rect"/>
+ <o:lock v:ext="edit" aspectratio="t"/>
+</v:shapetype><v:shape id="_x0000_i1025" type="#_x0000_t75" style='width:573.75pt;
+ height:430.5pt'>
+ <v:imagedata src="xmeter.files/image001.jpg" o:title="xmeter1"/>
+</v:shape><![endif]--><![if !vml]><img width=765 height=574
+src="xmeter.files/image002.jpg" v:shapes="_x0000_i1025"><![endif]></span><b><u><span
+style='font-size:20.0pt;color:white'><o:p></o:p></span></u></b></p>
+
+<p class=MsoNormal style='mso-outline-level:1'><span style='mso-bidi-font-size:
+12.0pt;font-family:Sylfaen;mso-bidi-font-family:"Microsoft Sans Serif";
+color:white'>X-Meter </span><span lang=TH style='mso-bidi-font-size:12.0pt;
+font-family:"Microsoft Sans Serif";mso-ascii-font-family:Sylfaen;mso-hansi-font-family:
+Sylfaen;color:white'>คืออุปกรณ์ที่มีความสามารถในการเชื่อมต่อกับปลั๊ก </span><span
+style='mso-bidi-font-size:12.0pt;font-family:Sylfaen;mso-bidi-font-family:"Microsoft Sans Serif";
+color:white'>DLC (data link cable) </span><span lang=TH style='mso-bidi-font-size:
+12.0pt;font-family:"Microsoft Sans Serif";mso-ascii-font-family:Sylfaen;
+mso-hansi-font-family:Sylfaen;color:white'>ซึ่งเป็นปลั๊กที่อยู่บริเวณใต้คอนโซลด้านขวาพวงมาลัยรถ
+โดยปรกติ ปลั๊ก</span><span style='mso-bidi-font-size:12.0pt;font-family:Sylfaen;
+mso-bidi-font-family:"Microsoft Sans Serif";color:white'> DLC </span><span
+lang=TH style='mso-bidi-font-size:12.0pt;font-family:"Microsoft Sans Serif";
+mso-ascii-font-family:Sylfaen;mso-hansi-font-family:Sylfaen;color:white'>นี้มีชื่อเรียกตามมาตรฐานว่า
+</span><span style='mso-bidi-font-size:12.0pt;font-family:Sylfaen;mso-bidi-font-family:
+"Microsoft Sans Serif";color:white'>OBD2 (on board diagnostic 2)</span><span
+lang=TH style='mso-bidi-font-size:12.0pt;font-family:"Microsoft Sans Serif";
+mso-ascii-font-family:Sylfaen;mso-hansi-font-family:Sylfaen;color:white'><span
+style='mso-spacerun:yes'>&nbsp; </span></span><span style='mso-bidi-font-size:
+12.0pt;font-family:Sylfaen;mso-bidi-font-family:"Microsoft Sans Serif";
+color:white'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-outline-level:1'><span lang=TH style='mso-bidi-font-size:
+12.0pt;font-family:"Microsoft Sans Serif";mso-ascii-font-family:Sylfaen;
+mso-hansi-font-family:Sylfaen;color:white'>ปลั๊ก </span><span style='mso-bidi-font-size:
+12.0pt;font-family:Sylfaen;mso-bidi-font-family:"Microsoft Sans Serif";
+color:white'>OBD2 </span><span class=GramE><span lang=TH style='mso-bidi-font-size:
+12.0pt;font-family:"Microsoft Sans Serif";mso-ascii-font-family:Sylfaen;
+mso-hansi-font-family:Sylfaen;color:white'>นี้เป็นช่องต่อเพื่อใช้ในการซ่อมบำรุงรถยนต์รุ่นใหม่ๆ<span
+style='mso-spacerun:yes'>&nbsp; </span>โดยศูนย์บริการ</span></span><span
+lang=TH style='mso-bidi-font-size:12.0pt;font-family:"Microsoft Sans Serif";
+mso-ascii-font-family:Sylfaen;mso-hansi-font-family:Sylfaen;color:white'>
+สามารถใช้อุปกรณ์คอมพิวเตอร์วิเคราะห์มาต่อกับปลั๊กนี้
+เพื่อใช้ในการวิเคราะห์ปัญหาและอุปกรณ์ต่างๆของรถยนต์
+ซึ่งสามารถช่วยให้การตรวจซ่อมนั้นรวดเร็วถูกต้องแม่นยำมากยิ่งขึ้น</span><span
+style='mso-bidi-font-size:12.0pt;font-family:Sylfaen;mso-bidi-font-family:"Microsoft Sans Serif";
+color:white'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-indent:36.0pt;mso-outline-level:1'><span
+lang=TH style='mso-bidi-font-size:12.0pt;font-family:"Microsoft Sans Serif";
+mso-ascii-font-family:Sylfaen;mso-hansi-font-family:Sylfaen;color:white'>หลักการทำงานคือ
+</span><span style='mso-bidi-font-size:12.0pt;font-family:Sylfaen;mso-bidi-font-family:
+"Microsoft Sans Serif";color:white'>X-Meter </span><span lang=TH
+style='mso-bidi-font-size:12.0pt;font-family:"Microsoft Sans Serif";mso-ascii-font-family:
+Sylfaen;mso-hansi-font-family:Sylfaen;color:white'>จะอ่านข้อมูลที่ส่งมาจากกล่อง
+</span><span style='mso-bidi-font-size:12.0pt;font-family:Sylfaen;mso-bidi-font-family:
+"Microsoft Sans Serif";color:white'>PCM </span><span lang=TH style='mso-bidi-font-size:
+12.0pt;font-family:"Microsoft Sans Serif";mso-ascii-font-family:Sylfaen;
+mso-hansi-font-family:Sylfaen;color:white'>(</span><span style='mso-bidi-font-size:
+12.0pt;font-family:Sylfaen;mso-bidi-font-family:"Microsoft Sans Serif";
+color:white'>Power train Control Module) </span><span lang=TH style='mso-bidi-font-size:
+12.0pt;font-family:"Microsoft Sans Serif";mso-ascii-font-family:Sylfaen;
+mso-hansi-font-family:Sylfaen;color:white'>หรือกล่องควบคุมเครื่องยนต์นั่นเอง
+(ข้อมูลเป็นไปตามาตรฐาน </span><span style='mso-bidi-font-size:12.0pt;
+font-family:Sylfaen;mso-bidi-font-family:"Microsoft Sans Serif";color:white'>OBD2<span
+class=GramE>)<span style='mso-spacerun:yes'>&nbsp; </span><span lang=TH
+style='font-family:"Microsoft Sans Serif";mso-ascii-font-family:Sylfaen;
+mso-hansi-font-family:Sylfaen'>แล้วนำมาคำนวณค่าและแสดงผล</span></span></span><span
+lang=TH style='mso-bidi-font-size:12.0pt;font-family:"Microsoft Sans Serif";
+mso-ascii-font-family:Sylfaen;mso-hansi-font-family:Sylfaen;color:white'>
+ดังรายละเอียดในข้อ 1.</span><span style='mso-bidi-font-size:12.0pt;font-family:
+Sylfaen;mso-bidi-font-family:"Microsoft Sans Serif";color:white'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-outline-level:1'><span lang=TH style='mso-bidi-font-size:
+12.0pt;font-family:"Microsoft Sans Serif";mso-ascii-font-family:Sylfaen;
+mso-hansi-font-family:Sylfaen;color:white'>รายละเอียดเพิ่มเติมสามารถไปดูได้ตาม </span><span
+style='mso-bidi-font-size:12.0pt;font-family:Sylfaen;mso-bidi-font-family:"Microsoft Sans Serif";
+color:white'>Link </span><span lang=TH style='mso-bidi-font-size:12.0pt;
+font-family:"Microsoft Sans Serif";mso-ascii-font-family:Sylfaen;mso-hansi-font-family:
+Sylfaen;color:white'>เหล่านี้ครับ</span><span style='mso-bidi-font-size:12.0pt;
+font-family:Sylfaen;mso-bidi-font-family:"Microsoft Sans Serif";color:white'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-outline-level:1'><span class=GramE><span
+style='font-size:26.0pt;font-family:"CommercialScript BT";color:red'>Reference</span><span
+lang=TH style='font-size:26.0pt;font-family:"Angsana New";mso-ascii-font-family:
+"CommercialScript BT";mso-hansi-font-family:"CommercialScript BT";color:red'> </span><span
+style='font-size:26.0pt;font-family:"CommercialScript BT";color:red'>:</span></span><span
+style='font-size:26.0pt;font-family:"CommercialScript BT";color:red'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-outline-level:1'><span style='font-size:14.0pt;
+font-family:Tahoma;color:#00CCFF'><a
+href="http://www.autotap.com/technical_library.asp"><span style='color:#00CCFF'>http://www.autotap.com/technical_library.asp</span></a><o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-outline-level:1'><span style='font-size:14.0pt;
+font-family:Tahoma;color:#00CCFF'><a
+href="http://www.obd2crazy.com/techdata.html"><span style='color:#00CCFF'>http://www.obd2crazy.com/techdata.html</span></a><o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-outline-level:1'><span style='font-size:14.0pt;
+font-family:Tahoma;color:#00CCFF'><a href="http://www.gendan.co.uk/articles.php"><span
+style='color:#00CCFF'>http://www.gendan.co.uk/articles.php</span></a><o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-outline-level:1'><span style='font-size:14.0pt;
+font-family:Tahoma;color:#00CCFF'><a
+href="http://www.iatn.net/nastf/oematrix.pdf"><span style='color:#00CCFF'>http://www.iatn.net/nastf/oematrix.pdf</span></a><o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-outline-level:1'><span style='font-size:14.0pt;
+font-family:Tahoma;color:#00CCFF'><a href="http://www.obd2cables.com/"><span
+style='color:#00CCFF'>http://www.obd2cables.com/</span></a></span><span
+style='font-size:14.0pt;mso-bidi-font-size:12.0pt;font-family:Tahoma;
+color:#00CCFF'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-outline-level:1'><span style='font-size:14.0pt;
+mso-bidi-font-size:12.0pt;font-family:Tahoma;color:#00CCFF'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal style='mso-outline-level:1'><span style='font-size:26.0pt;
+font-family:"CommercialScript BT";mso-bidi-font-family:Tahoma;color:red'>Download:</span><b><span
+style='font-size:14.0pt;mso-bidi-font-size:12.0pt;font-family:Tahoma;
+color:#FF6600'> </span></b><span style='font-size:14.0pt;mso-bidi-font-size:
+12.0pt;font-family:Tahoma;color:#FF6600'><span
+style='mso-spacerun:yes'>&nbsp;&nbsp;</span><!--[if gte vml 1]><v:shape id="_x0000_i1026"
+ type="#_x0000_t75" style='width:90.75pt;height:42.75pt'>
+ <v:imagedata src="xmeter.files/image003.png" o:title="upgradeicon"/>
+</v:shape><![endif]--><![if !vml]><img border=0 width=121 height=57
+src="xmeter.files/image004.jpg" v:shapes="_x0000_i1026"><![endif]><span
+style='mso-spacerun:yes'>&nbsp;</span><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:22.5pt;text-indent:-18.0pt;mso-outline-level:
+1;mso-list:l0 level1 lfo12;tab-stops:list 22.5pt'><![if !supportLists]><span
+style='font-size:14.0pt;mso-bidi-font-size:12.0pt;font-family:Tahoma;
+mso-fareast-font-family:Tahoma;color:blue'><span style='mso-list:Ignore'>1.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><span
+style='font-size:14.0pt;mso-bidi-font-size:12.0pt;font-family:Tahoma;
+color:#FF6600'><a
+href="http://www.geocities.com/jirakarn_w/xmeterfiles/Xupdater.zip">X-Meter
+Updater Version 1.04</a> </span><span style='mso-bidi-font-size:12.0pt;
+font-family:Tahoma;color:#FF6600'>( <span lang=TH>โปรแกรมสำหรับ</span> upgrade
+firmware)</span><span style='font-size:14.0pt;mso-bidi-font-size:12.0pt;
+font-family:Tahoma;color:#FF6600'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:22.5pt;text-indent:-18.0pt;mso-outline-level:
+1;mso-list:l0 level1 lfo12;tab-stops:list 22.5pt'><![if !supportLists]><span
+style='font-size:14.0pt;mso-bidi-font-size:12.0pt;font-family:Tahoma;
+mso-fareast-font-family:Tahoma;color:blue'><span style='mso-list:Ignore'>2.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp; </span></span></span><![endif]><u><span
+style='font-size:14.0pt;mso-bidi-font-size:12.0pt;font-family:Tahoma;
+color:#FF6600'><a
+href="http://www.geocities.com/jirakarn_w/xmeterfiles/xmanual_incomplete.zip">X-Meter
+User Manual</a></span></u><span lang=TH style='mso-ansi-font-size:14.0pt;
+mso-bidi-font-size:12.0pt;font-family:Tahoma;color:#FF6600'><span
+style='mso-spacerun:yes'>&nbsp;&nbsp; </span>(คู่มือวิธีการใช้งาน)<o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-outline-level:1'><span style='font-size:14.0pt;
+mso-bidi-font-size:12.0pt;font-family:Tahoma;color:#FF6600'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal style='mso-outline-level:1'><span lang=TH style='font-size:
+16.0pt;font-family:"Angsana New";mso-ascii-font-family:Sylfaen;mso-hansi-font-family:
+Sylfaen;color:white'>คุณสมบัติทั่วไป </span><span style='font-size:16.0pt;
+font-family:Sylfaen;color:white'><span
+style='mso-spacerun:yes'>&nbsp;</span>(Specification)<o:p></o:p></span></p>
+
+<ol style='margin-top:0cm' start=1 type=1>
+ <li class=MsoNormal style='color:#FF9900;mso-list:l3 level1 lfo3;tab-stops:
+     list 36.0pt'><span style='font-size:16.0pt;font-family:Sylfaen'>Meter Mode
+     - </span><span lang=TH style='font-size:16.0pt;font-family:"Angsana New";
+     mso-ascii-font-family:Sylfaen;mso-hansi-font-family:Sylfaen'>โหมดแสดงค่าพารามิเตอร์ต่างๆของเครื่องยนต์แบบ</span><span
+     style='font-size:16.0pt;font-family:Sylfaen'> Real time</span><span
+     lang=TH style='font-size:16.0pt;font-family:"Angsana New";mso-ascii-font-family:
+     Sylfaen;mso-hansi-font-family:Sylfaen'> ได้ 2 ค่าพร้อมๆกัน </span><span
+     style='font-size:16.0pt;font-family:Sylfaen'><o:p></o:p></span></li>
+</ol>
+
+<p class=MsoNormal style='margin-left:18.0pt;text-indent:18.0pt'><span lang=TH
+style='font-size:16.0pt;font-family:"Angsana New";mso-ascii-font-family:Sylfaen;
+mso-hansi-font-family:Sylfaen;color:#FF9900'>โดยสามารถเลือกได้อย่างอิสระ<span
+style='mso-spacerun:yes'>&nbsp; </span>ทั้งแถวบนและแถวล่าง ดังนี้</span><span
+style='font-size:16.0pt;font-family:Sylfaen;color:#FF9900'> (Sampling Rate 4
+Hz)<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-family:Sylfaen;color:white'>Calculate
+Engine Load – </span><span lang=TH style='font-size:14.0pt;mso-ansi-font-size:
+12.0pt;font-family:"Angsana New";mso-ascii-font-family:Sylfaen;mso-hansi-font-family:
+Sylfaen;color:white'>ค่าภาระของเครื่องยนต์ที่ได้จากการคำนวณ</span><span
+style='font-family:Sylfaen;color:white'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-family:Sylfaen;color:white'>Coolant
+Temperature – </span><span lang=TH style='font-size:14.0pt;mso-ansi-font-size:
+12.0pt;font-family:"Angsana New";mso-ascii-font-family:Sylfaen;mso-hansi-font-family:
+Sylfaen;color:white'>อุณหภูมิน้ำหล่อเย็น</span><span style='font-family:Sylfaen;
+color:white'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-family:Sylfaen;color:white'><!--[if gte vml 1]><v:shape
+ id="_x0000_i1050" type="#_x0000_t75" style='width:314.25pt;height:105pt'>
+ <v:imagedata src="xmeter.files/image005.jpg" o:title="pid1"/>
+</v:shape><![endif]--><![if !vml]><img border=0 width=419 height=140
+src="xmeter.files/image006.jpg" v:shapes="_x0000_i1050"><![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-family:Sylfaen;color:white'>Short
+Term Fuel Trim Bank 1 – </span><span lang=TH style='font-size:14.0pt;
+mso-ansi-font-size:12.0pt;font-family:"Angsana New";mso-ascii-font-family:Sylfaen;
+mso-hansi-font-family:Sylfaen;color:white'>ค่าปรับชดเชยการฉีดน้ำมันเชื้อเพลิง </span><span
+style='font-family:Sylfaen;color:white'>(short term)<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-family:Sylfaen;color:white'>Long
+Term Fuel Trim Bank 1 – </span><span lang=TH style='font-size:14.0pt;
+mso-ansi-font-size:12.0pt;font-family:"Angsana New";mso-ascii-font-family:Sylfaen;
+mso-hansi-font-family:Sylfaen;color:white'>ค่าปรับชดเชยการฉีดน้ำมันเชื้อเพลิง (</span><span
+style='font-family:Sylfaen;color:white'>Long term)<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-family:Sylfaen;color:white'><!--[if gte vml 1]><v:shape
+ id="_x0000_i1051" type="#_x0000_t75" style='width:318.75pt;height:111.75pt'>
+ <v:imagedata src="xmeter.files/image007.jpg" o:title="pid2"/>
+</v:shape><![endif]--><![if !vml]><img border=0 width=425 height=149
+src="xmeter.files/image008.jpg" v:shapes="_x0000_i1051"><![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-family:Sylfaen;color:white'>Fuel
+Pressure – </span><span lang=TH style='font-size:14.0pt;mso-ansi-font-size:
+12.0pt;font-family:"Angsana New";mso-ascii-font-family:Sylfaen;mso-hansi-font-family:
+Sylfaen;color:white'>แรงดันน้ำมันเชื้อเพลิง </span><span style='font-family:
+Sylfaen;color:white'>***<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-family:Sylfaen;color:white'>Manifold
+Air Pressure – </span><span lang=TH style='font-size:14.0pt;mso-ansi-font-size:
+12.0pt;font-family:"Angsana New";mso-ascii-font-family:Sylfaen;mso-hansi-font-family:
+Sylfaen;color:white'>แรงดันในท่อไอดี</span><span style='font-family:Sylfaen;
+color:white'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-family:Sylfaen;color:white'><!--[if gte vml 1]><v:shape
+ id="_x0000_i1052" type="#_x0000_t75" style='width:312.75pt;height:105pt'>
+ <v:imagedata src="xmeter.files/image009.jpg" o:title="pid3"/>
+</v:shape><![endif]--><![if !vml]><img border=0 width=417 height=140
+src="xmeter.files/image010.jpg" v:shapes="_x0000_i1052"><![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-family:Sylfaen;color:white'>Engine
+Speed – </span><span lang=TH style='font-size:14.0pt;mso-ansi-font-size:12.0pt;
+font-family:"Angsana New";mso-ascii-font-family:Sylfaen;mso-hansi-font-family:
+Sylfaen;color:white'>ความเร็วรอบเครื่องยนต์</span><span style='font-family:
+Sylfaen;color:white'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-family:Sylfaen;color:white'>Vehicle
+Speed – </span><span lang=TH style='font-size:14.0pt;mso-ansi-font-size:12.0pt;
+font-family:"Angsana New";mso-ascii-font-family:Sylfaen;mso-hansi-font-family:
+Sylfaen;color:white'>ความเร็วของรถ</span><span style='font-family:Sylfaen;
+color:white'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-family:Sylfaen;color:white'><!--[if gte vml 1]><v:shape
+ id="_x0000_i1053" type="#_x0000_t75" style='width:317.25pt;height:102pt'>
+ <v:imagedata src="xmeter.files/image011.jpg" o:title="pid4"/>
+</v:shape><![endif]--><![if !vml]><img border=0 width=423 height=136
+src="xmeter.files/image012.jpg" v:shapes="_x0000_i1053"><![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-family:Sylfaen;color:white'>Ignition
+Advanced Timing - </span><span lang=TH style='font-size:14.0pt;mso-ansi-font-size:
+12.0pt;font-family:"Angsana New";mso-ascii-font-family:Sylfaen;mso-hansi-font-family:
+Sylfaen;color:white'>องศาจุดระเบิด</span><span style='font-family:Sylfaen;
+color:white'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-family:Sylfaen;color:white'>Intake
+Air Temperature – </span><span lang=TH style='font-size:14.0pt;mso-ansi-font-size:
+12.0pt;font-family:"Angsana New";mso-ascii-font-family:Sylfaen;mso-hansi-font-family:
+Sylfaen;color:white'>อุณหภูมิอากาศไหลเข้าท่อไอดี</span><span style='font-family:
+Sylfaen;color:white'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-family:Sylfaen;color:white'><!--[if gte vml 1]><v:shape
+ id="_x0000_i1045" type="#_x0000_t75" style='width:318.75pt;height:111.75pt'>
+ <v:imagedata src="xmeter.files/image013.jpg" o:title="pid5"/>
+</v:shape><![endif]--><![if !vml]><img border=0 width=425 height=149
+src="xmeter.files/image014.jpg" v:shapes="_x0000_i1045"><![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-family:Sylfaen;color:white'>Air
+Flow – </span><span lang=TH style='font-size:14.0pt;mso-ansi-font-size:12.0pt;
+font-family:"Angsana New";mso-ascii-font-family:Sylfaen;mso-hansi-font-family:
+Sylfaen;color:white'>ปริมาณอากาศที่ไหลผ่านท่อไอดี</span><span style='font-family:
+Sylfaen;color:white'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-family:Sylfaen;color:white'>Throttle
+Position – </span><span lang=TH style='font-size:14.0pt;mso-ansi-font-size:
+12.0pt;font-family:"Angsana New";mso-ascii-font-family:Sylfaen;mso-hansi-font-family:
+Sylfaen;color:white'>ตำแหน่งการเปิดวาล์วลิ้นปีกผีเสื้อ</span><span
+style='font-family:Sylfaen;color:white'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-family:Sylfaen;color:white'><!--[if gte vml 1]><v:shape
+ id="_x0000_i1027" type="#_x0000_t75" style='width:318pt;height:111pt'>
+ <v:imagedata src="xmeter.files/image015.jpg" o:title="pid6"/>
+</v:shape><![endif]--><![if !vml]><img border=0 width=424 height=148
+src="xmeter.files/image016.jpg" v:shapes="_x0000_i1027"><![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-family:Sylfaen;color:white'>Front
+Heated Oxygen Sensor Voltage – </span><span lang=TH style='font-size:14.0pt;
+mso-ansi-font-size:12.0pt;font-family:"Angsana New";mso-ascii-font-family:Sylfaen;
+mso-hansi-font-family:Sylfaen;color:white'>แรงดันที่อ่านได้จาก </span><span
+style='font-family:Sylfaen;color:white'>Oxygen sensor</span><span lang=TH
+style='font-size:14.0pt;mso-ansi-font-size:12.0pt;font-family:"Angsana New";
+mso-ascii-font-family:Sylfaen;mso-hansi-font-family:Sylfaen;color:white'>
+ตัวหน้า </span><span style='font-family:Sylfaen;color:white'>Cat.<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-family:Sylfaen;color:white'>Rear
+Heated Oxygen Sensor Voltage – </span><span lang=TH style='font-size:14.0pt;
+mso-ansi-font-size:12.0pt;font-family:"Angsana New";mso-ascii-font-family:Sylfaen;
+mso-hansi-font-family:Sylfaen;color:white'>แรงดันที่อ่านได้จาก </span><span
+style='font-family:Sylfaen;color:white'>Oxygen sensor</span><span lang=TH
+style='font-size:14.0pt;mso-ansi-font-size:12.0pt;font-family:"Angsana New";
+mso-ascii-font-family:Sylfaen;mso-hansi-font-family:Sylfaen;color:white'>
+ตัวหลัง </span><span style='font-family:Sylfaen;color:white'>Cat.<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-family:Sylfaen;color:white'><!--[if gte vml 1]><v:shape
+ id="_x0000_i1028" type="#_x0000_t75" style='width:318pt;height:111pt'>
+ <v:imagedata src="xmeter.files/image017.jpg" o:title="pid7"/>
+</v:shape><![endif]--><![if !vml]><img border=0 width=424 height=148
+src="xmeter.files/image018.jpg" v:shapes="_x0000_i1028"><![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-family:Sylfaen;color:white'>Commanded
+EGR (Exhaust Gas Return) –</span><span lang=TH style='font-size:14.0pt;
+mso-ansi-font-size:12.0pt;font-family:"Angsana New";mso-ascii-font-family:Sylfaen;
+mso-hansi-font-family:Sylfaen;color:white'> เปอร์เซ็นต์การเปิดของวาล์วไอเสียย้อนกลับ</span><span
+style='font-family:Sylfaen;color:white'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-family:Sylfaen;color:white'>EGR
+Error<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-family:Sylfaen;color:white'><!--[if gte vml 1]><v:shape
+ id="_x0000_i1029" type="#_x0000_t75" style='width:320.25pt;height:111pt'>
+ <v:imagedata src="xmeter.files/image019.jpg" o:title="pid8"/>
+</v:shape><![endif]--><![if !vml]><img border=0 width=427 height=148
+src="xmeter.files/image020.jpg" v:shapes="_x0000_i1029"><![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-family:Sylfaen;color:white'>Commanded
+Evaporative Purge – </span><span lang=TH style='font-size:14.0pt;mso-ansi-font-size:
+12.0pt;font-family:"Angsana New";mso-ascii-font-family:Sylfaen;mso-hansi-font-family:
+Sylfaen;color:white'>เปอร์เซ็นต์การเปิดวาล์ว</span><span style='font-family:
+Sylfaen;color:white'> EP<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-family:Sylfaen;color:white'>Fuel
+Level – </span><span lang=TH style='font-size:14.0pt;mso-ansi-font-size:12.0pt;
+font-family:"Angsana New";mso-ascii-font-family:Sylfaen;mso-hansi-font-family:
+Sylfaen;color:white'>ระดับน้ำมันเชื้อเพลิง </span><span style='font-family:
+Sylfaen;color:white'>***<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-family:Sylfaen;color:white'><!--[if gte vml 1]><v:shape
+ id="_x0000_i1030" type="#_x0000_t75" style='width:318.75pt;height:108.75pt'>
+ <v:imagedata src="xmeter.files/image021.jpg" o:title="pid9"/>
+</v:shape><![endif]--><![if !vml]><img border=0 width=425 height=145
+src="xmeter.files/image022.jpg" v:shapes="_x0000_i1030"><![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-family:Sylfaen;color:white'>Barometric
+Pressure – </span><span lang=TH style='font-size:14.0pt;mso-ansi-font-size:
+12.0pt;font-family:"Angsana New";mso-ascii-font-family:Sylfaen;mso-hansi-font-family:
+Sylfaen;color:white'>ความดันบรรยากาศ (ปรกติอยู่ที่ 100-101 </span><span
+class=SpellE><span style='font-family:Sylfaen;color:white'>kPa</span></span><span
+style='font-family:Sylfaen;color:white'>)<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-family:Sylfaen;color:white'>Catalytic
+Converter 1 Temperature – </span><span lang=TH style='font-size:14.0pt;
+mso-ansi-font-size:12.0pt;font-family:"Angsana New";mso-ascii-font-family:Sylfaen;
+mso-hansi-font-family:Sylfaen;color:white'>อุณหภูมิของ </span><span
+class=SpellE><span style='font-family:Sylfaen;color:white'>Catylytic</span></span><span
+style='font-family:Sylfaen;color:white'> </span><span lang=TH style='font-size:
+14.0pt;mso-ansi-font-size:12.0pt;font-family:"Angsana New";mso-ascii-font-family:
+Sylfaen;mso-hansi-font-family:Sylfaen;color:white'>ตัวที่ 1 โดยประมาณ</span><span
+style='font-family:Sylfaen;color:white'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-family:Sylfaen;color:white'><!--[if gte vml 1]><v:shape
+ id="_x0000_i1046" type="#_x0000_t75" style='width:320.25pt;height:108.75pt'>
+ <v:imagedata src="xmeter.files/image023.jpg" o:title="pid10"/>
+</v:shape><![endif]--><![if !vml]><img border=0 width=427 height=145
+src="xmeter.files/image024.jpg" v:shapes="_x0000_i1046"><![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-family:Sylfaen;color:white'>Catalytic
+Converter 2 Temperature – </span><span lang=TH style='font-size:14.0pt;
+mso-ansi-font-size:12.0pt;font-family:"Angsana New";mso-ascii-font-family:Sylfaen;
+mso-hansi-font-family:Sylfaen;color:white'>อุณหภูมิของ</span><span
+style='font-family:Sylfaen;color:white'> Catalytic </span><span lang=TH
+style='font-size:14.0pt;mso-ansi-font-size:12.0pt;font-family:"Angsana New";
+mso-ascii-font-family:Sylfaen;mso-hansi-font-family:Sylfaen;color:white'>ตัวที่
+2 โดยประมาณ</span><span style='font-family:Sylfaen;color:white'> ***<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-family:Sylfaen;color:white'>PCM
+Voltage –</span><span lang=TH style='font-size:14.0pt;mso-ansi-font-size:12.0pt;
+font-family:"Angsana New";mso-ascii-font-family:Sylfaen;mso-hansi-font-family:
+Sylfaen;color:white'> แรงดันไฟของกล่องควบคุม</span><span style='font-family:
+Sylfaen;color:white'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-family:Sylfaen;color:white'><!--[if gte vml 1]><v:shape
+ id="_x0000_i1047" type="#_x0000_t75" style='width:320.25pt;height:108pt'>
+ <v:imagedata src="xmeter.files/image025.jpg" o:title="pid11"/>
+</v:shape><![endif]--><![if !vml]><img border=0 width=427 height=144
+src="xmeter.files/image026.jpg" v:shapes="_x0000_i1047"><![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-family:Sylfaen;color:white'>Absolute
+Engine Load – </span><span lang=TH style='font-size:14.0pt;mso-ansi-font-size:
+12.0pt;font-family:"Angsana New";mso-ascii-font-family:Sylfaen;mso-hansi-font-family:
+Sylfaen;color:white'>ค่าภาระของเครื่องยนต์แบบสัมบูรณ์ </span><span
+style='font-family:Sylfaen;color:white'>***<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-family:Sylfaen;color:white'>Commanded
+Equivalent Ratio – </span><span lang=TH style='font-size:14.0pt;mso-ansi-font-size:
+12.0pt;font-family:"Angsana New";mso-ascii-font-family:Sylfaen;mso-hansi-font-family:
+Sylfaen;color:white'>อัตราส่วนผสมอากาศ / น้ำมัน ที่ควบคุมจากกล่องควบคุม</span><span
+style='font-family:Sylfaen;color:white'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-family:Sylfaen;color:white'><!--[if gte vml 1]><v:shape
+ id="_x0000_i1048" type="#_x0000_t75" style='width:315.75pt;height:113.25pt'>
+ <v:imagedata src="xmeter.files/image027.jpg" o:title="pid12"/>
+</v:shape><![endif]--><![if !vml]><img border=0 width=421 height=151
+src="xmeter.files/image028.jpg" v:shapes="_x0000_i1048"><![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-family:Sylfaen;color:white'>Relative
+Throttle Position –</span><span lang=TH style='font-size:14.0pt;mso-ansi-font-size:
+12.0pt;font-family:"Angsana New";mso-ascii-font-family:Sylfaen;mso-hansi-font-family:
+Sylfaen;color:white'> เปอร์เซ็นต์การเปิดลิ้นปีกผีเสื้อแบบสัมพัทธ์</span><span
+style='font-family:Sylfaen;color:white'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-family:Sylfaen;color:white'>Ambient
+Air Temperature –</span><span lang=TH style='font-size:14.0pt;mso-ansi-font-size:
+12.0pt;font-family:"Angsana New";mso-ascii-font-family:Sylfaen;mso-hansi-font-family:
+Sylfaen;color:white'> อุณหภูมิอากาศภายนอก </span><span style='font-family:Sylfaen;
+color:white'>***<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-family:Sylfaen;color:white'><!--[if gte vml 1]><v:shape
+ id="_x0000_i1049" type="#_x0000_t75" style='width:318pt;height:110.25pt'>
+ <v:imagedata src="xmeter.files/image029.jpg" o:title="pid13"/>
+</v:shape><![endif]--><![if !vml]><img border=0 width=424 height=147
+src="xmeter.files/image030.jpg" v:shapes="_x0000_i1049"><![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-family:Sylfaen;color:white'>And
+more…….<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:red;
+mso-bidi-font-style:italic'><span style='mso-list:Ignore'>-<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><i><span lang=TH style='font-size:14.0pt;
+mso-ansi-font-size:12.0pt;font-family:"Angsana New";mso-ascii-font-family:Sylfaen;
+mso-hansi-font-family:Sylfaen;color:red'>หมายเหตุ<span
+style='mso-spacerun:yes'>&nbsp; </span></span></i><i><span style='font-family:
+Sylfaen;color:red'>***</span></i><i><span lang=TH style='font-size:14.0pt;
+mso-ansi-font-size:12.0pt;font-family:"Angsana New";mso-ascii-font-family:Sylfaen;
+mso-hansi-font-family:Sylfaen;color:red'> </span></i><i><span style='font-family:
+Sylfaen;color:red'>=</span></i><i><span lang=TH style='font-size:14.0pt;
+mso-ansi-font-size:12.0pt;font-family:"Angsana New";mso-ascii-font-family:Sylfaen;
+mso-hansi-font-family:Sylfaen;color:red'> ค่าที่ไม่สามารถแสดงได้ในรถ </span></i><i><span
+style='font-family:Sylfaen;color:red'>Mazda3 </span></i><i><span lang=TH
+style='font-size:14.0pt;mso-ansi-font-size:12.0pt;font-family:"Angsana New";
+mso-ascii-font-family:Sylfaen;mso-hansi-font-family:Sylfaen;color:red'>เครื่อง </span></i><i><span
+style='font-family:Sylfaen;color:red'>LF2.0<o:p></o:p></span></i></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:red;
+mso-bidi-font-style:italic'><span style='mso-list:Ignore'>-<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><i><span style='font-family:Sylfaen;color:red'><span
+style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>Parameter
+</span></i><i><span lang=TH style='font-size:14.0pt;mso-ansi-font-size:12.0pt;
+font-family:"Angsana New";mso-ascii-font-family:Sylfaen;mso-hansi-font-family:
+Sylfaen;color:red'>บางค่าจะแสดงได้หรือไม่ขึ้นอยู่กับยี่ห้อและรุ่นของรถ</span></i><i><span
+style='font-family:Sylfaen;color:red'><o:p></o:p></span></i></p>
+
+<p class=MsoNormal style='margin-left:18.0pt'><span style='font-family:Sylfaen;
+color:white'><o:p>&nbsp;</o:p></span></p>
+
+<ol style='margin-top:0cm' start=2 type=1>
+ <li class=MsoNormal style='color:#FF9900;mso-list:l3 level1 lfo3;tab-stops:
+     list 36.0pt'><span lang=TH style='font-size:16.0pt;font-family:"Angsana New";
+     mso-ascii-font-family:Sylfaen;mso-hansi-font-family:Sylfaen'>โหมดแสดงผลอัตราสิ้นเปลืองเชื้อเพลิงแบบ</span><span
+     style='font-size:16.0pt;font-family:Sylfaen'> Real time </span><span
+     lang=TH style='font-size:16.0pt;font-family:"Angsana New";mso-ascii-font-family:
+     Sylfaen;mso-hansi-font-family:Sylfaen'>มี 2 โหมด</span><span
+     style='font-size:16.0pt;font-family:Sylfaen'><o:p></o:p></span></li>
+</ol>
+
+<p class=MsoNormal style='margin-left:72.0pt;text-indent:-36.0pt;mso-list:l3 level2 lfo3;
+tab-stops:list 72.0pt'><![if !supportLists]><span style='font-size:16.0pt;
+font-family:Sylfaen;mso-fareast-font-family:Sylfaen;mso-bidi-font-family:Sylfaen;
+color:#FF9900'><span style='mso-list:Ignore'>2.1<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=TH style='font-size:16.0pt;
+font-family:"Angsana New";mso-ascii-font-family:Sylfaen;mso-hansi-font-family:
+Sylfaen;color:#FF9900'>โหมดแสดงผล ค่าปัจจุบัน(</span><span style='font-size:
+16.0pt;font-family:Sylfaen;color:#FF9900'> Current Mode)<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt'><span style='font-size:16.0pt;
+font-family:Sylfaen;color:#FF9900'><!--[if gte vml 1]><v:shape id="_x0000_i1031"
+ type="#_x0000_t75" style='width:320.25pt;height:111.75pt'>
+ <v:imagedata src="xmeter.files/image031.jpg" o:title="current"/>
+</v:shape><![endif]--><![if !vml]><img border=0 width=427 height=149
+src="xmeter.files/image032.jpg" v:shapes="_x0000_i1031"><![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:72.0pt;text-indent:-36.0pt;mso-list:l3 level2 lfo3;
+tab-stops:list 72.0pt'><![if !supportLists]><span style='font-size:16.0pt;
+font-family:Sylfaen;mso-fareast-font-family:Sylfaen;mso-bidi-font-family:Sylfaen;
+color:#FF9900'><span style='mso-list:Ignore'>2.2<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=TH style='font-size:16.0pt;
+font-family:"Angsana New";mso-ascii-font-family:Sylfaen;mso-hansi-font-family:
+Sylfaen;color:#FF9900'>โหมดแสดงผลแบบเฉลี่ย<span style='mso-spacerun:yes'>&nbsp;
+</span>( </span><span style='font-size:16.0pt;font-family:Sylfaen;color:#FF9900'>Average
+Mode)<o:p></o:p></span></p>
+
+<p class=MsoNormal style='text-indent:18.0pt'><span style='font-family:Sylfaen;
+color:white'><span style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><!--[if gte vml 1]><v:shape id="_x0000_i1032" type="#_x0000_t75"
+ style='width:318.75pt;height:111pt'>
+ <v:imagedata src="xmeter.files/image033.jpg" o:title="average"/>
+</v:shape><![endif]--><![if !vml]><img border=0 width=425 height=148
+src="xmeter.files/image034.jpg" v:shapes="_x0000_i1032"><![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='font-family:Sylfaen;color:white'><span
+style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span
+style='mso-tab-count:1'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span
+style='mso-spacerun:yes'>&nbsp;&nbsp;</span><o:p></o:p></span></p>
+
+<ol style='margin-top:0cm' start=3 type=1>
+ <li class=MsoNormal style='color:#FF9900;mso-list:l3 level1 lfo3;tab-stops:
+     list 36.0pt'><span lang=TH style='font-size:16.0pt;font-family:"Angsana New";
+     mso-ascii-font-family:Sylfaen;mso-hansi-font-family:Sylfaen'>โหมดพิเศษเพิ่มเติม<span
+     style='mso-spacerun:yes'>&nbsp; </span></span><span style='font-size:16.0pt;
+     font-family:Sylfaen'>(Special <span class=SpellE>Funtion</span>)</span><span
+     lang=TH style='font-size:16.0pt;font-family:"Angsana New";mso-ascii-font-family:
+     Sylfaen;mso-hansi-font-family:Sylfaen'>ได้แก่</span><span
+     style='font-size:16.0pt;font-family:Sylfaen'><o:p></o:p></span></li>
+</ol>
+
+<p class=MsoNormal style='margin-left:18.0pt'><span style='font-size:16.0pt;
+font-family:Sylfaen;color:#FF9900'><!--[if gte vml 1]><v:shape id="_x0000_i1033"
+ type="#_x0000_t75" style='width:331.5pt;height:113.25pt'>
+ <v:imagedata src="xmeter.files/image035.jpg" o:title="setup"/>
+</v:shape><![endif]--><![if !vml]><img border=0 width=442 height=151
+src="xmeter.files/image036.jpg" v:shapes="_x0000_i1033"><![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=TH style='font-size:14.0pt;
+mso-ansi-font-size:12.0pt;font-family:"Angsana New";mso-ascii-font-family:Sylfaen;
+mso-hansi-font-family:Sylfaen;color:white'>สามารถอ่านค่า </span><span
+style='font-family:Sylfaen;color:white'>Vehicle Information Number </span><span
+lang=TH style='font-size:14.0pt;mso-ansi-font-size:12.0pt;font-family:"Angsana New";
+mso-ascii-font-family:Sylfaen;mso-hansi-font-family:Sylfaen;color:white'>ได้</span><span
+style='font-family:Sylfaen;color:white'> {</span><span lang=TH
+style='font-size:14.0pt;mso-ansi-font-size:12.0pt;font-family:"Angsana New";
+mso-ascii-font-family:Sylfaen;mso-hansi-font-family:Sylfaen;color:white'>เป็นเหมือนกับเลข
+</span><span style='font-family:Sylfaen;color:white'>Serial No. </span><span
+lang=TH style='font-size:14.0pt;mso-ansi-font-size:12.0pt;font-family:"Angsana New";
+mso-ascii-font-family:Sylfaen;mso-hansi-font-family:Sylfaen;color:white'>ของรถคันนั้นๆ</span><span
+style='font-family:Sylfaen;color:white'>}<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=TH style='font-size:14.0pt;
+mso-ansi-font-size:12.0pt;font-family:"Angsana New";mso-ascii-font-family:Sylfaen;
+mso-hansi-font-family:Sylfaen;color:white'>สามารถอ่านจำนวน </span><span
+style='font-family:Sylfaen;color:white'>Diagnostic Trouble Code </span><span
+lang=TH style='font-size:14.0pt;mso-ansi-font-size:12.0pt;font-family:"Angsana New";
+mso-ascii-font-family:Sylfaen;mso-hansi-font-family:Sylfaen;color:white'>ในกล่อง
+</span><span style='font-family:Sylfaen;color:white'>PCM </span><span lang=TH
+style='font-size:14.0pt;mso-ansi-font-size:12.0pt;font-family:"Angsana New";
+mso-ascii-font-family:Sylfaen;mso-hansi-font-family:Sylfaen;color:white'>ได้ </span><span
+style='font-family:Sylfaen;color:white'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=TH style='font-size:14.0pt;
+mso-ansi-font-size:12.0pt;font-family:"Angsana New";mso-ascii-font-family:Sylfaen;
+mso-hansi-font-family:Sylfaen;color:white'>สามารถแสดงรหัส </span><span
+style='font-family:Sylfaen;color:white'>DTC</span><span lang=TH
+style='font-size:14.0pt;mso-ansi-font-size:12.0pt;font-family:"Angsana New";
+mso-ascii-font-family:Sylfaen;mso-hansi-font-family:Sylfaen;color:white'>
+ได้เพื่อใช้ในการวิเคราะห์ปัญหา</span><span style='font-family:Sylfaen;
+color:white'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=TH style='font-size:14.0pt;
+mso-ansi-font-size:12.0pt;font-family:"Angsana New";mso-ascii-font-family:Sylfaen;
+mso-hansi-font-family:Sylfaen;color:white'>สามารถเคลียร์<span
+style='mso-spacerun:yes'>&nbsp; </span></span><span style='font-family:Sylfaen;
+color:white'>Reset </span><span lang=TH style='font-size:14.0pt;mso-ansi-font-size:
+12.0pt;font-family:"Angsana New";mso-ascii-font-family:Sylfaen;mso-hansi-font-family:
+Sylfaen;color:white'>กล่อง </span><span style='font-family:Sylfaen;color:white'>PCM
+</span><span lang=TH style='font-size:14.0pt;mso-ansi-font-size:12.0pt;
+font-family:"Angsana New";mso-ascii-font-family:Sylfaen;mso-hansi-font-family:
+Sylfaen;color:white'>ได้ (ทำให้ไฟ</span><span style='font-family:Sylfaen;
+color:white'> engine </span><span lang=TH style='font-size:14.0pt;mso-ansi-font-size:
+12.0pt;font-family:"Angsana New";mso-ascii-font-family:Sylfaen;mso-hansi-font-family:
+Sylfaen;color:white'>ดับ) </span><span style='font-family:Sylfaen;color:white'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:18.0pt'><span style='font-family:Sylfaen;
+color:white'><!--[if gte vml 1]><v:shape id="_x0000_i1034" type="#_x0000_t75"
+ style='width:325.5pt;height:120pt'>
+ <v:imagedata src="xmeter.files/image037.jpg" o:title="dtc6"/>
+</v:shape><![endif]--><![if !vml]><img border=0 width=434 height=160
+src="xmeter.files/image038.jpg" v:shapes="_x0000_i1034"><![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:18.0pt;text-indent:18.0pt'><span
+style='font-family:Sylfaen;color:white'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal style='margin-left:18.0pt'><span style='font-family:Sylfaen;
+color:white'><o:p>&nbsp;</o:p></span></p>
+
+<ol style='margin-top:0cm' start=4 type=1>
+ <li class=MsoNormal style='color:#FF9900;mso-list:l3 level1 lfo3;tab-stops:
+     list 36.0pt'><span lang=TH style='font-size:16.0pt;font-family:"Angsana New";
+     mso-ascii-font-family:Sylfaen;mso-hansi-font-family:Sylfaen'>มี </span><span
+     style='font-size:16.0pt;font-family:Sylfaen'>Warning Light 2 </span><span
+     lang=TH style='font-size:16.0pt;font-family:"Angsana New";mso-ascii-font-family:
+     Sylfaen;mso-hansi-font-family:Sylfaen'>ตัว บน/ล่าง
+     โดยสามารถตั้งค่าให้ทำงานได้ตามต้องการ</span><span style='font-size:16.0pt;
+     font-family:Sylfaen'><o:p></o:p></span></li>
+</ol>
+
+<p class=MsoNormal style='margin-left:18.0pt'><span lang=TH style='font-size:
+16.0pt;font-family:"Angsana New";mso-ascii-font-family:Sylfaen;mso-hansi-font-family:
+Sylfaen;color:#FF9900'><span
+style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span
+style='mso-spacerun:yes'>&nbsp;</span>เช่น </span><span style='font-size:16.0pt;
+font-family:Sylfaen;color:#FF9900'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:33.75pt'><span lang=TH style='font-size:
+11.0pt;font-family:"Microsoft Sans Serif";mso-ascii-font-family:Sylfaen;
+mso-hansi-font-family:Sylfaen;color:white'>เมื่อ<span class=SpellE>อุณหภุ</span>มิน้ำหล่อเย็นสูงเกิน
+97 องศา หรือความเร็วรอบเครื่องยนต์สูงเกิน 6500 </span><span class=GramE><span
+style='font-size:11.0pt;font-family:Sylfaen;mso-bidi-font-family:"Microsoft Sans Serif";
+color:white'>RPM </span><span lang=TH style='font-size:11.0pt;font-family:"Microsoft Sans Serif";
+mso-ascii-font-family:Sylfaen;mso-hansi-font-family:Sylfaen;color:white'><span
+style='mso-spacerun:yes'>&nbsp;</span>ไฟเตือนจะกะพริบ</span></span><span
+style='font-size:11.0pt;font-family:Sylfaen;mso-bidi-font-family:"Microsoft Sans Serif";
+color:white'> (</span><span lang=TH style='font-size:11.0pt;font-family:"Microsoft Sans Serif";
+mso-ascii-font-family:Sylfaen;mso-hansi-font-family:Sylfaen;color:white'>ขึ้นกับ<span
+style='mso-spacerun:yes'>&nbsp; </span>โหมดที่เรากำลังอ่านขณะนั้น ในข้อ 1 ด้วย
+โดยสามารถปรับตั้งค่า </span><span style='font-size:11.0pt;font-family:Sylfaen;
+mso-bidi-font-family:"Microsoft Sans Serif";color:white'>LIMIT </span><span
+lang=TH style='font-size:11.0pt;font-family:"Microsoft Sans Serif";mso-ascii-font-family:
+Sylfaen;mso-hansi-font-family:Sylfaen;color:white'>ได้ด้วยตนเองและ</span><span
+lang=TH style='font-size:11.0pt;font-family:Sylfaen;mso-bidi-font-family:"Microsoft Sans Serif";
+color:white'> </span><span style='font-size:11.0pt;font-family:Sylfaen;
+mso-bidi-font-family:"Microsoft Sans Serif";color:white'>Download </span><span
+lang=TH style='font-size:11.0pt;font-family:"Microsoft Sans Serif";mso-ascii-font-family:
+Sylfaen;mso-hansi-font-family:Sylfaen;color:white'>ผ่านโปรแกรม </span><span
+style='font-size:11.0pt;font-family:Sylfaen;mso-bidi-font-family:"Microsoft Sans Serif";
+color:white'>Updater</span><span lang=TH style='font-size:11.0pt;font-family:
+"Microsoft Sans Serif";mso-ascii-font-family:Sylfaen;mso-hansi-font-family:
+Sylfaen;color:white'> </span><span style='font-size:11.0pt;font-family:Sylfaen;
+mso-bidi-font-family:"Microsoft Sans Serif";color:white'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:33.75pt'><span lang=TH style='font-size:
+11.0pt;font-family:"Microsoft Sans Serif";mso-ascii-font-family:Sylfaen;
+mso-hansi-font-family:Sylfaen;color:white'><!--[if gte vml 1]><v:shape id="_x0000_i1035"
+ type="#_x0000_t75" style='width:334.5pt;height:294.75pt'>
+ <v:imagedata src="xmeter.files/image039.jpg" o:title="limit"/>
+</v:shape><![endif]--><![if !vml]><img border=0 width=446 height=393
+src="xmeter.files/image039.jpg" v:shapes="_x0000_i1035"><![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:18.0pt'><span style='font-family:Sylfaen;
+color:white'><o:p>&nbsp;</o:p></span></p>
+
+<ol style='margin-top:0cm' start=5 type=1>
+ <li class=MsoNormal style='color:#FF9900;mso-list:l3 level1 lfo3;tab-stops:
+     list 36.0pt'><span lang=TH style='font-size:16.0pt;font-family:"Angsana New";
+     mso-ascii-font-family:Sylfaen;mso-hansi-font-family:Sylfaen'>สามารถปรับตั้งการใช้งานของมิเตอร์ได้
+     โดยที่ค่าที่ปรับตั้งจะถูกเก็บไว้และไม่หายไปแม้จะปิดสวิทช์</span><span
+     style='font-size:16.0pt;font-family:Sylfaen'> X-Meter </span><span
+     lang=TH style='font-size:16.0pt;font-family:"Angsana New";mso-ascii-font-family:
+     Sylfaen;mso-hansi-font-family:Sylfaen'>ก็ตาม เช่น</span><span
+     style='font-size:16.0pt;font-family:Sylfaen'><o:p></o:p></span></li>
+</ol>
+
+<p class=MsoNormal><span style='font-family:Sylfaen;color:white'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=TH style='font-size:14.0pt;
+mso-ansi-font-size:12.0pt;font-family:"Angsana New";mso-ascii-font-family:Sylfaen;
+mso-hansi-font-family:Sylfaen;color:white'>ตั้งการเปิด/ปิด ไฟพื้นหลังจอแสดงผลได้</span><span
+style='font-family:Sylfaen;color:white'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:18.0pt'><span style='font-family:Sylfaen;
+color:white'><!--[if gte vml 1]><v:shape id="_x0000_i1036" type="#_x0000_t75"
+ style='width:304.5pt;height:111pt'>
+ <v:imagedata src="xmeter.files/image040.jpg" o:title="backlight"/>
+</v:shape><![endif]--><![if !vml]><img border=0 width=406 height=148
+src="xmeter.files/image041.jpg" v:shapes="_x0000_i1036"><![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=TH style='font-size:14.0pt;
+mso-ansi-font-size:12.0pt;font-family:"Angsana New";mso-ascii-font-family:Sylfaen;
+mso-hansi-font-family:Sylfaen;color:white'>ตั้งการเปิด/ปิดเสียงได้</span><span
+style='font-family:Sylfaen;color:white'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:18.0pt'><span style='font-family:Sylfaen;
+color:white'><!--[if gte vml 1]><v:shape id="_x0000_i1037" type="#_x0000_t75"
+ style='width:306.75pt;height:107.25pt'>
+ <v:imagedata src="xmeter.files/image042.jpg" o:title="sound"/>
+</v:shape><![endif]--><![if !vml]><img border=0 width=409 height=143
+src="xmeter.files/image043.jpg" v:shapes="_x0000_i1037"><![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=TH style='font-size:14.0pt;
+mso-ansi-font-size:12.0pt;font-family:"Angsana New";mso-ascii-font-family:Sylfaen;
+mso-hansi-font-family:Sylfaen;color:white'>ตั้งค่าเริ่มต้นที่ต้องการแสดงในบรรทัดบนในโหมด
+</span><span style='font-family:Sylfaen;color:white'><span
+style='mso-spacerun:yes'>&nbsp;</span>Meter<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:18.0pt'><span style='font-family:Sylfaen;
+color:white'><!--[if gte vml 1]><v:shape id="_x0000_i1038" type="#_x0000_t75"
+ style='width:323.25pt;height:114.75pt'>
+ <v:imagedata src="xmeter.files/image044.jpg" o:title="setpid1"/>
+</v:shape><![endif]--><![if !vml]><img border=0 width=431 height=153
+src="xmeter.files/image045.jpg" v:shapes="_x0000_i1038"><![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=TH style='font-size:14.0pt;
+mso-ansi-font-size:12.0pt;font-family:"Angsana New";mso-ascii-font-family:Sylfaen;
+mso-hansi-font-family:Sylfaen;color:white'>ตั้งค่าเริ่มต้นที่ต้องการแสดงในบรรทัดล่างในโหมด
+</span><span style='font-family:Sylfaen;color:white'>Meter</span><span lang=TH
+style='font-size:14.0pt;mso-ansi-font-size:12.0pt;font-family:"Angsana New";
+mso-ascii-font-family:Sylfaen;mso-hansi-font-family:Sylfaen;color:white'><span
+style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+style='font-family:Sylfaen;color:white'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:18.0pt'><span style='font-family:Sylfaen;
+color:white'><!--[if gte vml 1]><v:shape id="_x0000_i1039" type="#_x0000_t75"
+ style='width:314.25pt;height:110.25pt'>
+ <v:imagedata src="xmeter.files/image046.jpg" o:title="setpid2"/>
+</v:shape><![endif]--><![if !vml]><img border=0 width=419 height=147
+src="xmeter.files/image047.jpg" v:shapes="_x0000_i1039"><![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=TH style='font-size:14.0pt;
+mso-ansi-font-size:12.0pt;font-family:"Angsana New";mso-ascii-font-family:Sylfaen;
+mso-hansi-font-family:Sylfaen;color:white'>ตั้งการเปิด/ปิด <span
+style='mso-spacerun:yes'>&nbsp;</span>การทำงานของไฟเตือน </span><span
+style='font-family:Sylfaen;color:white'>Warning Light<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:18.0pt'><span style='font-family:Sylfaen;
+color:white'><!--[if gte vml 1]><v:shape id="_x0000_i1040" type="#_x0000_t75"
+ style='width:327pt;height:115.5pt'>
+ <v:imagedata src="xmeter.files/image048.jpg" o:title="warnlight"/>
+</v:shape><![endif]--><![if !vml]><img border=0 width=436 height=154
+src="xmeter.files/image049.jpg" v:shapes="_x0000_i1040"><![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=TH style='font-size:14.0pt;
+mso-ansi-font-size:12.0pt;font-family:"Angsana New";mso-ascii-font-family:Sylfaen;
+mso-hansi-font-family:Sylfaen;color:white'>ตั้งการเปิด/ปิด</span><span
+style='font-family:Sylfaen;color:white'> Auto Sleep Mode (X-Meter </span><span
+lang=TH style='font-size:14.0pt;mso-ansi-font-size:12.0pt;font-family:"Angsana New";
+mso-ascii-font-family:Sylfaen;mso-hansi-font-family:Sylfaen;color:white'>ปิดตัวเองเมื่อดับเครื่องยนต์)</span><span
+lang=TH style='font-family:Sylfaen;color:white'> </span><span lang=TH
+style='font-size:14.0pt;mso-ansi-font-size:12.0pt;font-family:"Angsana New";
+mso-ascii-font-family:Sylfaen;mso-hansi-font-family:Sylfaen;color:white'>และเริ่มทำงานเมื่อสตาร์ทเครื่องยนต์</span><span
+style='font-family:Sylfaen;color:white'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:18.0pt'><span style='font-family:Sylfaen;
+color:white'><!--[if gte vml 1]><v:shape id="_x0000_i1041" type="#_x0000_t75"
+ style='width:330pt;height:117.75pt'>
+ <v:imagedata src="xmeter.files/image050.jpg" o:title="autosleep"/>
+</v:shape><![endif]--><![if !vml]><img border=0 width=440 height=157
+src="xmeter.files/image051.jpg" v:shapes="_x0000_i1041"><![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:18.0pt'><span style='font-family:Sylfaen;
+color:white'>-<span style='mso-tab-count:1'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+lang=TH style='font-size:14.0pt;mso-ansi-font-size:12.0pt;font-family:"Angsana New";
+mso-ascii-font-family:Sylfaen;mso-hansi-font-family:Sylfaen;color:white'>แสดงรายละเอียด
+</span><span style='font-family:Sylfaen;color:white'>Firmware <span
+class=GramE>( Java</span> </span><span lang=TH style='font-size:14.0pt;
+mso-ansi-font-size:12.0pt;font-family:"Angsana New";mso-ascii-font-family:Sylfaen;
+mso-hansi-font-family:Sylfaen;color:white'>ชื่อลูกผมเอง<span class=SpellE>นะคร้าบ</span>
+ไม่ใช่โปรแกรมจาวาแต่อย่างใด </span><span style='font-family:Sylfaen;color:white'>^_^
+)<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:18.0pt'><span lang=TH style='font-size:
+14.0pt;mso-ansi-font-size:12.0pt;font-family:"Angsana New";mso-ascii-font-family:
+Sylfaen;mso-hansi-font-family:Sylfaen;color:white'><span
+style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span><!--[if gte vml 1]><v:shape
+ id="_x0000_i1042" type="#_x0000_t75" style='width:333.75pt;height:118.5pt'>
+ <v:imagedata src="xmeter.files/image052.jpg" o:title="version"/>
+</v:shape><![endif]--><![if !vml]><img border=0 width=445 height=158
+src="xmeter.files/image053.jpg" v:shapes="_x0000_i1042"><![endif]></span><span
+style='font-family:Sylfaen;color:white'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:18.0pt'><span style='font-family:Sylfaen;
+color:white'><o:p>&nbsp;</o:p></span></p>
+
+<ol style='margin-top:0cm' start=6 type=1>
+ <li class=MsoNormal style='color:#FF9900;mso-list:l3 level1 lfo3;tab-stops:
+     list 36.0pt'><span lang=TH style='font-size:16.0pt;font-family:"Angsana New";
+     mso-ascii-font-family:Sylfaen;mso-hansi-font-family:Sylfaen'>ฟังก์ชั่นทางด้าน
+     </span><span style='font-size:16.0pt;font-family:Sylfaen'><span
+     style='mso-spacerun:yes'>&nbsp;</span>Hardware<o:p></o:p></span></li>
+</ol>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=TH style='font-size:14.0pt;
+mso-ansi-font-size:12.0pt;font-family:"Angsana New";mso-ascii-font-family:Sylfaen;
+mso-hansi-font-family:Sylfaen;color:white'>สามารถ </span><span
+style='font-family:Sylfaen;color:white'>Upgrade Firmware </span><span lang=TH
+style='font-size:14.0pt;mso-ansi-font-size:12.0pt;font-family:"Angsana New";
+mso-ascii-font-family:Sylfaen;mso-hansi-font-family:Sylfaen;color:white'><span
+style='mso-spacerun:yes'>&nbsp;&nbsp;</span>(มีสาย</span><span
+style='font-family:Sylfaen;color:white'> connector </span><span lang=TH
+style='font-size:14.0pt;mso-ansi-font-size:12.0pt;font-family:"Angsana New";
+mso-ascii-font-family:Sylfaen;mso-hansi-font-family:Sylfaen;color:white'>พิเศษเพื่อ
+ลง</span><span style='font-family:Sylfaen;color:white'> Firmware </span><span
+lang=TH style='font-size:14.0pt;mso-ansi-font-size:12.0pt;font-family:"Angsana New";
+mso-ascii-font-family:Sylfaen;mso-hansi-font-family:Sylfaen;color:white'>รุ่นใหม่กว่า)
+ได้เรื่อยๆ เพื่อแก้ไข </span><span style='font-family:Sylfaen;color:white'>Bug </span><span
+lang=TH style='font-size:14.0pt;mso-ansi-font-size:12.0pt;font-family:"Angsana New";
+mso-ascii-font-family:Sylfaen;mso-hansi-font-family:Sylfaen;color:white'>และเพิ่ม<span
+class=SpellE>ฟังก์ขั่น</span>การใช้งานใหม่ๆได้เรื่อยๆด้วยตนเองผ่าน </span><st1:place><st1:PlaceName><span
+  style='font-family:Sylfaen;color:white'>Parallel</span></st1:PlaceName><span
+ style='font-family:Sylfaen;color:white'> </span><st1:PlaceType><span
+  style='font-family:Sylfaen;color:white'>Port</span></st1:PlaceType></st1:place><span
+style='font-family:Sylfaen;color:white'> </span><span lang=TH style='font-size:
+14.0pt;mso-ansi-font-size:12.0pt;font-family:"Angsana New";mso-ascii-font-family:
+Sylfaen;mso-hansi-font-family:Sylfaen;color:white'>(<span class=SpellE>พอร์ทป</span>ริ้น<span
+class=SpellE>เตอร์</span>)</span><span style='font-family:Sylfaen;color:white'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:18.0pt'><span style='font-family:Sylfaen;
+color:white'><span style='mso-spacerun:yes'>&nbsp;</span><!--[if gte vml 1]><v:shape
+ id="_x0000_i1043" type="#_x0000_t75" style='width:334.5pt;height:294.75pt'>
+ <v:imagedata src="xmeter.files/image054.jpg" o:title="updater"/>
+</v:shape><![endif]--><![if !vml]><img border=0 width=446 height=393
+src="xmeter.files/image054.jpg" v:shapes="_x0000_i1043"><![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=TH style='font-size:14.0pt;
+mso-ansi-font-size:12.0pt;font-family:"Angsana New";mso-ascii-font-family:Sylfaen;
+mso-hansi-font-family:Sylfaen;color:white'>การใส่ข้อความพิเศษของผู้ใช้เอง
+เพื่อให้มาแสดงผลที่หน้าจอ</span><span style='font-family:Sylfaen;color:white'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-family:Sylfaen;color:white'><!--[if gte vml 1]><v:shape
+ id="_x0000_i1044" type="#_x0000_t75" style='width:337.5pt;height:252.75pt'>
+ <v:imagedata src="xmeter.files/image055.jpg" o:title="CIMG1457"/>
+</v:shape><![endif]--><![if !vml]><img border=0 width=450 height=337
+src="xmeter.files/image056.jpg" v:shapes="_x0000_i1044"><![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:18.0pt'><span style='font-family:Sylfaen;
+color:white'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span style='font-family:Sylfaen;color:white'>Interface
+OBD2 </span><span lang=TH style='font-size:14.0pt;mso-ansi-font-size:12.0pt;
+font-family:"Angsana New";mso-ascii-font-family:Sylfaen;mso-hansi-font-family:
+Sylfaen;color:white'>ได้หลาย </span><span style='font-family:Sylfaen;
+color:white'>protocol </span><span lang=TH style='font-size:14.0pt;mso-ansi-font-size:
+12.0pt;font-family:"Angsana New";mso-ascii-font-family:Sylfaen;mso-hansi-font-family:
+Sylfaen;color:white'><span style='mso-spacerun:yes'>&nbsp;</span></span><span
+style='font-family:Sylfaen;color:white'>(SAE J1850 PWM,VPW<span
+style='mso-spacerun:yes'>&nbsp; </span>/ ISO 9141-2 / ISO 14230-4 / ISO-17565-4
+(CAN)<span style='mso-spacerun:yes'>&nbsp; </span></span><span lang=TH
+style='font-size:14.0pt;mso-ansi-font-size:12.0pt;font-family:"Angsana New";
+mso-ascii-font-family:Sylfaen;mso-hansi-font-family:Sylfaen;color:white'>ทำให้สามารถใช้กับรถยี่ห้ออื่นๆในตลาดได้อีกด้วย</span><span
+style='font-family:Sylfaen;color:white'><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=TH style='font-size:14.0pt;
+mso-ansi-font-size:12.0pt;font-family:"Angsana New";mso-ascii-font-family:Sylfaen;
+mso-hansi-font-family:Sylfaen;color:white'>สามารถต่อเข้ากับคอมพิวเตอร์ </span><span
+style='font-family:Sylfaen;color:white'>Note Book</span><span lang=TH
+style='font-size:14.0pt;mso-ansi-font-size:12.0pt;font-family:"Angsana New";
+mso-ascii-font-family:Sylfaen;mso-hansi-font-family:Sylfaen;color:white'> หรือ
+เครื่องคอมพิวเตอร์ขนาดเล็ก ผ่าน </span><st1:place><st1:PlaceName><span
+  style='font-family:Sylfaen;color:white'>Serial</span></st1:PlaceName><span
+ style='font-family:Sylfaen;color:white'> </span><st1:PlaceType><span
+  style='font-family:Sylfaen;color:white'>Port</span></st1:PlaceType></st1:place><span
+style='font-family:Sylfaen;color:white'> </span><span lang=TH style='font-size:
+14.0pt;mso-ansi-font-size:12.0pt;font-family:"Angsana New";mso-ascii-font-family:
+Sylfaen;mso-hansi-font-family:Sylfaen;color:white'>เพื่อใช้งานควบคู่กับซอฟแวร์อื่นๆ<span
+style='mso-spacerun:yes'>&nbsp; </span>เพื่อแสดงผลออกที่คอมพิวเตอร์แทน<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l1 level1 lfo5;
+tab-stops:list 36.0pt'><![if !supportLists]><span style='font-size:14.0pt;
+font-family:"Angsana New";mso-fareast-font-family:"Angsana New";color:white'><span
+style='mso-list:Ignore'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=TH style='font-size:14.0pt;
+mso-ansi-font-size:12.0pt;font-family:"Angsana New";mso-ascii-font-family:Sylfaen;
+mso-hansi-font-family:Sylfaen;color:white'>มี </span><span style='font-family:
+Sylfaen;color:white'>Extended Port </span><span lang=TH style='font-size:14.0pt;
+mso-ansi-font-size:12.0pt;font-family:"Angsana New";mso-ascii-font-family:Sylfaen;
+mso-hansi-font-family:Sylfaen;color:white'>เพื่อเชื่อมต่อกับอุปกรณ์อื่นๆภายนอกในอนาคตได้
+เช่น</span><span style='font-family:Sylfaen;color:white'> Cruise Control, GPS,
+Security Lock </span><span lang=TH style='font-size:14.0pt;mso-ansi-font-size:
+12.0pt;font-family:"Angsana New";mso-ascii-font-family:Sylfaen;mso-hansi-font-family:
+Sylfaen;color:white'>ปลด<span class=SpellE>ล็อค</span>ประตูรถโดยใช้การ</span><span
+style='font-family:Sylfaen;color:white'> scan </span><span lang=TH
+style='font-size:14.0pt;mso-ansi-font-size:12.0pt;font-family:"Angsana New";
+mso-ascii-font-family:Sylfaen;mso-hansi-font-family:Sylfaen;color:white'>ลายนิ้วมือ</span><span
+style='font-family:Sylfaen;color:white'> (</span><span lang=TH
+style='font-size:14.0pt;mso-ansi-font-size:12.0pt;font-family:"Angsana New";
+mso-ascii-font-family:Sylfaen;mso-hansi-font-family:Sylfaen;color:white'>แค่เผื่อไว้สำหรับอนาคตนะครับ</span><span
+style='font-family:Sylfaen;color:white'>)<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:18.0pt'><span style='font-family:Sylfaen;
+color:white'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal><span lang=TH style='font-size:14.0pt;font-family:Tahoma;
+color:#FF6600'>อุปกรณ์ที่มาพร้อมกับ </span><span style='font-size:14.0pt;
+font-family:Tahoma;color:#FF6600'>X-METER <span class=GramE>(<span lang=TH> </span>X</span>-Meter
++ <span lang=TH>สาย</span> DLC + <span lang=TH>อุปกรณ์</span> Upgrade Firmware)<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:18.0pt'><span style='font-family:Sylfaen;
+color:white'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal><span style='font-family:Sylfaen;color:white'><!--[if gte vml 1]><v:shape
+ id="_x0000_i1054" type="#_x0000_t75" style='width:506.25pt;height:229.5pt'>
+ <v:imagedata src="xmeter.files/image057.jpg" o:title="xmeterset"/>
+</v:shape><![endif]--><![if !vml]><img border=0 width=675 height=306
+src="xmeter.files/image058.jpg" v:shapes="_x0000_i1054"><![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='font-size:14.0pt;font-family:Tahoma;color:white'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal><span style='font-size:18.0pt;font-family:Tahoma;color:white'>All
+Designed &amp; Invented by Jerry<o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='font-size:18.0pt;font-family:Tahoma;color:white'>Mail
+me:</span><span style='font-size:18.0pt;font-family:Wingdings;mso-ascii-font-family:
+Tahoma;mso-hansi-font-family:Tahoma;mso-bidi-font-family:Tahoma;color:white;
+mso-char-type:symbol;mso-symbol-font-family:Wingdings'><span style='mso-char-type:
+symbol;mso-symbol-font-family:Wingdings'>&agrave;</span></span><span style='font-size:
+18.0pt;font-family:Tahoma;color:white'> <a href="mailto:ahmlite@hotmail.com">ahmlite@hotmail.com</a><span
+style='mso-spacerun:yes'>&nbsp;&nbsp; </span><span class=GramE>or<span
+style='mso-spacerun:yes'>&nbsp; </span></span><a
+href="mailto:jerry@thaimazda3.com">jerry@thaimazda3.com</a> <o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='font-size:16.0pt;color:white'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal><span style='font-size:16.0pt;color:white'><o:p>&nbsp;</o:p></span></p>
+
+</div>
+
+</body>
+
+</html>

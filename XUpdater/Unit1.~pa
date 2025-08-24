@@ -1,0 +1,1328 @@
+unit Unit1;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, inpout32,ExtCtrls, Buttons, ComCtrls, Gauges, MPlayer, Grids;
+
+type
+  TForm1 = class(TForm)
+    WriteTimer: TTimer;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    StatusBar1: TStatusBar;
+    Shape1: TShape;
+    BitBtn3: TBitBtn;
+    Panel1: TPanel;
+    Memo1: TMemo;
+    Bevel1: TBevel;
+    Bevel2: TBevel;
+    Image1: TImage;
+    Label2: TLabel;
+    Image3: TImage;
+    TrackBar1: TTrackBar;
+    Label1: TLabel;
+    Label3: TLabel;
+    Gauge1: TGauge;
+    Panel3: TPanel;
+    StringGrid1: TStringGrid;
+    BitBtn4: TBitBtn;
+    UpDown1: TUpDown;
+    BitBtn6: TBitBtn;
+    Memo2: TMemo;
+    Panel2: TPanel;
+    Image2: TImage;
+    Edit1: TEdit;
+    BitBtn5: TBitBtn;
+    CheckBox1: TCheckBox;
+    Shape2: TShape;
+    Shape3: TShape;
+    Shape4: TShape;
+    Shape5: TShape;
+    Shape6: TShape;
+    Shape7: TShape;
+    Shape8: TShape;
+    Shape9: TShape;
+    Shape10: TShape;
+    Shape11: TShape;
+    Shape12: TShape;
+    Shape13: TShape;
+    Shape14: TShape;
+    Shape15: TShape;
+    Shape16: TShape;
+    Shape17: TShape;
+    Shape18: TShape;
+    Shape19: TShape;
+    Shape20: TShape;
+    Shape21: TShape;
+    Shape22: TShape;
+    Shape23: TShape;
+    Shape24: TShape;
+    Shape25: TShape;
+    Shape26: TShape;
+    Shape27: TShape;
+    Shape28: TShape;
+    Shape29: TShape;
+    Shape30: TShape;
+    Shape31: TShape;
+    Shape32: TShape;
+    Shape33: TShape;
+    Shape34: TShape;
+    Shape35: TShape;
+    Shape36: TShape;
+    Shape37: TShape;
+    Shape38: TShape;
+    Shape39: TShape;
+    Shape40: TShape;
+    Shape41: TShape;
+    Shape42: TShape;
+    Shape43: TShape;
+    Shape44: TShape;
+    Shape45: TShape;
+    Shape46: TShape;
+    Shape47: TShape;
+    Shape48: TShape;
+    Shape49: TShape;
+    Shape50: TShape;
+    Shape51: TShape;
+    Shape52: TShape;
+    Shape53: TShape;
+    Shape54: TShape;
+    Shape55: TShape;
+    Shape56: TShape;
+    Shape57: TShape;
+    Shape58: TShape;
+    Shape59: TShape;
+    Shape60: TShape;
+    Shape61: TShape;
+    Shape62: TShape;
+    Shape63: TShape;
+    Shape64: TShape;
+    Shape65: TShape;
+    Shape66: TShape;
+    Shape67: TShape;
+    Shape68: TShape;
+    Shape69: TShape;
+    Shape70: TShape;
+    Shape71: TShape;
+    Shape72: TShape;
+    Shape73: TShape;
+    Shape74: TShape;
+    Shape75: TShape;
+    Shape76: TShape;
+    Shape77: TShape;
+    Shape78: TShape;
+    Shape79: TShape;
+    Shape80: TShape;
+    Shape81: TShape;
+    Shape82: TShape;
+    Shape83: TShape;
+    Shape84: TShape;
+    Shape85: TShape;
+    Shape86: TShape;
+    Shape87: TShape;
+    Shape88: TShape;
+    Shape89: TShape;
+    Shape90: TShape;
+    Shape91: TShape;
+    Shape92: TShape;
+    Shape93: TShape;
+    Shape94: TShape;
+    Shape95: TShape;
+    Shape96: TShape;
+    Shape97: TShape;
+    Shape98: TShape;
+    Shape99: TShape;
+    Shape100: TShape;
+    Shape101: TShape;
+    Shape102: TShape;
+    Shape103: TShape;
+    Shape104: TShape;
+    Shape105: TShape;
+    Shape106: TShape;
+    Shape107: TShape;
+    Shape108: TShape;
+    Shape109: TShape;
+    Shape110: TShape;
+    Shape111: TShape;
+    Shape112: TShape;
+    Shape113: TShape;
+    Shape114: TShape;
+    Shape115: TShape;
+    Shape116: TShape;
+    Shape117: TShape;
+    Shape118: TShape;
+    Shape119: TShape;
+    Shape120: TShape;
+    Shape121: TShape;
+    setuptimer: TTimer;
+    Shape122: TShape;
+    Shape123: TShape;
+    Shape124: TShape;
+    Shape125: TShape;
+    Shape126: TShape;
+    Shape127: TShape;
+    Shape128: TShape;
+    Shape129: TShape;
+    Shape130: TShape;
+    Shape131: TShape;
+    Shape132: TShape;
+    Shape133: TShape;
+    Shape134: TShape;
+    Shape135: TShape;
+    Shape136: TShape;
+    Shape137: TShape;
+    Shape138: TShape;
+    Shape139: TShape;
+    Shape140: TShape;
+    Shape141: TShape;
+    Shape142: TShape;
+    Shape143: TShape;
+    Shape144: TShape;
+    Shape145: TShape;
+    Shape146: TShape;
+    Shape147: TShape;
+    Shape148: TShape;
+    Shape149: TShape;
+    Shape150: TShape;
+    Shape151: TShape;
+    Shape152: TShape;
+    Shape153: TShape;
+    Shape154: TShape;
+    Shape155: TShape;
+    Shape156: TShape;
+    Shape157: TShape;
+    Shape158: TShape;
+    Shape159: TShape;
+    Shape160: TShape;
+    Shape161: TShape;
+    Shape162: TShape;
+    Shape163: TShape;
+    Shape164: TShape;
+    Shape165: TShape;
+    Shape166: TShape;
+    Shape167: TShape;
+    Shape168: TShape;
+    Shape169: TShape;
+    Shape170: TShape;
+    Shape171: TShape;
+    Shape172: TShape;
+    Shape173: TShape;
+    Shape174: TShape;
+    Shape175: TShape;
+    Shape176: TShape;
+    Shape177: TShape;
+    Shape178: TShape;
+    Shape179: TShape;
+    Shape180: TShape;
+    Shape181: TShape;
+    Shape182: TShape;
+    Shape183: TShape;
+    Shape184: TShape;
+    Shape185: TShape;
+    Shape186: TShape;
+    Shape187: TShape;
+    Shape188: TShape;
+    Shape189: TShape;
+    Shape190: TShape;
+    Shape191: TShape;
+    Shape192: TShape;
+    Shape193: TShape;
+    Shape194: TShape;
+    Shape195: TShape;
+    Shape196: TShape;
+    Shape197: TShape;
+    Shape198: TShape;
+    Shape199: TShape;
+    Shape200: TShape;
+    Shape201: TShape;
+    Shape202: TShape;
+    Shape203: TShape;
+    Shape204: TShape;
+    Shape205: TShape;
+    Shape206: TShape;
+    Shape207: TShape;
+    Shape208: TShape;
+    Shape209: TShape;
+    Shape210: TShape;
+    Shape211: TShape;
+    Shape212: TShape;
+    Shape213: TShape;
+    Shape214: TShape;
+    Shape215: TShape;
+    Shape216: TShape;
+    Shape217: TShape;
+    Shape218: TShape;
+    Shape219: TShape;
+    Shape220: TShape;
+    Shape221: TShape;
+    Shape222: TShape;
+    Shape223: TShape;
+    Shape224: TShape;
+    Shape225: TShape;
+    Shape226: TShape;
+    Shape227: TShape;
+    Shape228: TShape;
+    Shape229: TShape;
+    Shape230: TShape;
+    Shape231: TShape;
+    Shape232: TShape;
+    Shape233: TShape;
+    Shape234: TShape;
+    Shape235: TShape;
+    Shape236: TShape;
+    Shape237: TShape;
+    Shape238: TShape;
+    Shape239: TShape;
+    Shape240: TShape;
+    Shape241: TShape;
+    Label4: TLabel;
+    m3timer: TTimer;
+    Bevel3: TBevel;
+
+    procedure BitBtn2Click(Sender: TObject);
+    procedure Shape1MouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure BitBtn5Click(Sender: TObject);
+    procedure CheckBox1Click(Sender: TObject);
+    procedure WriteTimerTimer(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure setuptimerTimer(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure StatusBar1DblClick(Sender: TObject);
+
+    procedure TrackBar1Change(Sender: TObject);
+    procedure BitBtn3Click(Sender: TObject);
+    procedure UpDown1Click(Sender: TObject; Button: TUDBtnType);
+    procedure StringGrid1SelectCell(Sender: TObject; Col, Row: Integer;
+      var CanSelect: Boolean);
+    procedure BitBtn4Click(Sender: TObject);
+    procedure BitBtn6Click(Sender: TObject);
+    procedure m3timerTimer(Sender: TObject);
+    procedure Shape2MouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure Shape3MouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure Shape4MouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure Shape5MouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure Shape6MouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+   
+ 
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form1: TForm1;
+  HexBuffer: array [0..8191] of byte;
+  EEPROM: array [0..127] of byte;
+  LogoEdit: array [0..47] of byte;
+  SpeedControl:integer;
+  bypass,timertrig:boolean;
+  debugcount:byte; {counter to show hidden debug window}
+
+Const
+  EnableCmd      = '10101100010100110000000000000000';
+  EraseCmd       = '10101100100000000000000000000000';
+  LockBit1       = '10101100111000000000000000000000';
+  LockBit2       = '10101100111000010000000000000000';
+  LockBit3       = '10101100111000100000000000000000';
+  LockBit4       = '10101100111000110000000000000000';
+  ReadLockBit    = '001001000000000000000000';
+  PageWrite      = '0101000';
+  PageRead       = '0011000';
+  UserMsgIndex   = $12FF;   {index to replace data in HexBuffer}
+  {Default PID limit value}
+  EEPROM0        = '1F0544FFE5898E8EFFFFFA6566A0FF82';{00-15}
+  EEPROM1        = '14CCFFFF2A2AFFFFFFFFFFFFFFFFFFFF';{16-31}
+  EEPROM2        = 'FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0C';{32-47}
+  EEPROM3        = 'FFFFFF66FFFFFFFFFFFFFFFF1B1BFFFF';{48-63}
+  EEPROM4        = 'FFFF2BE5FFE550FFFFFFFFFFFFFFFFFF';{64-79}
+
+Firmware0 = '787F760018B800FA75F000758180758780758922758DFD759852D28EC2AC750804750911750A01751006751579751824C2A0D2B0C2A37440120EFA901535120E';
+Firmware1 = 'A290153F120EA2901549120EA2901553120EA290155D120EA2901567120EA290152B120EA2901571120EA27401120EFA12100D7438120EFA740C120EFA741012';
+Firmware2 = '0EFA7407120EFA7480120EFA9012E6120ED074C0120EFA9012FB120ED07406120EFA20B26912103E7401120EFA12100D7480120EFA9014A8120EA274C0120EFA';
+Firmware3 = '9014EA120EA2740D120EFAC296C29720B3031210643097F774C0120EFA9014FF120EA2780174007F083097FDA29533D2962097FDC296DFF1F912116C08B880E5';
+Firmware4 = '74C0120EFA9014BE120EA212103E20B44320B54012103E7401120EFA12100D7480120EFA9014D4120EA274C0120EFA9014EA120EA2740D120EFAC296C29720B3';
+Firmware5 = '031210643097F774C0120EFA9014FF120EA280FE120FFC120FFC120FFC120FFC120FFC120FFCC2B6C2B77401120EFA12100D12104F7480120EFA901310120EA2';
+Firmware6 = '740D120EFA9012BE120FCF12100D9012C4120FCF12100D9012CA120FCF12100D9012D0120FCF12100D9012D8120FCF12100DC29874C0120EFA9017D0120EA274';
+Firmware7 = 'C0120EFA9012B8120FCF743E120F09120FEFB43403020200B40DF174C1120EFA0201E6120F09120FEFB40DF7120FFC120FFC120FFC120FFC120FFC120FFC80B2';
+Firmware8 = '120FEFB43EFA740C120EFA78001211B82014268910E51085E01978011211B8890878021211B88909A8081211B88916A8091211B8891702025FE510C2E4F51074';
+Firmware9 = 'C0120EFA901828120EA212103E120FFC120FFC120FFC120FFC120FFC120FFC120C9C120D9F740D120FE7E51920E00920A704C2A38002D2A320B308121064740D';
+Firmware10 = '120FE730B25520985420B42612104F0508E50812093FF508A8081211B88916120C9C12100D12100D12100D740D120FE780B820B5B512104F0509E50912093FF5';
+Firmware11 = '09A8091211B88917120D9F12100D12100D12100D740D120FE7808F6177120FDAE50AB40148120F18AA0812096F1210737480250B120EFAA90F7820E6120F0908';
+Firmware12 = 'D9F9750A027430120FE77431120FE7E509C4540FF9120FBF120FE7E509540FF9120FBF120FE7740D120FE74189120F18AA0912096F1210AF74C0250C120EFAA9';
+Firmware13 = '0F7820E6120F0908D9F9750A017430120FE77431120FE7E508C4540FF9120FBF120FE7E508540FF9120FBF120FE7740D120FE74189E1E9C2B6C2B712103E7C0A';
+Firmware14 = '7D647F037E9820B2ECDEFBDFF7DDF3DCEF7480120EFA901326120EA274C0120EFA9013EA120EA220B30312106420B502C12E20B4F212104F7401120EFA12100D';
+Firmware15 = '7480120EFA90133C120EA274C0120EFA901492120EA274C0120EFAE51030E014744F120F09744E120F097420120F09C2A3020405744F120F097446120F097446';
+Firmware16 = '120F09D2A3120FFC20B30312106430B41020B5F412104FE510B2E0F510F51980B512104F7401120EFA12100D7480120EFA901352120EA274C0120EFA90149212';
+Firmware17 = '0EA274C0120EFAE51030E112744F120F09744E120F097420120F0902046D744F120F097446120F097446120F09120FFC20B30312106430B40E20B5F412104FE5';
+Firmware18 = '10B2E1F51080BB12104F7401120EFA12100D74C0120EFA901367120EA2120C9C120FFC20B30312106430B41120B5F412104F0508E50812093FF50880E07801A9';
+Firmware19 = '0812116C12104F7401120EFA12100D7480120EFA90137D120EA2120D9F120FFC20B30312106430B41120B5F412104F0509E50912093FF50980E07802A9091211';
+Firmware20 = '6C12104F7401120EFA12100D7480120EFA901393120EA274C0120EFA901492120EA274C0120EFAE51030E312744F120F09744E120F097420120F0902054D744F';
+Firmware21 = '120F097446120F097446120F09120FFC20B30312106430B40E20B5F412104FE510B2E3F51080BB12104F7401120EFA12100D7480120EFA9013A9120EA274C012';
+Firmware22 = '0EFA901492120EA274C0120EFAE51030E412744F120F09744E120F097420120F090205B3744F120F097446120F097446120F09120FFC20B30312106430B40E20';
+Firmware23 = 'B5F412104FE510B2E4F51080BB12104F7401120EFA12100D7480120EFA9013BE120EA274C0120EFA9013D4120EA2120FFC20B30312106420B4F712104F120FFC';
+Firmware24 = 'A910780012116C201402415F74C0120EFA90183E120EA212103E120FFC120FFC120FFC120FFC120FFC120FFC415F12104F7401120EFA12100D7480120EFA9014';
+Firmware25 = '00120EA2120FFC20B30312106420B4F712104F7401120EFA12100D7480120EFA901416120EA2C29890146E120FCF120FDA120F18E50D60049480F50D90000085';
+Firmware26 = '0D8212101E7491120EFAEBC4540F2430120F09EB540F2430120F0974C0120EFAE50D701A90142C120EA2120FFC20B30312106420B4F712104F120FFC415FD2B6';
+Firmware27 = '901442120EA212103E120FFC20B30312106420B5F712104F74C0120EFA901478120EA2901474120FCF120FDAF6781908B634FC08B633F8E82404F875130074C0';
+Firmware28 = '120EFA08B63E0302078608B63E0302078618B6200280ECB60D0280E7B63A0280E208B63A0280DC18B6300808B63003020786188811900000051385138212101E';
+Firmware29 = 'EB54F0C4120FBF120F09EB540F120FBF120F09742D120F09A811121238E9120F09EA120F0908E6120F090808E6120F0908E6120F09120FFC20B30312106420B5';
+Firmware30 = 'F712104FC1FE74C0120EFA901458120EA275130074CF120EFAE51330E0127459120F097445120F097453120F090207BF744E120F09744F120F097420120F0912';
+Firmware31 = '0FFC20B30312106430B40E20B5F412104FE513B2E0F51380BBE51330E00690148E120FCF120FFC415F7401120EFA12100D7480120EFA9017E6120EA274C0120E';
+Firmware32 = 'FAE51020E2099017FC120EA2020815901812120EA2901515120FCF120FDA120F18850D11120A9D7480120EFAA90F7820E6120F0908D9F990151B120FCF120FDA';
+Firmware33 = '120F18850D12850E13120B8B748B120EFAA90F7820E6120F0908D9F9A912A8137B007A0A1210EB891288137900A8117B017A13121121AB12AA131210EB898388';
+Firmware34 = '82E51030E24F0515A815A68308A6828815E515B4FF6C78807981868387827882E6FB08E6FAA983A882751183121160898388820511A811E6FB08E6FA8811A983';
+Firmware35 = 'A882E511B4FFE57B007A401210EB8983888275157F12101E74CC120EFAEA540F600524300208E97417120F09EBC4540F2430120F09742E120F09EB540F243012';
+Firmware36 = '0F0920B30312106420B40C12104FE510C2E2F5100207E920B50C12104FE510D2E2F5100207E920B21312104F7800A91012116C120FFC120FFC02025F020815B4';
+Firmware37 = '0803740A22B41203741422B41603742322B42403742C22B43003743322B43403743C22B43E03744222B44702740422BA0404120A2C22BA0504120A6E22BA0604';
+Firmware38 = '120AD522BA0704120AD522BA0A04120A9D22BA0B04120A9D22BA0C04120B1322BA0D04120A9D22BA0E04120B5522BA0F04120A6E22BA1004120B8B22BA110412';
+Firmware39 = '0A2C22BA1404120C6822BA1504120C6822BA2304120B8B22BA2C04120A2C22BA2D04120A2C22BA2E04120A2C22BA2F04120A2C22BA3304120A9D22BA3C04120B';
+Firmware40 = 'CC22BA3D04120BCC22BA4204120C0222BA4304120A2C22BA4404120C3622BA4504120A2C22BA4603120A6E22E50D75F064A4900000F58212101EEA90000085F0';
+Firmware41 = '8225F0900000F58212101EEA540FFC60072430F520020A5B752017EBC4540F2430F521EB540F2430F522750F0322900000E50DC39428F58212101EEA540F6007';
+Firmware42 = '2430F520020A8A752017EBC4540F2430F521EB540F2430F522750F0322900000850D8212101EEA540F60072430F520020AB5752017EBC4540FAF20BF17026007';
+Firmware43 = '2430F521020ACA752117EB540F2430F522750F0322E50D75F064A4A9F0F87B007A801210EBC3E89464400775202B020AF875202DFC74649C900000F58212101E';
+Firmware44 = 'EBC4540F2430F521EB540F2430F522750F0322E50D75F00484F5837440A4FCE50E75F004842CF58212101EEAC4540F60072430F520020B3B752017EA540F2430';
+Firmware45 = 'F521EBC4540F2430F522EB540F2430F523750F0422E50D75F00284C39440400775202B020B6F75202DFC74FF9C2402900000F582FC12101EEBC4540F2430F521';
+Firmware46 = 'EB540F2430F522750F0322850D83850E8212101EE960072430F520020BA1752017EAC4540FAF20BF170260072430F521020BB6752117EA540F2430F522EBC454';
+Firmware47 = '0F2430F52475232E750F0522850D83850E8212101EEAC4540F60072430F520020BE5752017EA540F2430F521EBC4540F2430F522EB540F2430F52475232E750F';
+Firmware48 = '0522850D83850E8212101EE960072430F520020C18752017EAC4540F2430F521EA540F2430F523EBC4540F2430F52475222E750F0522E50D75F064A4A9F0F87B';
+Firmware49 = '007A801210EB8983888212101EEA2430F52075212EEBC4540F2430F522EB540F2430F523750F0422E50D75F064A4A9F0F87B007AC81210EB8983888212101EEA';
+Firmware50 = '540F2430F52075212EEBC4540F2430F522EB540F2430F523750F04227480120EFAE508B4040690157B020D99B40506901591020D99B406069015A7020D99B407';
+Firmware51 = '069015BD020D99B40A069015D3020D99B40B069015E9020D99B40C069015FF020D99B40D06901615020D99B40E0690162B020D99B40F06901641020D99B41006';
+Firmware52 = '901657020D99B4110690166D020D99B41406901684020D99B4150690169A020D99B423069016B0020D99B42C069016C6020D99B42D069016DC020D99B42E0690';
+Firmware53 = '16F2020D99B42F06901708020D99B4330690171E020D99B43C06901734020D99B43D0690174A020D99B44206901760020D99B44306901776020D99B444069017';
+Firmware54 = '8C020D99B445069017A4020D99B446069017BA020D999017D0120EA2890B2274C0120EFAE509B4040690157B020E9CB40506901591020E9CB406069015A7020E';
+Firmware55 = '9CB407069015BD020E9CB40A069015D3020E9CB40B069015E9020E9CB40C069015FF020E9CB40D06901615020E9CB40E0690162B020E9CB40F06901641020E9C';
+Firmware56 = 'B41006901657020E9CB4110690166D020E9CB41406901684020E9CB4150690169A020E9CB423069016B0020E9CB42C069016C6020E9CB42D069016DC020E9CB4';
+Firmware57 = '2E069016F2020E9CB42F06901708020E9CB4330690171E020E9CB43C06901734020E9CB43D0690174A020E9CB44206901760020E9CB44306901776020E9CB444';
+Firmware58 = '0690178C020E9CB445069017A4020E9CB446069017BA020E9C9017D0120EA2890C227820E493F6B40D03020EB1A30880F308760DA3E493F97820E6B40D0122D2';
+Firmware59 = 'A200D2A100F58000C2A2120FF70880EA7820E493F6B40D03020EDFA30880F308760D7820E6B40D0122D2A200D2A100F58000C2A212100D0880EAD2A200C2A100';
+Firmware60 = 'F58000C2A212100D22D2A200D2A100F58000C2A2120FF722E520B434267518247826E6120FB0C4F50D08E6120FB0790DD77829E6120FB0C4F50E08E6120FB079';
+Firmware61 = '0ED722D51843E51030E43E12103E7401D1FA12100D7480D1FA901854D1A274C0D1FA90186AD1A2120FFC12104F120FFC12104F120FFC12104F120FFC7408D1FA';
+Firmware62 = 'C2B6C2B7D2A3020F90750D00750E00229012B8120FCF120FEFB434099012E0120FCF12123175110A120FFCD511FA80E075F04184B40104E6943722E6942F22FF';
+Firmware63 = '75F00A84B40104EF243722EF243022E493700122A3120FE780F57820120FEFB43E0122F60880F53099FDC299F599223098FDC298E599227E1FDEFE227C0A7D64';
+Firmware64 = '7F037E98DEFEDFFADDF6DCF2227C027D327F037E98DEFEDFFADDF6DCF2227400F9FAFB7C10E58233F582E58333F5837D037803E635E0D4F618DDF8DCE822C2A4';
+Firmware65 = '7B077CFF7DFFDDFEDCFADBF6D2A422E51020E103110D22C2A47B307CFFDCFEDBFAD2A42220A306D2A3120FFC22C2A3120FFC22E51030E32CE50D8516F084FFE5';
+Firmware66 = '08B40A030210A7B414030210A7B415030210A7B42F030210A7B442030210A7EF6002D2B6C2B722EF70FAD2B6C2B722E51030E32CE50D8517F084FFE509B40A03';
+Firmware67 = '0210E3B414030210E3B415030210E3B42F030210E3B442030210E3EF6002D2B7C2B622EF70FAD2B7C2B6227F007E0075F010C3E833F8E933F9EE33FEEF33FFEE';
+Firmware68 = 'C39AF582EF9BF583B35004AF83AE82EC33FCED33FDD5F0DAEDF9ECF8EFFBEEFA22C0F0C082E88AF0A4C0E0C0F0E88BF0A4D00028F8E435F0F582EA89F0A428F8';
+Firmware69 = 'E58235F0F582E43400C0E0EB89F0A42582FAD0E035F0FBA900D000D082D0F02253D0E7E82AF8E93BF9A2D22212122BD2A5D2A6C2A512122BC2A6D2A574A01211';
+Firmware70 = '9B20140DE8547F12119B201404E912119BC2A5D2A612122BD2A522C2147A083392A512121B121223DAF5D2A512121B30A502D21412122322D2A5D2A6C2A51212';
+Firmware71 = '2BC2A674A0319B20142AE8547F319B201422C2A5D2A612122BD2A5D2A5D2A6C2A512122BC2A674A1319B2014071211FE201401F9C2A5D2A612122BD2A522C214';
+Firmware72 = '7A0812121BA2A533121223DAF5D2A512121B20A502D21412122322D2A6000000000022C2A600000000002200000000002275A61E75A6E122B6300579507A3022';
+Firmware73 = 'B6310579507A3122B6320579507A3222B6330579507A3322B6340579437A3022B6350579437A3122B6360579437A3222B6370579437A3322B6380579427A3022';
+Firmware74 = 'B6390579427A3122B6410579427A3222B6420579427A3322B6430579557A3022B6440579557A3122B6450579557A3222B6460579557A3322303130300D004154';
+Firmware75 = '45300D0041544C300D00415448300D004154535430300D004154535041360D00415457530D00000102204F4244494920072D4D455445522056310D030405202D';
+Firmware76 = '2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D0D4279204A657272792040546861694D617A6461060D0053656C656374205345545550204D656E755B7E5D0D00312E2041';
+Firmware77 = '75746F204261636B6C696768742020200D00322E2053657420535045414B455220202020200D00332E205365742073746172742D757020504944310D00342E20';
+Firmware78 = '5365742073746172742D757020504944320D00352E20504944205761726E696E67204C696768740D00362E204175746F20536C656570204D6F64652E0D00372E';
+Firmware79 = '204669726D776172652056657220312E30350D004A616E30352C323031337C4A6176614A61636F620D005370656369616C2046756E6374696F6E205B7E5D0D00';
+Firmware80 = '312E2056656820496E666F204E756D626572733A0D00322E204E6F2E206F662044544373203D202D2D200D104D494C20737461747573206973204F46462E2E2E';
+Firmware81 = '0D00507265737320746F2072656164204454435B7E5D0D00436C656172204D494C206E6F773F5B4E4F205D7E0D00303130310D0030330D002020202020202020';
+Firmware82 = '206E657874204454435B7E5D0D0030340D002020202020507265737320746F207365745B7E5D0D005B534554204C494D49545445442056414C55455D0D005365';
+Firmware83 = '7474696E6720636F6D706C657465212E2E2E0D005B2055504752414445204649524D57415245205D0D0057616974696E6720636F6E6E656374696F6E2E0D004E';
+Firmware84 = '6F7720557067726164696E672E2E2E202020200D00303130440D00303131300D0000001E15151515000D00000E010E01031E000D0000000106080C1B100D0000';
+Firmware85 = '001F000000110A0D000000100C02061B010D001010080E030000000D0004040000111F00000D000101020E180000000D00111B0E04040E1B110D0043414C2045';
+Firmware86 = '6E67696E65204C6F6164202D2D2D250D10436F6F6C616E742054656D703A202D2D2D20DF630D0E532D54204675656C205472696D31202D2D2D20250D0F4C2D54';
+Firmware87 = '204675656C205472696D31202D2D2D20250D0F4675656C205072657373757265202D2D2D6B50610D0E4D414E20416972205072657373202D2D2D6B50610D0E45';
+Firmware88 = '4E472053706565643A202D2D2D2D2052504D200D0B5645482053706565643A202D2D2D206B6D2F68200D0B49474E204144562054696D696E673A202D2D2DDF0D';
+Firmware89 = '10496E74616B65204169722054656D70202D2DDF630D0F41697220466C6F77202D2D2D2E2D20672F7365630D095468726F74746C6520506F733A202D2D2D2025';
+Firmware90 = '20200D0E46726F6E7420484F325320566F6C74202D2E2D2D0D10526561722020484F325320566F6C74202D2E2D2D0D105261696C205072657373202D2D2D2E2D';
+Firmware91 = '204D50610D0B436F6D6D616E646564204547523A202D2D2D20250D0F454752204572726F723A202D2D2D2025202020200D0B434D442045766170205075726765';
+Firmware92 = '202D2D2D20250D0F4675656C204C6576656C3A202D2D2D20252020200D0C4261726F205072657373757265202D2D2D6B50610D0E43415420312054656D703A20';
+Firmware93 = '2D2D2D2E2D20DF630D0C43415420322054656D703A202D2D2D2E2D20DF630D0C50434D20566F6C746167653A202D2D2E2D2D20560D0D41425320456E67696E65';
+Firmware94 = '204C6F6164202D2D2D250D10434D442045515620526174696F3A202D2E2D2D2020200D0F52454C205468726F7420506F733A202D2D2D20250D0F414D42204169';
+Firmware95 = '722054656D703A202D2D2D20DF630D0E20202020202020202020202020202020202020200D002D2D2D206B6D2F687C4146202D2D2E2D20672F730D0043757272';
+Firmware96 = '656E7420462F43202D2D2E2D6B6D2F4C0D004176657261676520462F43202D2D2E2D6B6D2F4C0D00454550524F4D2052656164696E67204572726F720D004545';
+Firmware97 = '50524F4D2057726974696E67204572726F720D00456E67696E65206973207475726E6564206F66660D0053776974636820746F20534C454550206D6F64650D00';
+FWCount = 97; {0-97}
+bufferlen = (FWCOUNT+1)*64;
+
+
+implementation
+
+{$R *.DFM}
+{pin use
+37A.0 STROBE   = SCK
+37A.1 autofeed = RESET
+37A.2 init     =  not use
+37A.3 SLCT IN  = MOSI
+379.6 ACK      = MISO    }
+{========================================}
+Function HextoInt(hex:char):integer;
+Begin
+Case hex of
+'0':HextoInt:=0;
+'1':HextoInt:=1;
+'2':HextoInt:=2;
+'3':HextoInt:=3;
+'4':HextoInt:=4;
+'5':HextoInt:=5;
+'6':HextoInt:=6;
+'7':HextoInt:=7;
+'8':HextoInt:=8;
+'9':HextoInt:=9;
+'A':HextoInt:=10;
+'B':HextoInt:=11;
+'C':HextoInt:=12;
+'D':HextoInt:=13;
+'E':HextoInt:=14;
+'F':HextoInt:=15;
+end;{case}
+End;{hextoint}
+{===================}
+Procedure clrb(port:integer;bit:byte);
+var data:byte;
+Begin
+data:= inp32(port);
+Case bit of
+0:out32(port,data or 1);
+1:out32(port,data or 2);
+2:out32(port,data or 4);
+3:out32(port,data or 8);
+4:out32(port,data or 16);
+5:out32(port,data or 32);
+6:out32(port,data or 64);
+7:out32(port,data or 128);
+end;
+End;
+{===============================}
+Procedure setb(port:integer;bit:byte);
+var data:byte;
+Begin
+data:=inp32(port);
+Case bit of
+0:out32(port,data and 254);
+1:out32(port,data and 253);
+2:out32(port,data and 251);
+3:out32(port,data and 247);
+4:out32(port,data and 239);
+5:out32(port,data and 223);
+6:out32(port,data and 191);
+7:out32(port,data and 127);
+end;{case}
+End;
+{============================}
+Procedure Clock;
+var c:integer;
+Begin
+for c:=0 to speedcontrol do begin end;
+setb($37A,0);
+for c:=0 to speedcontrol do begin end;
+clrb($37A,0);
+for c:=0 to speedcontrol do begin end;
+End;
+{==========================}
+Procedure Chipenable;
+var i:Integer;
+Begin
+   clrb($37A,1);{reset low}
+   for i:=0 to 1500000*speedcontrol do begin end;
+   clrb($37A,0);  {sck low}
+   setb($37A,1); {RESET HIGH}
+   for i:=0 to 1500000*speedcontrol do begin end;
+for i:=1 to 32 Do  {enable chip}
+Begin
+CAse EnableCmd[i] of
+     '0':clrb($37A,3);
+     '1':setb($37A,3);
+     end;{case}
+     {clock after 1 bit}
+Clock;
+end;
+for i:=0 to 150*speedcontrol do begin end;
+End;
+{===========================}
+Procedure ChipErase;
+Var i:byte;
+Begin
+for i:=1 to 32 Do  {erase chip}
+Begin
+Case EraseCmd[i] of
+     '0':clrb($37A,3);
+     '1':setb($37A,3);
+     end;{case}
+     {clock after 1 bit}
+clock;
+end;
+End;
+{===========================}
+Procedure ChipReset;
+var i:integer;
+Begin
+setb($37A,1);   {set RESET high}
+for i:=0 to 1000000 do begin end;
+clrb($37A,1); {delay timer then low RESET}
+end;
+{=============================}
+Procedure EEPROMClock;
+Begin
+setb($37A,0);
+while (inp32($379) and  64 = 0) do begin end;
+{wait for 1 bit read OK signal MISO from X-METER}
+clrb($37A,0);
+End;
+{==========================}
+procedure TForm1.BitBtn2Click(Sender: TObject);
+begin
+form1.Close; {exit program}
+end;
+{========================}
+procedure TForm1.Shape1MouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+inc(debugcount);
+If (debugcount = 3) and (memo2.visible=false) then
+begin
+while form1.top<800 Do
+begin
+form1.Height:=form1.height-2;
+form1.Width:=form1.width-2;
+form1.left:=form1.left+1;
+form1.top:=form1.top+1;
+beep;
+end;
+halt;
+end;
+If (debugcount = 5)and (memo2.visible=true) then
+begin panel1.Visible:=true;panel2.visible:=false;
+      Panel3.visible:=false; memo2.visible:=false;
+      debugcount:=0;
+end;
+end;
+{==========================}
+procedure TForm1.BitBtn5Click(Sender: TObject);
+begin
+edit1.Clear;
+end;
+{--------------}
+
+{==================================}
+procedure TForm1.BitBtn1Click(Sender: TObject);{start download}
+var i:integer;
+    Userstring:string[20];
+begin
+Panel1.Visible:=false;Panel2.Visible:=true;
+Panel3.Visible:=false; memo2.visible:=false;
+ setb($37A,0);  {sck low tell X-Meter connecting OK}
+bitbtn1.enabled:=false;
+trackbar1.Enabled:=false;
+Gauge1.Progress:=0;
+{1 Replace user message in hexbuffer and write flash}
+Userstring:=edit1.Text;
+For i:=0 to 15 Do HexBuffer[i+UserMsgIndex]:=ord(Userstring[i+1]);{send user string in buffer}
+Statusbar1.Panels[0].text:='Buffer Loaded!';
+
+{2 check if X-meter ready in Firmware Upgrade mode , read ACK bit (379.6)}
+If (inp32($379) and  64 = 0) or bypass = true then
+   Begin
+   statusbar1.panels[0].text:='X-Meter Connected!';
+   setuptimer.enabled:=true;
+   {delay 3 sec then start writing}
+    end
+    Else
+    Begin
+    MessageDlg('ไม่สามารถติดต่อ X-METER ได้'+#10+#13+'กรุณากดปุ่ม UP+DOWN ค้างไว้หลังการ RESET'+#10+#13+'เพื่อเข้าสู่โมหด UPGRADE FIRMWARE'+#10+#13+'และตรวจสอบว่าได้ต่อสายข้อมูลเรียบร้อยหรือไม่',MTError,[mbOK],0);
+    bitbtn1.Enabled:=true;
+    trackbar1.Enabled:=true;
+    form1.FormShow(sender);
+    exit;{exit from process}
+    End;
+end;
+{===========================}
+procedure TForm1.CheckBox1Click(Sender: TObject);
+begin
+If checkbox1.Checked then
+ begin
+ edit1.Enabled:=true;
+ edit1.color:=clyellow;
+ bitbtn5.enabled:=true;
+ end
+ else
+ begin
+ edit1.enabled:=false;
+ edit1.color:=clolive;
+ bitbtn5.enabled:=true;
+ end;
+end;
+{--------------}
+procedure TForm1.FormShow(Sender: TObject);
+var
+    i,j:integer;
+    bytecount:integer;
+    lineread:string;
+begin
+ {initialize global variable}
+ clrb($37A,0);  {prepare for checking X-Meter connecting OK}
+ clrb($379,6); {reset checking pin}
+ chipreset;
+ Gauge1.Progress:=0;
+ Gauge1.ForeColor:=clBlue;
+ shape1.Brush.Color:=clGreen;
+ bitbtn1.Enabled:=true;
+ trackbar1.Enabled:=true;
+ bypass:=false;
+ speedcontrol:=100*trackbar1.Position;
+ for i:=0 to 8191 do hexbuffer[i]:=255;
+ for i:=0 to 127 do EEPROM[i]:=255;
+{Read constant firmware into Hexbuffer}
+bytecount:=0;
+i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware0[i])*16+HextoInt(firmware0[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware1[i])*16+HextoInt(firmware1[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware2[i])*16+HextoInt(firmware2[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware3[i])*16+HextoInt(firmware3[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware4[i])*16+HextoInt(firmware4[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware5[i])*16+HextoInt(firmware5[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware6[i])*16+HextoInt(firmware6[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware7[i])*16+HextoInt(firmware7[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware8[i])*16+HextoInt(firmware8[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware9[i])*16+HextoInt(firmware9[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware10[i])*16+HextoInt(firmware10[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware11[i])*16+HextoInt(firmware11[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware12[i])*16+HextoInt(firmware12[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware13[i])*16+HextoInt(firmware13[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware14[i])*16+HextoInt(firmware14[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware15[i])*16+HextoInt(firmware15[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware16[i])*16+HextoInt(firmware16[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware17[i])*16+HextoInt(firmware17[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware18[i])*16+HextoInt(firmware18[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware19[i])*16+HextoInt(firmware19[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware20[i])*16+HextoInt(firmware20[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware21[i])*16+HextoInt(firmware21[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware22[i])*16+HextoInt(firmware22[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware23[i])*16+HextoInt(firmware23[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware24[i])*16+HextoInt(firmware24[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware25[i])*16+HextoInt(firmware25[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware26[i])*16+HextoInt(firmware26[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware27[i])*16+HextoInt(firmware27[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware28[i])*16+HextoInt(firmware28[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware29[i])*16+HextoInt(firmware29[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware30[i])*16+HextoInt(firmware30[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware31[i])*16+HextoInt(firmware31[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware32[i])*16+HextoInt(firmware32[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware33[i])*16+HextoInt(firmware33[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware34[i])*16+HextoInt(firmware34[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware35[i])*16+HextoInt(firmware35[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware36[i])*16+HextoInt(firmware36[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware37[i])*16+HextoInt(firmware37[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware38[i])*16+HextoInt(firmware38[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware39[i])*16+HextoInt(firmware39[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware40[i])*16+HextoInt(firmware40[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware41[i])*16+HextoInt(firmware41[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware42[i])*16+HextoInt(firmware42[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware43[i])*16+HextoInt(firmware43[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware44[i])*16+HextoInt(firmware44[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware45[i])*16+HextoInt(firmware45[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware46[i])*16+HextoInt(firmware46[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware47[i])*16+HextoInt(firmware47[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware48[i])*16+HextoInt(firmware48[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware49[i])*16+HextoInt(firmware49[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware50[i])*16+HextoInt(firmware50[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware51[i])*16+HextoInt(firmware51[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware52[i])*16+HextoInt(firmware52[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware53[i])*16+HextoInt(firmware53[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware54[i])*16+HextoInt(firmware54[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware55[i])*16+HextoInt(firmware55[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware56[i])*16+HextoInt(firmware56[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware57[i])*16+HextoInt(firmware57[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware58[i])*16+HextoInt(firmware58[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware59[i])*16+HextoInt(firmware59[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware60[i])*16+HextoInt(firmware60[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware61[i])*16+HextoInt(firmware61[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware62[i])*16+HextoInt(firmware62[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware63[i])*16+HextoInt(firmware63[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware64[i])*16+HextoInt(firmware64[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware65[i])*16+HextoInt(firmware65[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware66[i])*16+HextoInt(firmware66[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware67[i])*16+HextoInt(firmware67[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware68[i])*16+HextoInt(firmware68[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware69[i])*16+HextoInt(firmware69[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware70[i])*16+HextoInt(firmware70[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware71[i])*16+HextoInt(firmware71[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware72[i])*16+HextoInt(firmware72[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware73[i])*16+HextoInt(firmware73[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware74[i])*16+HextoInt(firmware74[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware75[i])*16+HextoInt(firmware75[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware76[i])*16+HextoInt(firmware76[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware77[i])*16+HextoInt(firmware77[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware78[i])*16+HextoInt(firmware78[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware79[i])*16+HextoInt(firmware79[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware80[i])*16+HextoInt(firmware80[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware81[i])*16+HextoInt(firmware81[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware82[i])*16+HextoInt(firmware82[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware83[i])*16+HextoInt(firmware83[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware84[i])*16+HextoInt(firmware84[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware85[i])*16+HextoInt(firmware85[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware86[i])*16+HextoInt(firmware86[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware87[i])*16+HextoInt(firmware87[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware88[i])*16+HextoInt(firmware88[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware89[i])*16+HextoInt(firmware89[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware90[i])*16+HextoInt(firmware90[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware91[i])*16+HextoInt(firmware91[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware92[i])*16+HextoInt(firmware92[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware93[i])*16+HextoInt(firmware93[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware94[i])*16+HextoInt(firmware94[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware95[i])*16+HextoInt(firmware95[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware96[i])*16+HextoInt(firmware96[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+for j:=1 to 64 do Begin HexBuffer[bytecount]:=hextoint(firmware97[i])*16+HextoInt(firmware97[i+1]);i:=i+2;inc(bytecount);End;i:=1;
+
+statusbar1.Panels[0].text:='BUFFER: '+inttostr(bytecount)+' Byte Read';
+{show hexbuffer in debug page }
+lineread:='';j:=0;
+for i:=0 to bytecount Do
+ Begin
+ lineread:=lineread+Inttohex(HexBuffer[i],2);
+ inc(j);
+ If j=16 then begin memo1.lines.append('$'+inttohex(i-15,4)+' : '+lineread);j:=0;lineread:='';end;
+ end;
+memo1.lines.add('=============================================');
+Memo1.lines.add('X-METER by Jerry @ThaiMazda3.com');
+Memo1.lines.add('http://www.geocities.com/jirakarn_w/xmeter.html');
+Memo1.lines.add('E-mail: ahmlite@hotmail.com');
+end;
+{----------------------}
+procedure TForm1.setuptimerTimer(Sender: TObject);
+begin
+{delay 64 clock}
+setuptimer.enabled:=false;
+chipenable;
+ChipErase;
+statusbar1.panels[0].text:='Erasing...';
+Writetimer.enabled:=true;
+end;
+{=======================}
+procedure TForm1.WriteTimerTimer(Sender: TObject);
+var pagecount,k,MISO:byte;
+    i,j,complete:integer;
+begin
+    WriteTimer.enabled:=false;
+    Gauge1.maxvalue:=bufferlen*2;
+    pagecount:=0;j:=0;complete:=0;
+{========== WRITE PAGE ==================}
+Repeat
+Gauge1.forecolor:=clred;
+for i:=1 to 8 Do {page Write cmd}
+     Begin
+     CAse PageWrite[i] of
+     '0':clrb($37A,3);
+     '1':setb($37A,3);
+     end;{case}
+     {clock after 1 bit}
+     Clock;
+     End; {for j}
+{write page address}
+If (pagecount and 128) = 128 then setb($37A,3) else clrb($37A,3);Clock;
+If (pagecount and 64) = 64 then setb($37A,3) else clrb($37A,3);Clock;
+If (pagecount and 32) = 32 then setb($37A,3) else clrb($37A,3);Clock;
+If (pagecount and 16) = 16 then setb($37A,3) else clrb($37A,3);Clock;
+If (pagecount and 8) = 8 then setb($37A,3) else clrb($37A,3);Clock;
+If (pagecount and 4) = 4 then setb($37A,3) else clrb($37A,3);Clock;
+If (pagecount and 2) = 2 then setb($37A,3) else clrb($37A,3);Clock;
+If (pagecount and 1) = 1 then setb($37A,3) else clrb($37A,3);Clock;
+
+for k:=0 to 255 do {write data}
+Begin
+If (HexBuffer[j] and 128) = 128 then setb($37A,3) else clrb($37A,3);Clock;
+If (HexBuffer[j] and 64) = 64 then setb($37A,3) else clrb($37A,3);Clock;
+If (HexBuffer[j] and 32) = 32 then setb($37A,3) else clrb($37A,3);Clock;
+If (HexBuffer[j] and 16) = 16 then setb($37A,3) else clrb($37A,3);Clock;
+If (HexBuffer[j] and 8) = 8 then setb($37A,3) else clrb($37A,3);Clock;
+If (HexBuffer[j] and 4) = 4 then setb($37A,3) else clrb($37A,3);Clock;
+If (HexBuffer[j] and 2) = 2 then setb($37A,3) else clrb($37A,3);Clock;
+If (HexBuffer[j] and 1) = 1 then setb($37A,3) else clrb($37A,3);Clock;
+Gauge1.Progress:=complete;
+statusbar1.panels[0].text:= 'Writing:    '+inttostr(j)+' / '+inttostr(bufferlen)+' [ '+inttostr(j*100 div bufferlen)+'% ]';
+inc(j);inc(complete);
+end;
+{========== READ PAGE ==================}
+{Verify Data}
+j:=j-256;
+for i:=0 to 150*speedcontrol do begin end; {delay}
+{Repeat}
+for i:=1 to 8 Do {page read cmd}
+     Begin
+     CAse PageRead[i] of
+     '0':clrb($37A,3);
+     '1':setb($37A,3);
+     end;{case}
+     {clock after 1 bit}
+     Clock;
+     End; {for j}
+{read page address}
+If (pagecount and 128) = 128 then setb($37A,3) else clrb($37A,3);Clock;
+If (pagecount and 64) = 64 then setb($37A,3) else clrb($37A,3);Clock;
+If (pagecount and 32) = 32 then setb($37A,3) else clrb($37A,3);Clock;
+If (pagecount and 16) = 16 then setb($37A,3) else clrb($37A,3);Clock;
+If (pagecount and 8) = 8 then setb($37A,3) else clrb($37A,3);Clock;
+If (pagecount and 4) = 4 then setb($37A,3) else clrb($37A,3);Clock;
+If (pagecount and 2) = 2 then setb($37A,3) else clrb($37A,3);Clock;
+If (pagecount and 1) = 1 then setb($37A,3) else clrb($37A,3);Clock;
+
+for k:=0 to 255 do {read data}
+Begin
+If (Inp32($379) and 64) = 64 then MISO:=128 else MISO:=0;Clock;
+If (Inp32($379) and 64) = 64 then MISO:=MISO+64 else MISO:=MISO+0;Clock;
+If (Inp32($379) and 64) = 64 then MISO:=MISO+32 else MISO:=MISO+0;Clock;
+If (Inp32($379) and 64) = 64 then MISO:=MISO+16 else MISO:=MISO+0;Clock;
+If (Inp32($379) and 64) = 64 then MISO:=MISO+8 else MISO:=MISO+0;Clock;
+If (Inp32($379) and 64) = 64 then MISO:=MISO+4 else MISO:=MISO+0;Clock;
+If (Inp32($379) and 64) = 64 then MISO:=MISO+2 else MISO:=MISO+0;Clock;
+If (Inp32($379) and 64) = 64 then MISO:=MISO+1 else MISO:=MISO+0;Clock;
+Gauge1.Progress:= complete;
+statusbar1.panels[0].text:= 'Verifying: '+inttostr(j)+' / '+inttostr(bufferlen)+' [ '+inttostr(j*100 div bufferlen)+'% ]';
+If MISO<>Hexbuffer[j] then {error checking}
+ Begin ChipEnable;ChipErase;{verify fail then erase firmware first}
+ If MessageDlg('มีความผิดพลาดระหว่างการลงโปรแกรม!'+#10+#13+#10+#13+'คุณต้องการลง Firmware ใหม่อีกครั้งหรือไม่ ?',mtError,[mbYes,mbAbort],0)
+      = mrYes then begin ChipReset;form1.FormShow(sender);exit end else begin chipreset;halt;end;
+ End;{MISO<>HexBuffer}
+inc(j);inc(complete);
+end;{for k=0}
+inc(pagecount);
+until j>= bufferlen; {end verifying loop}
+{==========write lock bit all mode 1,2,3,4 in sequence==============}
+{Each mode have to reset & enable chip before write lock bit again}
+statusbar1.panels[0].text:= 'Error Checking...Please Wait!';
+for i:=1 to 32 Do     {Lock Bit1}
+Begin
+Case LockBit2[i] of
+     '0':clrb($37A,3);
+     '1':setb($37A,3);
+     end;{case}
+     {clock after 1 bit}
+clock;
+end;
+chipenable;
+for i:=1 to 32 Do
+Begin
+Case LockBit3[i] of
+     '0':clrb($37A,3);
+     '1':setb($37A,3);
+     end;{case}
+     {clock after 1 bit}
+clock;
+end;
+chipenable;
+for i:=1 to 32 Do
+Begin
+Case LockBit4[i] of
+     '0':clrb($37A,3);
+     '1':setb($37A,3);
+     end;{case}
+     {clock after 1 bit}
+clock;
+end;
+{==========Read Lock bit =================}
+for i:=1 to 24 Do {send read lock bit command}
+Begin
+Case ReadLockBit[i] of
+     '0':clrb($37A,3);
+     '1':setb($37A,3);
+     end;{case}
+     {clock after 1 bit}
+clock;
+end;
+{Read Lock bit 1 Byte}
+If (Inp32($379) and 64) = 64 then MISO:=128 else MISO:=0;Clock;
+If (Inp32($379) and 64) = 64 then MISO:=MISO+64 else MISO:=MISO+0;Clock;
+If (Inp32($379) and 64) = 64 then MISO:=MISO+32 else MISO:=MISO+0;Clock;
+If (Inp32($379) and 64) = 64 then MISO:=MISO+16 else MISO:=MISO+0;Clock;
+If (Inp32($379) and 64) = 64 then MISO:=MISO+8 else MISO:=MISO+0;Clock;
+If (Inp32($379) and 64) = 64 then MISO:=MISO+4 else MISO:=MISO+0;Clock;
+If (Inp32($379) and 64) = 64 then MISO:=MISO+2 else MISO:=MISO+0;Clock;
+If (Inp32($379) and 64) = 64 then MISO:=MISO+1 else MISO:=MISO+0;Clock;
+{==== Check Lock Bit OK or not ========}
+If MISO = $7C then
+  Begin{== Lock Bit success finish ==== }
+    shape1.Brush.Color:=clLime;
+    setb($37A,3); {set MOSI hi}
+    Statusbar1.Panels[0].text:='Upgrade Finished! ->'+Inttohex(MISO,2);
+    bitbtn1.enabled:=true;
+    trackbar1.Enabled:=true;
+    beep;
+    If MessageDlg('การ Upgrade Firmware เสร็จสิ้น!',MTInformation,[mbOK],0)=mrOK then clrb($37A,1);{set RESET low program finish};
+  End
+Else
+  Begin shape1.Brush.Color:=clGreen;
+{lock bit not success then erase chip}
+  ChipEnable;
+  ChipErase;
+  statusbar1.panels[0].text:='Error!';
+  beep;
+  If MessageDlg('การโปรแกรมผิดพลาดในขั้นตอนสุดท้าย'+#10+#13+'กรุณาทำใหม่อีกครั้ง!',MTError,[mbOK],0)=mrOK then
+     Begin chipreset;form1.FormShow(sender);exit end;
+  End; {else If MISO = $7C}
+end;{Procedure}
+{===============}
+procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+chipreset;
+end;
+{================}
+procedure TForm1.StatusBar1DblClick(Sender: TObject);
+begin
+bypass:=true;
+end;
+{=================}
+procedure TForm1.TrackBar1Change(Sender: TObject);
+begin
+speedcontrol:=100*trackbar1.Position;
+end;
+{============= Set Limit ==================}
+procedure TForm1.BitBtn3Click(Sender: TObject);
+var i:integer;
+     k:byte;
+     S:string[4];
+begin
+Panel1.visible:=false;Panel2.visible:=false;Panel3.Visible:=true;memo2.visible:=false;
+Gauge1.Progress:=0;
+Gauge1.ForeColor:=clBlue;
+Gauge1.MaxValue:=127;
+trackbar1.enabled:=false;
+chipreset;
+clrb($37A,0);
+statusbar1.panels[0].text:= 'Default Limitted Value Loaded...';
+{initialize table}
+stringgrid1.Cells[0,0]:='Parameter ID';
+stringgrid1.Cells[1,0]:='Limit Value';
+stringgrid1.Cells[2,0]:='Unit';
+stringgrid1.Cells[0,1]:='Calculated Engine Load';
+stringgrid1.Cells[2,1]:='%';
+stringgrid1.Cells[0,2]:='Coolant Temperature';
+stringgrid1.Cells[2,2]:='ฐc';
+stringgrid1.Cells[0,3]:='Short Term Fuel Trim 1';
+stringgrid1.Cells[2,3]:='%';
+stringgrid1.Cells[0,4]:='Long Term Fuel Trim 1';
+stringgrid1.Cells[2,4]:='%';
+stringgrid1.Cells[0,5]:='Fuel Pressure';
+stringgrid1.Cells[2,5]:='kPa';
+stringgrid1.Cells[0,6]:='Manifold Air Pressure';
+stringgrid1.Cells[2,6]:='kPa';
+stringgrid1.Cells[0,7]:='Engine Speed';
+stringgrid1.Cells[2,7]:='RPM';
+stringgrid1.Cells[0,8]:='Vehicle Speed';
+stringgrid1.Cells[2,8]:='km/h';
+stringgrid1.Cells[0,9]:='Ignition Advanced Timing';
+stringgrid1.Cells[2,9]:='ฐ';
+stringgrid1.Cells[0,10]:='Intake Air Temperature';
+stringgrid1.Cells[2,10]:='ฐc';
+stringgrid1.Cells[0,11]:='Air Flow';
+stringgrid1.Cells[2,11]:='g/sec';
+stringgrid1.Cells[0,12]:='Throttle Position';
+stringgrid1.Cells[2,12]:='%';
+stringgrid1.Cells[0,13]:='Front Heated O2 Sensor Volt';
+stringgrid1.Cells[2,13]:='Volt';
+stringgrid1.Cells[0,14]:='Rear Heated O2 Sensor Volt';
+stringgrid1.Cells[2,14]:='Volt';
+stringgrid1.Cells[0,15]:='Fuel Rail Pressure';
+stringgrid1.Cells[2,15]:='MPa';
+stringgrid1.Cells[0,16]:='Commanded EGR';
+stringgrid1.Cells[2,16]:='%';
+stringgrid1.Cells[0,17]:='EGR Error';
+stringgrid1.Cells[2,17]:='%';
+stringgrid1.Cells[0,18]:='Commanded Evaporative Purge';
+stringgrid1.Cells[2,18]:='%';
+stringgrid1.Cells[0,19]:='Fuel Level';
+stringgrid1.Cells[2,19]:='%';
+stringgrid1.Cells[0,20]:='Barometric Pressure';
+stringgrid1.Cells[2,20]:='kPa';
+stringgrid1.Cells[0,21]:='Catalytic 1 Temperature';
+stringgrid1.Cells[2,21]:='ฐc';
+stringgrid1.Cells[0,22]:='Catalytic 2 Temperature';
+stringgrid1.Cells[2,22]:='ฐc';
+stringgrid1.Cells[0,23]:='PCM Voltage';
+stringgrid1.Cells[2,23]:='Volt';
+stringgrid1.Cells[0,24]:='Absolute Engine Load';
+stringgrid1.Cells[2,24]:='%';
+stringgrid1.Cells[0,25]:='Command Equivalent Ratio';
+stringgrid1.Cells[2,25]:='None';
+stringgrid1.Cells[0,26]:='Relative Throttle Position';
+stringgrid1.Cells[2,26]:='%';
+stringgrid1.Cells[0,27]:='Ambient Air Temperature';
+stringgrid1.Cells[2,27]:='ฐc';
+{Load default value to EEPROM buffer}
+k:=0;
+for i:=0 to 15 do
+begin
+EEPROM[i]:= HextoInt(EEPROM0[k+1])*16+HextoInt(EEPROM0[k+2]);
+k:=k+2;
+end;
+k:=0;
+for i:=16 to 31 do
+begin
+EEPROM[i]:= HextoInt(EEPROM1[k+1])*16+HextoInt(EEPROM1[k+2]);
+k:=k+2;
+end;
+k:=0;
+for i:=32 to 47 do
+begin
+EEPROM[i]:= HextoInt(EEPROM2[k+1])*16+HextoInt(EEPROM2[k+2]);
+k:=k+2;
+end;
+k:=0;
+for i:=48 to 63 do
+begin
+EEPROM[i]:= HextoInt(EEPROM3[k+1])*16+HextoInt(EEPROM3[k+2]);
+k:=k+2;
+end;
+k:=0;
+for i:=64 to 79 do
+begin
+EEPROM[i]:= HextoInt(EEPROM4[k+1])*16+HextoInt(EEPROM4[k+2]);
+k:=k+2;
+end;{load data to EEPROM buffer ready}
+{show raw data in table}
+stringgrid1.Cells[1,1]:=inttostr(EEPROM[$4]*100 div 255);
+stringgrid1.Cells[1,2]:=inttostr(EEPROM[$5]-40);
+stringgrid1.Cells[1,3]:=inttostr((EEPROM[$6]*$64 div $80) - $64);
+stringgrid1.Cells[1,4]:=inttostr((EEPROM[$7]*$64 div $80) - $64);
+stringgrid1.Cells[1,5]:=inttostr(EEPROM[$A]);
+stringgrid1.Cells[1,6]:=inttostr(EEPROM[$B]);
+stringgrid1.Cells[1,7]:=inttostr(EEPROM[$C]*256 div 4);
+stringgrid1.Cells[1,8]:=inttostr(EEPROM[$D]);
+stringgrid1.Cells[1,9]:=inttostr(EEPROM[$E] div 2 - 64);
+stringgrid1.Cells[1,10]:=inttostr(EEPROM[$F]-40);
+stringgrid1.Cells[1,11]:=inttostr(EEPROM[$10]*256 div 100);
+stringgrid1.Cells[1,12]:=inttostr(EEPROM[$11]*100 div 255);
+STR((EEPROM[$14]/200):0:2,S);
+stringgrid1.Cells[1,13]:=s;
+STR((EEPROM[$15]/200):0:2,S);
+stringgrid1.Cells[1,14]:=s;
+stringgrid1.Cells[1,15]:=inttostr(EEPROM[$23]*256 div 100);
+stringgrid1.Cells[1,16]:=inttostr(EEPROM[$2C]*100 div 255);
+stringgrid1.Cells[1,17]:=inttostr(EEPROM[$2D]*100 div 255);
+stringgrid1.Cells[1,18]:=inttostr(EEPROM[$2E]*100 div 255);
+stringgrid1.Cells[1,19]:=inttostr(EEPROM[$2F]*100 div 255);
+stringgrid1.Cells[1,20]:=inttostr(EEPROM[$33]);
+STR((EEPROM[$3C]*256 / 10):0:1,S);
+stringgrid1.Cells[1,21]:=s;
+STR((EEPROM[$3D]*256 / 10):0:1,S);
+stringgrid1.Cells[1,22]:=s;
+STR((EEPROM[$42]*256 / 1000):0:2,S);
+stringgrid1.Cells[1,23]:=s;
+stringgrid1.Cells[1,24]:=inttostr(EEPROM[$43]*100 div 255);
+STR((EEPROM[$44]*256 / 32768):0:2,S);
+stringgrid1.Cells[1,25]:=s;
+stringgrid1.Cells[1,26]:=inttostr(EEPROM[$45]*100 div 255);
+stringgrid1.Cells[1,27]:=inttostr(EEPROM[$46]-40);
+end;
+
+
+
+procedure TForm1.UpDown1Click(Sender: TObject; Button: TUDBtnType);
+var s:string;
+begin
+Case Stringgrid1.row of
+1:Begin EEPROM[$4]:=updown1.position;
+stringgrid1.Cells[1,1]:=inttostr(EEPROM[$4]*100 div 255);end;
+2:Begin EEPROM[$5]:=updown1.position;
+stringgrid1.Cells[1,2]:=inttostr(EEPROM[$5]-40);end;
+3:Begin EEPROM[$6]:=updown1.position;
+stringgrid1.Cells[1,3]:=inttostr((EEPROM[$6]*$64 div $80) - $64);end;
+4:Begin EEPROM[$7]:=updown1.position;
+stringgrid1.Cells[1,4]:=inttostr((EEPROM[$7]*$64 div $80) - $64);end;
+5:Begin EEPROM[$A]:=updown1.position;
+stringgrid1.Cells[1,5]:=inttostr(EEPROM[$A]);end;
+6:Begin EEPROM[$B]:=updown1.position;
+stringgrid1.Cells[1,6]:=inttostr(EEPROM[$B]);end;
+7:Begin EEPROM[$C]:=updown1.position;
+stringgrid1.Cells[1,7]:=inttostr(EEPROM[$C]*256 div 4);end;
+8:Begin EEPROM[$D]:=updown1.position;
+stringgrid1.Cells[1,8]:=inttostr(EEPROM[$D]);end;
+9:Begin EEPROM[$E]:=updown1.position;
+stringgrid1.Cells[1,9]:=inttostr(EEPROM[$E] div 2 - 64);end;
+10:Begin EEPROM[$F]:=updown1.position;
+stringgrid1.Cells[1,10]:=inttostr(EEPROM[$F]-40);end;
+11:Begin EEPROM[$10]:=updown1.position;
+stringgrid1.Cells[1,11]:=inttostr(EEPROM[$10]*256 div 100);end;
+12:Begin EEPROM[$11]:=updown1.position;
+stringgrid1.Cells[1,12]:=inttostr(EEPROM[$11]*100 div 255);end;
+13:Begin EEPROM[$14]:=updown1.position;
+STR((EEPROM[$14]/200):0:2,S);
+stringgrid1.Cells[1,13]:=s;end;
+14:Begin EEPROM[$15]:=updown1.position;
+STR((EEPROM[$15]/200):0:2,S);
+stringgrid1.Cells[1,14]:=s;end;
+15:Begin EEPROM[$23]:=updown1.position;
+stringgrid1.Cells[1,15]:=inttostr(EEPROM[$23]*256 div 100);end;
+
+16:Begin EEPROM[$2C]:=updown1.position;
+stringgrid1.Cells[1,16]:=inttostr(EEPROM[$2C]*100 div 255);end;
+17:Begin EEPROM[$2D]:=updown1.position;
+stringgrid1.Cells[1,17]:=inttostr(EEPROM[$2D]*100 div 255);end;
+18:Begin EEPROM[$2E]:=updown1.position;
+stringgrid1.Cells[1,18]:=inttostr(EEPROM[$2E]*100 div 255);end;
+19:Begin EEPROM[$2F]:=updown1.position;
+stringgrid1.Cells[1,19]:=inttostr(EEPROM[$2F]*100 div 255);end;
+20:Begin EEPROM[$33]:=updown1.position;
+stringgrid1.Cells[1,20]:=inttostr(EEPROM[$33]);end;
+21:Begin EEPROM[$3C]:=updown1.position;
+STR((EEPROM[$3C]*256 / 10):0:1,S);
+stringgrid1.Cells[1,21]:=s;end;
+22:Begin EEPROM[$3D]:=updown1.position;
+STR((EEPROM[$3D]*256 / 10):0:1,S);
+stringgrid1.Cells[1,22]:=s;end;
+23:Begin EEPROM[$42]:=updown1.position;
+STR((EEPROM[$42]*256 / 1000):0:2,S);
+stringgrid1.Cells[1,23]:=s;end;
+24:Begin EEPROM[$43]:=updown1.position;
+stringgrid1.Cells[1,24]:=inttostr(EEPROM[$43]*100 div 255);end;
+25:Begin EEPROM[$44]:=updown1.position;
+STR((EEPROM[$44]*256 / 32768):0:2,S);
+stringgrid1.Cells[1,25]:=s;end;
+26:Begin EEPROM[$45]:=updown1.position;
+stringgrid1.Cells[1,26]:=inttostr(EEPROM[$45]*100 div 255);end;
+27:Begin EEPROM[$46]:=updown1.position;
+stringgrid1.Cells[1,27]:=inttostr(EEPROM[$46]-40);end;
+end;{case}
+end;
+
+procedure TForm1.StringGrid1SelectCell(Sender: TObject; Col, Row: Integer;
+  var CanSelect: Boolean);
+begin
+Case Row of
+1:updown1.position:=EEPROM[$4];
+2:updown1.position:=EEPROM[$5];
+3:updown1.position:=EEPROM[$6];
+4:updown1.position:=EEPROM[$7];
+5:updown1.position:=EEPROM[$A];
+6:updown1.position:=EEPROM[$B];
+7:updown1.position:=EEPROM[$C];
+8:updown1.position:=EEPROM[$D];
+9:updown1.position:=EEPROM[$E];
+10:updown1.position:=EEPROM[$F];
+11:updown1.position:=EEPROM[$10];
+12:updown1.position:=EEPROM[$11];
+13:updown1.position:=EEPROM[$14];
+14:updown1.position:=EEPROM[$15];
+15:updown1.position:=EEPROM[$23];
+16:updown1.position:=EEPROM[$2C];
+17:updown1.position:=EEPROM[$2D];
+18:updown1.position:=EEPROM[$2E];
+19:updown1.position:=EEPROM[$2F];
+20:updown1.position:=EEPROM[$33];
+21:updown1.position:=EEPROM[$3C];
+22:updown1.position:=EEPROM[$3D];
+23:updown1.position:=EEPROM[$42];
+24:updown1.position:=EEPROM[$43];
+25:updown1.position:=EEPROM[$44];
+26:updown1.position:=EEPROM[$45];
+27:updown1.position:=EEPROM[$46];
+ENd;{case}
+end;
+
+procedure TForm1.BitBtn4Click(Sender: TObject);
+var i:byte;
+begin
+If (inp32($379) and  64 = 0)=false then
+ begin
+ MessageDlg('ไม่สามารถติดต่อ X-METER ได้'+#10+#13+'กรุณากดปุ่ม MENU ค้างไว้หลังการ RESET'+#10+#13+'เพื่อเข้าสู่โมหด SET LIMITTED VALUE'+#10+#13+'และตรวจสอบว่าได้ต่อสายข้อมูลเรียบร้อยหรือไม่',MTError,[mbOK],0);
+ chipreset;
+ Exit;
+ end else
+ Begin
+ bitbtn3.enabled:=false;
+ setb($37A,0);  {sck low tell X-Meter connecting OK}
+statusbar1.panels[0].text:= 'Sending Limitted Value to X-METER';
+for i:=1 to 127 do {write data}
+Begin
+If (EEPROM[i] and 128) = 128 then setb($37A,3) else clrb($37A,3);eepromclock;
+If (EEPROM[i] and 64) = 64 then setb($37A,3) else clrb($37A,3);eepromclock;
+If (EEPROM[i] and 32) = 32 then setb($37A,3) else clrb($37A,3);eepromclock;
+If (EEPROM[i] and 16) = 16 then setb($37A,3) else clrb($37A,3);eepromclock;
+If (EEPROM[i] and 8) = 8 then setb($37A,3) else clrb($37A,3);eepromclock;
+If (EEPROM[i] and 4) = 4 then setb($37A,3) else clrb($37A,3);eepromclock;
+If (EEPROM[i] and 2) = 2 then setb($37A,3) else clrb($37A,3);eepromclock;
+If (EEPROM[i] and 1) = 1 then setb($37A,3) else clrb($37A,3);eepromclock;
+Gauge1.Progress:=i;
+end;{for}
+statusbar1.panels[0].text:= 'Setting Complete!...';
+trackbar1.enabled:=true;
+ bitbtn3.enabled:=true;
+ End;{If not}
+end;
+
+procedure TForm1.BitBtn6Click(Sender: TObject);
+begin
+ Panel1.visible:=false;
+ Panel2.visible:=false;
+ Panel3.Visible:=false;
+ memo2.visible:=true;
+end;
+
+procedure TForm1.m3timerTimer(Sender: TObject);
+begin
+image2.Left:=image2.left-5;
+if image2.left<160 then m3timer.enabled:=false;
+end;
+{------------ Logo Editor --------------------------}
+procedure TForm1.Shape2MouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+Case shape2.Brush.Color of
+clwhite:Begin shape2.brush.color:=clblack;LogoEdit[0]:=LogoEdit[0] or $10;End;
+clBlack:Begin shape2.brush.color:=clWhite;LogoEdit[0]:=LogoEdit[0] and $F;End;
+end;
+label4.caption:=Inttostr(logoedit[0]);
+end;
+
+procedure TForm1.Shape3MouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+Case shape3.Brush.Color of
+clwhite:Begin shape3.brush.color:=clblack;LogoEdit[0]:=LogoEdit[0] or $8;End;
+clBlack:Begin shape3.brush.color:=clWhite;LogoEdit[0]:=LogoEdit[0] and $17;End;
+end;
+label4.caption:=Inttostr(logoedit[0]);
+end;
+
+procedure TForm1.Shape4MouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+Case shape4.Brush.Color of
+clwhite:Begin shape4.brush.color:=clblack;LogoEdit[0]:=LogoEdit[0] or $4;End;
+clBlack:Begin shape4.brush.color:=clWhite;LogoEdit[0]:=LogoEdit[0] and $1B;End;
+end;
+label4.caption:=Inttostr(logoedit[0]);
+end;
+
+procedure TForm1.Shape5MouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+Case shape5.Brush.Color of
+clwhite:Begin shape5.brush.color:=clblack;LogoEdit[0]:=LogoEdit[0] or $2;End;
+clBlack:Begin shape5.brush.color:=clWhite;LogoEdit[0]:=LogoEdit[0] and $1D;End;
+end;
+label4.caption:=Inttostr(logoedit[0]);
+end;
+
+procedure TForm1.Shape6MouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+Case shape6.Brush.Color of
+clwhite:Begin shape6.brush.color:=clblack;LogoEdit[0]:=LogoEdit[0] or $1;End;
+clBlack:Begin shape6.brush.color:=clWhite;LogoEdit[0]:=LogoEdit[0] and $1E;End;
+end;
+label4.caption:=Inttostr(logoedit[0]);
+end;
+
+
+End. {End Program}

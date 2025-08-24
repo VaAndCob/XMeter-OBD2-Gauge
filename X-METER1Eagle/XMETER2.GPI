@@ -1,0 +1,62 @@
+Photoplotter Info File: C:/Program Files/EAGLE-4.16r1/projects/X-Meter2/xmeter2.gpi
+
+ Date              : 01/09/2006 16:32:33 
+ Plotfile          : C:/Program Files/EAGLE-4.16r1/projects/X-Meter2/xmeter2.sts
+ Apertures         : generated: 
+ Device            : Gerber photoplotter with RS-274-X aperture generation
+
+Parameter settings:
+
+ Emulate Apertures : no
+ Emulate Thermal   : no
+ Emulate Annulus   : no
+ Tolerance Draw  + :  0.00 %
+ Tolerance Draw  - :  0.00 %
+ Tolerance Flash + :  0.00 %
+ Tolerance Flash - :  0.00 %
+ Rotate            : no
+ Mirror            : yes
+ Optimize          : yes
+ Auto fit          : yes
+ OffsetX           : 0inch
+ OffsetY           : 0inch
+
+Plotfile Info:
+
+ Coordinate Format : 2.4
+ Coordinate Units  : Inch
+ Data Mode         : Absolute
+ Zero Suppression  : None
+ End Of Block      : *
+
+Apertures used:
+
+ Code     Shape     Size                  used
+
+ D10      round     0.1340inch               2
+ D11      oval      0.0624inch x 0.1168inch    36
+ D12      octagon   0.0760inch              41
+ D13      round     0.2290inch               2
+ D14      octagon   0.0624inch             140
+ D15      round     0.0828inch               2
+ D16      oval      0.0960inch x 0.0520inch     2
+ D17      oval      0.0520inch x 0.0960inch     2
+ D18      round     0.0830inch               1
+ D19      octagon   0.0830inch               1
+ D20      round     0.1080inch               1
+ D21      octagon   0.1080inch               1
+ D22      oval      0.1168inch x 0.0624inch    24
+ D23      oval      0.0760inch x 0.1440inch     3
+ D24      round     0.0520inch               3
+ D25      round     0.0710inch               1
+ D26      octagon   0.0710inch              39
+ D27      oval      0.1440inch x 0.0760inch    13
+ D28      octagon   0.0930inch               2
+ D29      octagon   0.0692inch               4
+ D30      octagon   0.0749inch              10
+ D31      round     0.1182inch               2
+ D32      oval      0.1655inch x 0.0867inch     2
+ D33      oval      0.0867inch x 0.1655inch     1
+ D34      round     0.0480inch              48
+ D35      round     0.1970inch               4
+

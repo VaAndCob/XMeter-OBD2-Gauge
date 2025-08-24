@@ -1,0 +1,3906 @@
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 1
+
+
+
+
+
+       MCS-51 Family Macro Assembler   A S E M - 5 1   V 1.3
+       =====================================================
+
+
+
+	Source File:	H:\backupfiles\XFirmware\XMeter10.asm
+	Object File:	H:\backupfiles\XFirmware\XMeter10.hex
+	List File:	H:\backupfiles\XFirmware\XMeter10.lst
+
+
+
+ Line  I  Addr  Code            Source
+
+    1:				;Program X-Meter Version 1.0.4
+    2:				;MCU    =   AT89S52
+    3:				;X-TAL  =   22.118 MHz
+    4:				;Ver 1.01 Date  25/11/2006 {turn off all warning lamp when switch to sleep mode}}
+    5:				;Ver 1.02 Date  10/12/2006 {auto sleep and auto activate}
+    6:				;Ver 1.03 Date  31/12/2006 {turn off all warning lamp when leave meter mode/DTC additional message/C
+				LEAR MIL}
+    7:				;Ver 1.04 Date  22/04/2007 {No. of DTC bug fix, Read DTCs}
+    8:
+    9:				;==============================================
+   10:				;Pin Configuration
+   11:		D      0080	LCDDATA		EQU	P0	;LCD data Line
+   12:				;Port1
+   13:		B	 95	MOSI		BIT	P1.5	;ISP Data Out
+   14:		B	 96	MISO		BIT	P1.6	;ISP Data In
+   15:		B	 97	SCK		BIT	P1.7	;ISP Clock
+   16:				;Port 2
+   17:		B	 A0	RW		BIT	P2.0	;LCD 0 = Read  1 = write
+   18:		B	 A1	RS		BIT	P2.1	;LCD 0 = Instruction 1 = Data
+   19:		B	 A2	EN		BIT	P2.2	;LCD clock High to Low
+   20:		B	 A3	BL		BIT	P2.3	;LCD Back Light 0 = On, 1 = OFF
+   21:		B	 A4	BUZZER		BIT	P2.4	;Buzzer Bit 0= On, 1 = OFF
+   22:		B	 A5	EEPSDA		BIT	P2.5	;EEprom Data Line
+   23:		B	 A6	EEPSCL		BIT	P2.6	;EEprom Clock Line
+   24:		B	 A7	EEPWP		BIT	P2.7	;EEprom write Protect 0 = Disable, 1= Write Protect
+   25:				;Port3   P3.0 & P3.1 Reserved as Serial Port
+   26:		B	 B2	BTNMENU	BIT	P3.2	;Menu button
+   27:		B	 B3	BTNBL		BIT	P3.3	;Backlight toggle switch
+   28:		B	 B4	BTNUP		BIT	P3.4	;UP button
+   29:		B	 B5	BTNDN		BIT	P3.5	;Down button
+   30:		B	 B6	LEDUP		BIT	P3.6	;Upper Warning  LED 0 = On, 1 = OFF
+   31:		B	 B7	LEDDN		BIT	P3.7	;Lower  Warning  LED 0 = On, 1 = OFF
+   32:				;Port1   Reserved as extentsion & ISP
+   33:				;Internal Ram
+   34:		N      0008	PID1		EQU	08h	;PID1 mode
+   35:		N      0009	PID2		EQU	09h	;PID2 mode
+   36:		N      000A	PIDTURN		EQU	0Ah	;check which PID will be sent to ELM
+   37:		N      000B	WRADDL1	EQU	0Bh	;LCD write address for calculated value line1
+   38:		N      000C	WRADDL2	EQU	0Ch	;LCD write address for calculated value line2
+   39:		N      000D	B1		EQU	0Dh	;address for Byte1
+   40:		N      000E	B2		EQU	0Eh	;address for Byte2
+   41:		N      000F	RESULTLEN	EQU	0Fh	;keep length of result
+   42:		N      0010	CONFIG		EQU	10h	;current config
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 2
+
+
+
+ Line  I  Addr  Code            Source
+
+   43:				;bit3 = PID warning light (0-off,1-on) ,bit 2 = F/C mode(0=inst/1=avr) , bit1 =beep(0-off,1-on), bit
+				0=backlight(0-off,1-on)
+   44:				;bit4 = Auto sleep mode (0-off,1-on)
+   45:		N      0011	TEMP1		EQU 	11h	;general ram use
+   46:		N      0012	TEMP2		EQU	12h	;general ram use
+   47:		N      0013	TEMP3		EQU	13h	;general ram use
+   48:		N      0014	EEPERR   	EQU   	14h	;EEPROM I2C Error
+   49:		N      0015	FCPTR		EQU	15h	;IRAM pointer for F/C 80h-FFh data logging
+   50:		N      0016	LIMITCHK1	EQU	16h	;address for keep limit PID load from eeprom
+   51:		N      0017	LIMITCHK2	EQU	17h	;address for keep limit PID load from eeprom
+   52:		N      0018	SLEEPCNT	EQU	18h	;sleep mode counter
+   53:
+   54:		N      0020	BUFFER		EQU	20h	;Message Buffer
+   55:				;Stack Pointer at 60h up to 7Fh
+   56:				;Special Function Register
+   57:		N      00A6	WDTRST		EQU	0A6h	;SFR address for Watchdog Timer Register
+   58:				;EEPROM address assignment
+   59:		N      0000	ECONFIG		EQU	00h	;Configuration same as CONFIG
+   60:		N      0001	EPID1		EQU	01h
+   61:		N      0002	EPID2		EQU	02h
+   62:				;04h-4Fh  Reserved for Warning Lamp in each PID no.
+   63:
+   64:				;PID04 CAL Engine Load ---%"	[90 = 0E5h]
+   65:				;PID05 Coolant Temp: --- " 	[97 = 089h]
+   66:				;PID06 S-T Fuel Trim1 --- %" 	[+/- 10 = 08Eh]
+   67:				;PID07 L-T Fuel Trim1 --- %"	[+/- 10 = 08Eh]
+   68:				;PID0A Fuel Pressure ---kPa"  	[ 250 = FAh]lowerlimit*
+   69:				;PID0B MAN Air Press ---kPa"  	[101 = 65h]
+   70:				;PID0C ENG Speed: ---- RPM " [6500 = 66h]
+   71:				;PID0D VEH Speed: --- km/h " 	[160 = A0h]
+   72:				;PID0E IGN ADV Timing: ---" 	[+/- 27.5 = FFh]
+   73:				;PID0F Intake Air Temp --" 	[90c = 82h]
+   74:				;PID10 Air Flow ---.- g/sec"	[50.0g/s = 14h]
+   75:				;PID11 Throttle Pos: --- %  "	[80%  = CCh]
+   76:				;PID14 Front HO2S Volt -.--" 	[0.1 V= 02h] lowerlimit*
+   77:				;PID15 Rear  HO2S Volt -.--"	[0.1 V= 02h] lowerlimit*
+   78:				;PID2C Commanded EGR: --- %" [100% = FFh]
+   79:				;PID2D EGR Error: --- %    "	[100% = FFh]
+   80:				;PID2E CMD Evap Purge --- %"   [100% = FFh]
+   81:				;PID2F Fuel Level: --- %   "	   [5%     =  0Ch] lower limit*
+   82:				;PID33 Baro Pressure ---kPa"	[102 = 66h]
+   83:				;PID3C CAT 1 Temp: ---.- "	[700c = 1Bh]
+   84:				;PID3D CAT 2 Temp: ---.- "	[700c = 1Bh]
+   85:				;PID42:PCM Voltage: --.-- V"	[11.0 = 2Bh] lowerlimit*
+   86:				;PID43 ABS Engine Load ---%"	[90 = 0E5h]
+   87:				;PID44 CMD EQV Ratio: -.--   "  [not sure = FFh]
+   88:				;PID45 REL Throt Pos: --- %"	[90 = 0E5h]
+   89:				;PID46 AMB Air Temp: --- "	[40 = 50h]
+   90:
+   91:				;*******************************************
+   92:				;LCD Commands Write parameter
+   93:				;MOV A = parameter then CALL LCD_CMD_WR
+   94:		N      0001	LCD_CLS		EQU	01
+   95:		N      0002	LCD_HOME	EQU	02
+   96:		N      0004	LCD_SETMODE	EQU	04    ;+I/D  S
+   97:				;I/D  = 0 Cursor&DDRAM  Decrement  , I/D = 1 Cursor&DDRAM Increment
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 3
+
+
+
+ Line  I  Addr  Code            Source
+
+   98:				;S   = 0   Cursor Move as I/D, S =1  insert charactor
+   99:		N      0008	LCD_SETVISIBLE	EQU	08    ;+ D C B
+  100:				;D = 0 Off display ,D = 1 On display
+  101:				;C = 0 Off Cur sor , C = 1 On cursor
+  102:				;B = 0 Blink Off    ,  B = 1 Blink On
+  103:		N      0010	LCD_SHIFT	EQU	16 ; + S/C  R/L  x  x
+  104:				;S/C = 0 move cursor as R/L  1 position
+  105:				;S/C = 1 move charactor as R/L 1 column on every line
+  106:				;R/L = 0 Left direction, R/L = 1 Right direction
+  107:		N      0020	LCD_SETFUNC	EQU	32; + DL  N  F  x  x
+  108:				;DL = 0  4 bit mode , DL = 1  8 bit mode
+  109:				;N = 0  1/8 Duty   ,N = 1 1/16 duty
+  110:				;F = 0   5x7 dot,   F = 1  5x10 dot
+  111:		N      0040	LCD_SETCGADDR	EQU	64 ; + address  upto 16 data
+  112:		N      0080	LCD_SETDDADDR	EQU	128 ; + address
+  113:				;Program Start Address  ================
+  114:		N      0000	ORG  	0000h
+  115:				;*****RESET START***************************
+  116:	  0000			RES:
+  117:	  0000	78 7F		MOV	  R0,#7FH           ;POWER UP CLEAR 61-7FH
+  118:	  0002			RES1:
+  119:	  0002	76 00		MOV	  @R0,#0
+  120:	  0004	18		DEC	  R0
+  121:	  0005	B8 00 FA	CJNE	  R0,#00H,RES1	;Clear IRAM Adress 00h-7Fh = 0
+  122:	  0008	75 F0 00	MOV  	  B,#0              	;CLEAR SYSTEM FLAG
+  123:	  000B	75 81 80	MOV	  SP,#80h       	 ;SET STACK point to IRAM (not duplicate)
+  124:				;Serial Port initialize
+  125:	  000E	75 87 80	MOV	PCON,#80H          	 ;1000000
+  126:	  0011	75 89 22	MOV  	TMOD,#22H        	 ;TIMER1 MODE2
+  127:	  0014	75 8D FD	MOV       	TH1,#0FDH  	  ;38400 bps
+  128:	  0017	75 98 52	MOV	SCON,#52H 	  ;SERIAL 8 BIT UART MODE
+  129:	  001A	D2 8E		SETB	TR1             	  ;TIMER1 ON
+  130:	  001C	C2 AC		CLR	ES		;no interrupt
+  131:				;Default  Internal RAM if EEPROM Error
+  132:	  001E	75 08 04	MOV	PID1,#04h	;default PID1
+  133:	  0021	75 09 11	MOV	PID2,#11h	;default PID2
+  134:	  0024	75 0A 01	MOV	PIDTURN,#01h	;set to PID1 current msg
+  135:	  0027	75 10 06	MOV	CONFIG,#00000110b	;beep on & backlight off , Instant F/C,Warning Lamp ON,auto sleep of
+				f
+  136:	  002A	75 15 79	MOV	FCPTR,#79h	;F/C pointer point to 79h
+  137:	  002D	75 18 24	MOV	SLEEPCNT,#24h	;Reset Sleep mode counter
+  138:				;Initial Port
+  139:	  0030	C2 A0		CLR	P2
+					  ^
+			  @@@@@ segment type mismatch @@@@@
+
+  140:	  0032	D2 B0		SETB	P3
+					  ^
+			  @@@@@ segment type mismatch @@@@@
+
+  141:				;MOV	P2,#00010000b	;clear port 2 for LCD  except buzzer to OFF
+  142:				;MOV	P3,#0FFh		;Extend Port
+  143:				;SETB	EEPWP		;EEPROM Write Protect enable (unused now)
+  144:	  0034	C2 A3		CLR	BL		;turn BL on
+  145:				;addition here
+  146:				;===========================
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 4
+
+
+
+ Line  I  Addr  Code            Source
+
+  147:				;Load CGRAM
+  148:	  0036	74 40		MOV	A,#LCD_SETCGADDR+0  ;set CDRAM address
+  149:	  0038	12 0E C3	CALL	WRCMD
+  150:	  003B	90 15 03	MOV	DPTR,#CGUL
+  151:	  003E	12 0E 6B	CALL	WRSTR		;write 3 char in CGRAM  00
+  152:	  0041	90 15 0D	MOV	DPTR,#CGUM
+  153:	  0044	12 0E 6B	CALL	WRSTR		;write 3 char in CGRAM  01
+  154:	  0047	90 15 17	MOV	DPTR,#CGUR
+  155:	  004A	12 0E 6B	CALL	WRSTR		;write 3 char in CGRAM  02
+  156:	  004D	90 15 21	MOV	DPTR,#CGLL
+  157:	  0050	12 0E 6B	CALL	WRSTR		;write 3 char in CGRAM  03
+  158:	  0053	90 15 2B	MOV	DPTR,#CGLM
+  159:	  0056	12 0E 6B	CALL	WRSTR		;write 3 char in CGRAM  04
+  160:	  0059	90 15 35	MOV	DPTR,#CGLR
+  161:	  005C	12 0E 6B	CALL	WRSTR		;write 3 char in CGRAM  05h
+  162:				;MOV	DPTR,#CGD	;Load D char
+  163:				;CALL	WRSTR		;write D char in CGRAM  06h
+  164:				;MOV	DPTR,#CGM	;Load 3 char
+  165:				;CALL	WRSTR		;write 3 char in CGRAM  07h
+  166:	  005F	90 14 F9	MOV	DPTR,#CG3	;Load 3 char
+  167:	  0062	12 0E 6B	CALL	WRSTR		;write 3 char in CGRAM  06h
+  168:	  0065	90 15 3F	MOV	DPTR,#CGX	;Load X Char
+  169:	  0068	12 0E 6B	CALL	WRSTR		;write X char in CGRAM 07h
+  170:
+  171:				;add more here
+  172:				;==================================
+  173:				;LCD Initialize
+  174:	  006B	74 01		MOV	A,#LCD_CLS
+  175:	  006D	12 0E C3	CALL	WRCMD
+  176:	  0070	12 0F D6	CALL	DEL100m
+  177:	  0073	74 38		MOV	A,#LCD_SETFUNC+11000b
+  178:	  0075	12 0E C3	CALL	WRCMD
+  179:	  0078	74 0C		MOV	A,#LCD_SETVISIBLE+100b      ; display on + nocursor + noblink
+  180:	  007A	12 0E C3	CALL	WRCMD
+  181:	  007D	74 10		MOV	A,#LCD_SHIFT+0000b
+  182:	  007F	12 0E C3	CALL	WRCMD
+  183:	  0082	74 07		MOV	A,#LCD_SETMODE+11b	 ;Left scroll
+  184:	  0084	12 0E C3	CALL	WRCMD
+  185:				;==============================
+  186:				;LCD display title
+  187:	  0087	74 80		MOV	A,#LCD_SETDDADDR+00 ;Line 1   OBDII X-METER V1
+  188:	  0089	12 0E C3	CALL	WRCMD
+  189:	  008C	90 12 B4	MOV	DPTR,#TITLE1	;OBDII X-METER V1
+  190:	  008F	12 0E 99	CALL	WRSCR
+  191:	  0092	74 C0		MOV	A,#LCD_SETDDADDR+40h ;Line2
+  192:	  0094	12 0E C3	CALL	WRCMD
+  193:	  0097	90 12 C9	MOV	DPTR,#TITLE2	;---------------------------
+  194:	  009A	12 0E 99	CALL	WRSCR
+  195:				;------------
+  196:	  009D	74 06		MOV	A,#LCD_SETMODE+10b 	;Normal Right Scroll
+  197:	  009F	12 0E C3	CALL	WRCMD
+  198:				;======= Set Limitted Value Mode
+  199:	  00A2	20 B2 69	JB	BTNMENU,UPGRADE	;by pass Limitted Value
+  200:	  00A5	12 10 07	CALL	SOUND_BEEP
+  201:	  00A8	74 01		MOV	A,#LCD_CLS
+  202:	  00AA	12 0E C3	CALL	WRCMD
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 5
+
+
+
+ Line  I  Addr  Code            Source
+
+  203:	  00AD	12 0F D6	CALL	DEL100m
+  204:	  00B0	74 80		MOV	A,#LCD_SETDDADDR+0 ;Line 1
+  205:	  00B2	12 0E C3	CALL	WRCMD
+  206:	  00B5	90 14 76	MOV	DPTR,#LIMITMSG	;Set limit message
+  207:	  00B8	12 0E 6B	CALL	WRSTR
+  208:	  00BB	74 C0		MOV	A,#LCD_SETDDADDR+40h ;Line 2
+  209:	  00BD	12 0E C3	CALL	WRCMD
+  210:	  00C0	90 14 B8	MOV	DPTR,#UGFIRM2	;Waiting connection.
+  211:	  00C3	12 0E 6B	CALL	WRSTR
+  212:	  00C6	74 0D		MOV	A,#LCD_SETVISIBLE+101b      ; display on + nocursor + blinking
+  213:	  00C8	12 0E C3	CALL	WRCMD
+  214:	  00CB	C2 96		CLR	MISO		;set PIN checking to tell UPDATER xmeter is ready
+  215:	  00CD	C2 97		CLR          	SCK                        	;set Low SCK for updater detect (X-Meter check Updat
+				er Start)
+  216:	  00CF	20 B3 03	JB	BTNBL,$+6	;toggle back light
+  217:	  00D2	12 10 2E	CALL	BACKLIGHT
+  218:	  00D5	30 97 F7	JNB       	SCK,$-6                       ;if SCK is set hi else back to Updater
+  219:	  00D8	74 C0		MOV	A,#LCD_SETDDADDR+40h ;Line 2
+  220:	  00DA	12 0E C3	CALL	WRCMD
+  221:	  00DD	90 14 CD	MOV	DPTR,#UGFIRM3	;Now Loading...
+  222:	  00E0	12 0E 6B	CALL	WRSTR
+  223:				;add eeprom writing code  here
+  224:	  00E3	78 01		MOV	R0,#01h		;start writing address (00h is reserved as CONFIG)
+  225:	  00E5			LIMITREAD:
+  226:	  00E5	74 00		MOV	A,#00h
+  227:	  00E7	7F 08		MOV	R7,#08h
+  228:	  00E9			READ8BIT:
+  229:	  00E9	30 97 FD	JNB	SCK,$		;Wait CLK Hi
+  230:				;read data 1 bit
+  231:	  00EC	A2 95		MOV    	C,MOSI
+  232:	  00EE	33		RLC   	 A
+  233:	  00EF	D2 96		SETB	MISO		;tell Updater that 1 bit read
+  234:	  00F1	20 97 FD	JB	SCK,$		;CLK Low end 1byte
+  235:	  00F4	C2 96		CLR	MISO
+  236:	  00F6	DF F1		DJNZ	R7,READ8BIT
+  237:				;MOV	R0,address
+  238:	  00F8	F9		MOV	R1,A
+  239:	  00F9	12 11 36	CALL	IPW		;write EEPROM 1 byte
+  240:	  00FC	08		INC	R0		;next EEPROM address
+  241:	  00FD	B8 80 E5	CJNE	R0,#080h,LIMITREAD;If address = 128 then exit
+  242:	  0100	74 C0		MOV	A,#LCD_SETDDADDR+40h ;Line 2
+  243:	  0102	12 0E C3	CALL	WRCMD
+  244:	  0105	90 14 8C	MOV	DPTR,#LIMITFIN	;Setting complete...
+  245:	  0108	12 0E 6B	CALL	WRSTR
+  246:	  010B	12 10 07	CALL	SOUND_BEEP	;finish
+  247:				;======= Firmware Upgrade Mode
+  248:	  010E			UPGRADE:
+  249:	  010E	20 B4 43	JB	BTNUP,CHECKING		;by pass firmware upgrade
+  250:	  0111	20 B5 40	JB	BTNDN,CHECKING
+  251:	  0114	12 10 07	CALL	SOUND_BEEP
+  252:	  0117	74 01		MOV	A,#LCD_CLS
+  253:	  0119	12 0E C3	CALL	WRCMD
+  254:	  011C	12 0F D6	CALL	DEL100m
+  255:	  011F	74 80		MOV	A,#LCD_SETDDADDR+0 ;Line 1
+  256:	  0121	12 0E C3	CALL	WRCMD
+  257:	  0124	90 14 A2	MOV	DPTR,#UGFIRM1	;Upgrade Fimrware
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 6
+
+
+
+ Line  I  Addr  Code            Source
+
+  258:	  0127	12 0E 6B	CALL	WRSTR
+  259:	  012A	74 C0		MOV	A,#LCD_SETDDADDR+40h ;Line 2
+  260:	  012C	12 0E C3	CALL	WRCMD
+  261:	  012F	90 14 B8	MOV	DPTR,#UGFIRM2	;Waiting connection.
+  262:	  0132	12 0E 6B	CALL	WRSTR
+  263:	  0135	74 0D		MOV	A,#LCD_SETVISIBLE+101b      ; display on + nocursor + blinking
+  264:	  0137	12 0E C3	CALL	WRCMD
+  265:	  013A	C2 96		CLR	MISO		;set PIN checking for Upgrade firmwrae MISO (Updater Check X-Meter)
+  266:	  013C	C2 97		CLR          	SCK                        	;set Low SCK for updater detect (X-Meter check Updat
+				er Start)
+  267:	  013E	20 B3 03	JB	BTNBL,$+6	;toggle back light
+  268:	  0141	12 10 2E	CALL	BACKLIGHT
+  269:	  0144	30 97 F7	JNB       	SCK,$-6                       ;if SCK is set hi else back to Updater
+  270:	  0147	74 C0		MOV	A,#LCD_SETDDADDR+40h ;Line 2
+  271:	  0149	12 0E C3	CALL	WRCMD
+  272:	  014C	90 14 CD	MOV	DPTR,#UGFIRM3	;Now Loading...
+  273:	  014F	12 0E 6B	CALL	WRSTR
+  274:	  0152	80 FE		JMP	$		;Loop forever tl finish Upgrade
+  275:				;Checking system
+  276:	  0154			CHECKING:
+  277:	  0154	12 0F C5	CALL	DEL500m
+  278:	  0157	12 0F C5	CALL	DEL500m
+  279:	  015A	12 0F C5	CALL	DEL500m
+  280:	  015D	12 0F C5	CALL	DEL500m
+  281:	  0160	12 0F C5	CALL	DEL500m
+  282:	  0163	12 0F C5	CALL	DEL500m
+  283:	  0166	C2 B6		CLR	LEDUP		;turn off LED
+  284:	  0168	C2 B7		CLR	LEDDN
+  285:	  016A	74 01		MOV	A,#LCD_CLS	;clear screen once
+  286:	  016C	12 0E C3	CALL	WRCMD
+  287:	  016F	12 0F D6	CALL	DEL100m
+  288:				;****************Check illegal firmware modified
+  289:	  0172	12 10 18	CALL	SOUND_TRIG
+  290:	  0175	74 80		MOV	A,#LCD_SETDDADDR+0 ;Line 1
+  291:	  0177	12 0E C3	CALL	WRCMD
+  292:	  017A	90 12 DE	MOV	DPTR,#TITLE3		  ;by Jerry@Thaimazda3  check illegal copy
+  293:	  017D	12 0E 6B	CALL	WRSTR
+  294:	  0180	74 0D		MOV	A,#LCD_SETVISIBLE+101b      ; display on + nocursor + blinking
+  295:	  0182	12 0E C3	CALL	WRCMD
+  296:				;===============================
+  297:				;ELM327 Initialize message
+  298:	  0185	90 12 8C	MOV	DPTR,#SERINIT1
+  299:	  0188	12 0F 98	CALL	SBLOCK
+  300:	  018B	12 0F D6	CALL	DEL100m
+  301:	  018E	90 12 92	MOV	DPTR,#SERINIT2
+  302:	  0191	12 0F 98	CALL	SBLOCK
+  303:	  0194	12 0F D6	CALL	DEL100m
+  304:	  0197	90 12 98	MOV	DPTR,#SERINIT3
+  305:	  019A	12 0F 98	CALL	SBLOCK
+  306:	  019D	12 0F D6	CALL	DEL100m
+  307:	  01A0	90 12 9E	MOV	DPTR,#SERINIT4
+  308:	  01A3	12 0F 98	CALL	SBLOCK
+  309:	  01A6	12 0F D6	CALL	DEL100m
+  310:	  01A9	90 12 A6	MOV	DPTR,#SERINIT5
+  311:	  01AC	12 0F 98	CALL	SBLOCK
+  312:	  01AF	12 0F D6	CALL	DEL100m
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 7
+
+
+
+ Line  I  Addr  Code            Source
+
+  313:
+  314:				;========= Check CAN connection =====================
+  315:	  01B2			TRYCAN:			;OK and UNABLE TO CONNECT
+  316:	  01B2	C2 98		CLR	RI		;clear SBUF interrupt
+  317:	  01B4	74 C0		MOV	A,#LCD_SETDDADDR+40h ;Line2
+  318:	  01B6	12 0E C3	CALL	WRCMD
+  319:	  01B9	90 17 88	MOV	DPTR,#NODATA	;clear LCD line2
+  320:	  01BC	12 0E 6B	CALL	WRSTR
+  321:	  01BF	74 C0		MOV	A,#LCD_SETDDADDR+40h ;Line2
+  322:	  01C1	12 0E C3	CALL	WRCMD
+  323:	  01C4	90 12 86	MOV	DPTR,#CHKCAN	;send 0100 to ELM327
+  324:	  01C7	12 0F 98	CALL	SBLOCK
+  325:	  01CA	74 3E		MOV	A,#3Eh		;send ">" first
+  326:	  01CC			TRYCAN1:
+  327:	  01CC	12 0E D2	CALL	WRCHAR		;write > to LCD & data receive by RBYTE
+  328:	  01CF	12 0F B8	CALL	RBYTE		;Receive "SEARCHING...."
+  329:	  01D2	B4 34 03	CJNE	A,#34h,TRYCAN2	;If A = "4" then connection OK
+  330:	  01D5	02 01 FF	JMP	CONNECT
+  331:	  01D8			TRYCAN2:
+  332:	  01D8	B4 0D F1	CJNE	A,#0Dh,TRYCAN1	;if A = CR wait 2 second  and try again
+  333:				;add some thing here
+  334:	  01DB	74 C1		MOV	A,#LCD_SETDDADDR+41h 	;set address to line2+1
+  335:	  01DD	12 0E C3	CALL	WRCMD
+  336:	  01E0	80 04		JMP	$+6		;jump CALL RBYTE
+  337:	  01E2			TRYCAN3:
+  338:	  01E2	12 0E D2	CALL	WRCHAR
+  339:	  01E5	12 0F B8	CALL	RBYTE
+  340:	  01E8	B4 0D F7	CJNE	A,#0Dh,TRYCAN3	;If A = "CR " then delay & retry again
+  341:	  01EB	12 0F C5	CALL	DEL500m
+  342:	  01EE	12 0F C5	CALL	DEL500m
+  343:	  01F1	12 0F C5	CALL	DEL500m
+  344:	  01F4	12 0F C5	CALL	DEL500m
+  345:	  01F7	12 0F C5	CALL	DEL500m
+  346:	  01FA	12 0F C5	CALL	DEL500m
+  347:	  01FD	80 B3		JMP	TRYCAN		;request again
+  348:	  01FF			CONNECT:
+  349:				;loop to check > feed back
+  350:	  01FF	12 0F B8	CALL	RBYTE
+  351:	  0202	B4 3E FA	CJNE	A,#3Eh,$-3	;ELM connected OK
+  352:	  0205	74 0C		MOV	A,#LCD_SETVISIBLE+100b      ; display on + nocursor + noblink
+  353:	  0207	12 0E C3	CALL	WRCMD
+  354:				;==============Load setting from EEPROM=====================
+  355:	  020A			LOADEEP:
+  356:	  020A	78 00		MOV	R0,#ECONFIG
+  357:	  020C	12 11 86	CALL	IPR		;read Back light & beep  status Result in R1
+  358:	  020F	20 14 28	JB	EEPERR,READERR;EEPROM error skip loading
+  359:	  0212	89 10		MOV	CONFIG,R1
+  360:	  0214	E5 10		MOV	A,CONFIG		;check backlight
+  361:	  0216	20 E0 02	JB	ACC.0,$+5	;back light on then skip
+  362:	  0219	D2 A3		SETB	BL		;turn off
+  363:
+  364:	  021B	78 01		MOV	R0,#EPID1		;Read PID1 from eeprom
+  365:	  021D	12 11 86	CALL	IPR
+  366:	  0220	89 08		MOV	PID1,R1
+  367:
+  368:	  0222	78 02		MOV	R0,#EPID2		;Read PID2 from eeprom
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 8
+
+
+
+ Line  I  Addr  Code            Source
+
+  369:	  0224	12 11 86	CALL	IPR
+  370:	  0227	89 09		MOV	PID2,R1
+  371:
+  372:	  0229	A8 08		MOV	R0,PID1		;load limit pid from eeprom
+  373:	  022B	12 11 86	CALL	IPR		;Result in R1
+  374:	  022E	89 16		MOV	LIMITCHK1,R1	;keep in LIMITCHK1
+  375:	  0230	A8 09		MOV	R0,PID2		;load limit pid from eeprom
+  376:	  0232	12 11 86	CALL	IPR		;Result in R1
+  377:	  0235	89 17		MOV	LIMITCHK2,R1	;keep in LIMITCHK2
+  378:
+  379:				;etc add here
+  380:	  0237	02 02 60	JMP	METER		;Skip to METER (no error)
+  381:	  023A			READERR:
+  382:	  023A	E5 10		MOV	A,CONFIG
+  383:	  023C	C2 E4		CLR	ACC.4
+  384:	  023E	F5 10		MOV	CONFIG,A		;turn off Warning Light mode
+  385:	  0240	74 C0		MOV	A,#LCD_SETDDADDR+40h 	;set address to line2
+  386:	  0242	12 0E C3	CALL	WRCMD
+  387:	  0245	90 17 E0	MOV	DPTR,#RDERR	;Show EEprom error message
+  388:	  0248	12 0E 6B	CALL	WRSTR
+  389:	  024B	12 10 07	CALL	SOUND_BEEP
+  390:	  024E	12 0F C5	CALL	DEL500m
+  391:	  0251	12 0F C5	CALL	DEL500m
+  392:	  0254	12 0F C5	CALL	DEL500m
+  393:	  0257	12 0F C5	CALL	DEL500m
+  394:	  025A	12 0F C5	CALL	DEL500m
+  395:	  025D	12 0F C5	CALL	DEL500m
+  396:				;===========================================================
+  397:	  0260			METER:
+  398:	  0260	12 0C 77	CALL	LINE1		;first line PID display
+  399:	  0263	12 0D 71	CALL	LINE2		;second line PID display
+  400:				;send AT command
+  401:	  0266	74 0D		MOV	A,#0Dh
+  402:	  0268	12 0F B0	CALL	SBYTE		;send CR to receive > and start receive data
+  403:				;*************** MAIN LOOP **********************************
+  404:	  026B			MAIN:			;Main Loop
+  405:				;***** check PID mode and send command to ELM and show string to LCD
+  406:	  026B	20 B3 08	JB	BTNBL,$+11	;toggle back light
+  407:	  026E	12 10 2E	CALL	BACKLIGHT
+  408:	  0271	74 0D		MOV	A,#0Dh
+  409:	  0273	12 0F B0	CALL	SBYTE		;send CR to receive > and start receive data
+  410:
+  411:	  0276	30 B2 55	JNB	BTNMENU,SETUP0	;enter setup mode
+  412:	  0279	20 98 54	JB	RI,RECEIVE	;read back data from ELM
+  413:				;***** PID mode change button check**********
+  414:	  027C			MAIN3:
+  415:	  027C	20 B4 26	JB	BTNUP,MAIN2	;next mode Line1
+  416:	  027F	12 10 18	CALL	SOUND_TRIG
+  417:	  0282	05 08		INC	PID1		;add pid1+1
+  418:	  0284	E5 08		MOV	A,PID1
+  419:	  0286	12 09 30	CALL	SKIPPID		;skip unused PID mode
+  420:	  0289	F5 08		MOV	PID1,A		;Return skipped PID mode
+  421:
+  422:	  028B	A8 08		MOV	R0,PID1		;load limit pid from eeprom
+  423:	  028D	12 11 86	CALL	IPR		;Result in R1
+  424:	  0290	89 16		MOV	LIMITCHK1,R1	;keep in LIMITCHK1
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 9
+
+
+
+ Line  I  Addr  Code            Source
+
+  425:
+  426:	  0292	12 0C 77	CALL	LINE1
+  427:	  0295	12 0F D6	CALL	DEL100m	;keyboard delay
+  428:	  0298	12 0F D6	CALL	DEL100m	;keyboard delay
+  429:	  029B	12 0F D6	CALL	DEL100m	;keyboard delay
+  430:				;addition
+  431:	  029E	74 0D		MOV	A,#0Dh		;send CR again
+  432:	  02A0	12 0F B0	CALL	SBYTE
+  433:	  02A3	80 C6		JMP	MAIN
+  434:				;------------
+  435:	  02A5			MAIN2:
+  436:	  02A5	20 B5 C3	JB	BTNDN,MAIN	;next mode Line2
+  437:	  02A8	12 10 18	CALL	SOUND_TRIG
+  438:	  02AB	05 09		INC	PID2		;add pid1+1
+  439:	  02AD	E5 09		MOV	A,PID2
+  440:	  02AF	12 09 30	CALL	SKIPPID		;skip unused PID mode
+  441:	  02B2	F5 09		MOV	PID2,A		;Return skipped PID mode
+  442:
+  443:	  02B4	A8 09		MOV	R0,PID2		;load limit pid from eeprom
+  444:	  02B6	12 11 86	CALL	IPR		;Result in R1
+  445:	  02B9	89 17		MOV	LIMITCHK2,R1	;keep in LIMITCHK2
+  446:
+  447:	  02BB	12 0D 71	CALL	LINE2		;Update LCD
+  448:	  02BE	12 0F D6	CALL	DEL100m	;keyboard delay
+  449:	  02C1	12 0F D6	CALL	DEL100m	;keyboard delay
+  450:	  02C4	12 0F D6	CALL	DEL100m	;keyboard delay
+  451:				;adddition
+  452:	  02C7	74 0D		MOV	A,#0Dh
+  453:	  02C9	12 0F B0	CALL	SBYTE
+  454:	  02CC	80 9D		JMP	MAIN
+  455:	  02CE			SETUP0:
+  456:	  02CE	61 6A		AJMP	SETUP
+  457:				;=========END MAIN LOOP=================
+  458:	  02D0			RECEIVE:
+  459:	  02D0	12 0F A3	CALL	RBLOCK
+  460:	  02D3	E5 0A		MOV	A,PIDTURN
+  461:	  02D5	B4 01 48	CJNE	A,#01h,PIDTURN2	;if PIDTURN<> 1 then goto PIDTURN2
+  462:				;LCD LINE1**********************************
+  463:				;CALL	LINE1		;Display PID mode in LINE1
+  464:	  02D8	12 0E E1	CALL	GETB1B2		;Translate ASCII in buffer to Hex Data and keep in B1,B2
+  465:	  02DB	AA 08		MOV	R2,PID1		;keep PID1 mode in R2 for CALCULATE
+  466:	  02DD	12 09 5A	CALL	CALCULATE	;Determine PID mode / calculate /translate to ASCII / keep in BUFFER/RESULTL
+				EN
+  467:	  02E0	12 10 3D	CALL	LIGHT1		;check warning lamp
+  468:				;------Write Result to LCD lin1
+  469:	  02E3	74 80		MOV	A,#LCD_SETDDADDR 	;set address in LCD to write result in LINE1
+  470:	  02E5	25 0B		ADD	A,WRADDL1		;add write address
+  471:	  02E7	12 0E C3	CALL	WRCMD
+  472:	  02EA	A9 0F		MOV	R1,RESULTLEN		;R1 = Length of result to display
+  473:	  02EC	78 20		MOV	R0,#BUFFER		;R0 point to buffer
+  474:	  02EE			LENGTH1:
+  475:	  02EE	E6		MOV	A,@R0			;load char in A
+  476:	  02EF	12 0E D2	CALL	WRCHAR
+  477:	  02F2	08		INC	R0
+  478:	  02F3	D9 F9		DJNZ	R1,LENGTH1		;loop til end of length
+  479:				;check PID2 mode & send AT cmd to ELM
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 10
+
+
+
+ Line  I  Addr  Code            Source
+
+  480:	  02F5	75 0A 02	MOV	PIDTURN,#02h	;set  PIDTURN = 2
+  481:	  02F8	74 30		MOV	A,#30h
+  482:	  02FA	12 0F B0	CALL	SBYTE	;send char0
+  483:	  02FD	74 31		MOV	A,#31h
+  484:	  02FF	12 0F B0	CALL	SBYTE	;send char1
+  485:	  0302	E5 09		MOV	A,PID2	;keep pid2 in temp
+  486:	  0304	C4		SWAP	A
+  487:	  0305	54 0F		ANL	A,#0Fh
+  488:	  0307	F9		MOV	R1,A
+  489:	  0308	12 0F 88	CALL	HTOA
+  490:	  030B	12 0F B0	CALL	SBYTE	;send higt byte
+  491:	  030E	E5 09		MOV	A,PID2	;keep pid2 in temp
+  492:	  0310	54 0F		ANL	A,#0Fh
+  493:	  0312	F9		MOV	R1,A
+  494:	  0313	12 0F 88	CALL	HTOA
+  495:	  0316	12 0F B0	CALL	SBYTE	;send low byte
+  496:	  0319	74 0D		MOV	A,#0Dh
+  497:	  031B	12 0F B0	CALL	SBYTE	;send CR
+  498:	  031E	41 7C		AJMP	MAIN3
+  499:				;LINE2********************************************
+  500:	  0320			PIDTURN2:
+  501:				;CALL	LINE2		;Display PID mode in LINE2
+  502:	  0320	12 0E E1	CALL	GETB1B2		;Translate ASCII in buffer to Hex Data and keep in B1,B2
+  503:	  0323	AA 09		MOV	R2,PID2		;keep PID2 mode in R2 for CALCULATE
+  504:	  0325	12 09 5A	CALL	CALCULATE	;Determine PID mode / calculate /translate to ASCII / keep in BUFFER/RESULTL
+				EN
+  505:	  0328	12 10 79	CALL	LIGHT2		;check warning lamp
+  506:				;-------Write Result to LCD lin2
+  507:	  032B	74 C0		MOV	A,#LCD_SETDDADDR+40h 	;set address in LCD to write result in LINE2
+  508:	  032D	25 0C		ADD	A,WRADDL2
+  509:	  032F	12 0E C3	CALL	WRCMD
+  510:	  0332	A9 0F		MOV	R1,RESULTLEN		;R1 = Length of result to display
+  511:	  0334	78 20		MOV	R0,#BUFFER		;R0 point to buffer
+  512:	  0336			LENGTH2:
+  513:	  0336	E6		MOV	A,@R0			;load char in A
+  514:	  0337	12 0E D2	CALL	WRCHAR
+  515:	  033A	08		INC	R0
+  516:	  033B	D9 F9		DJNZ	R1,LENGTH2
+  517:				;check PID2 mode & send AT cmd to ELM
+  518:	  033D	75 0A 01	MOV	PIDTURN,#01h	;set PIDTURN = 1
+  519:	  0340	74 30		MOV	A,#30h
+  520:	  0342	12 0F B0	CALL	SBYTE	;send char0
+  521:	  0345	74 31		MOV	A,#31h
+  522:	  0347	12 0F B0	CALL	SBYTE	;send char1
+  523:	  034A	E5 08		MOV	A,PID1	;keep pid1 in temp
+  524:	  034C	C4		SWAP	A
+  525:	  034D	54 0F		ANL	A,#0Fh
+  526:	  034F	F9		MOV	R1,A
+  527:	  0350	12 0F 88	CALL	HTOA
+  528:	  0353	12 0F B0	CALL	SBYTE	;send higt byte
+  529:	  0356	E5 08		MOV	A,PID1	;keep pid1 in temp
+  530:	  0358	54 0F		ANL	A,#0Fh
+  531:	  035A	F9		MOV	R1,A
+  532:	  035B	12 0F 88	CALL	HTOA
+  533:	  035E	12 0F B0	CALL	SBYTE	;send low byte
+  534:	  0361	74 0D		MOV	A,#0Dh
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 11
+
+
+
+ Line  I  Addr  Code            Source
+
+  535:	  0363	12 0F B0	CALL	SBYTE	;send CR
+  536:	  0366	41 7C		AJMP	MAIN3
+  537:				;********************END of Program*****************************
+  538:	  0368			CONSUMP0:
+  539:	  0368	E1 DA		AJMP	CONSUMP
+  540:
+  541:	  036A			SETUP:     ; test setup menu
+  542:	  036A	C2 B6		CLR	LEDUP	;turn off LED
+  543:	  036C	C2 B7		CLR	LEDDN
+  544:	  036E	12 10 07	CALL	SOUND_BEEP
+  545:	  0371	7C 0A		MOV	R4,#0Ah
+  546:	  0373			DEL5m1:
+  547:	  0373	7D 64		MOV	R5,#064h
+  548:	  0375			DEL5m3:
+  549:	  0375	7F 03		MOV	R7,#03h
+  550:	  0377			DEL5m2:
+  551:	  0377	7E 98		MOV	R6,#098h
+  552:	  0379	20 B2 EC	JB	BTNMENU,CONSUMP0	;goto fuel consumption mode
+  553:	  037C	DE FB		DJNZ	R6,$-3
+  554:	  037E	DF F7		DJNZ	R7,DEL5m2
+  555:	  0380	DD F3		DJNZ       R5,DEL5m3
+  556:	  0382	DC EF		DJNZ	R4,DEL5m1	;end delay loop
+  557:
+  558:	  0384	74 80		MOV	A,#LCD_SETDDADDR+00 ;Line 1
+  559:	  0386	12 0E C3	CALL	WRCMD
+  560:	  0389	90 12 F4	MOV	DPTR,#MENU1
+  561:	  038C	12 0E 6B	CALL	WRSTR
+  562:	  038F	74 C0		MOV	A,#LCD_SETDDADDR+40h ;Line2
+  563:	  0391	12 0E C3	CALL	WRCMD
+  564:	  0394	90 13 B8	MOV	DPTR,#MENU2
+  565:	  0397	12 0E 6B	CALL	WRSTR
+  566:				;select mode here
+  567:				;**************************
+  568:	  039A			SELECT:
+  569:	  039A	20 B3 03	JB	BTNBL,$+6	;toggle backlight
+  570:	  039D	12 10 2E	CALL	BACKLIGHT
+  571:	  03A0	20 B5 02	JB	BTNDN,GOSET	;if press down button goto Special function
+  572:	  03A3	C1 1F		AJMP	SPLFUNC
+  573:	  03A5			GOSET:
+  574:	  03A5	20 B4 F2	JB	BTNUP,SELECT
+  575:				;Enter setup menu
+  576:				;1) set up back light
+  577:	  03A8	12 10 18	CALL	SOUND_TRIG
+  578:	  03AB	74 01		MOV	A,#LCD_CLS
+  579:	  03AD	12 0E C3	CALL	WRCMD
+  580:	  03B0	12 0F D6	CALL	DEL100m
+  581:	  03B3	74 80		MOV	A,#LCD_SETDDADDR+00 ;Line 1
+  582:	  03B5	12 0E C3	CALL	WRCMD
+  583:	  03B8	90 13 0A	MOV	DPTR,#MENU11	;set up back light
+  584:	  03BB	12 0E 6B	CALL	WRSTR
+  585:	  03BE	74 C0		MOV	A,#LCD_SETDDADDR+40h ;Line 1
+  586:	  03C0	12 0E C3	CALL	WRCMD
+  587:	  03C3	90 14 60	MOV	DPTR,#TOGGLE	;TOGGLE Here
+  588:	  03C6	12 0E 6B	CALL	WRSTR
+  589:	  03C9			BLSTATUS:
+  590:	  03C9	74 C0		MOV	A,#LCD_SETDDADDR+40h ;Line 1 set address to write ON or OFF
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 12
+
+
+
+ Line  I  Addr  Code            Source
+
+  591:	  03CB	12 0E C3	CALL	WRCMD
+  592:	  03CE	E5 10		MOV	A,CONFIG		;read current status bit0
+  593:	  03D0	30 E0 14	JNB	ACC.0,BLOFF	;if ACC.0 = 0 then goto BLOFF
+  594:	  03D3	74 4F		MOV	A,#4Fh		;O char
+  595:	  03D5	12 0E D2	CALL	WRCHAR
+  596:	  03D8	74 4E		MOV	A,#4Eh		;N char
+  597:	  03DA	12 0E D2	CALL	WRCHAR
+  598:	  03DD	74 20		MOV	A,#20h		;space char
+  599:	  03DF	12 0E D2	CALL	WRCHAR
+  600:	  03E2	C2 A3		CLR	BL		;turn on
+  601:	  03E4	02 03 F8	JMP	SETBL		;jump to set backlight
+  602:	  03E7			BLOFF:
+  603:	  03E7	74 4F		MOV	A,#4Fh		;O char
+  604:	  03E9	12 0E D2	CALL	WRCHAR
+  605:	  03EC	74 46		MOV	A,#46h		;F char
+  606:	  03EE	12 0E D2	CALL	WRCHAR
+  607:	  03F1	74 46		MOV	A,#46h		;F char
+  608:	  03F3	12 0E D2	CALL	WRCHAR
+  609:	  03F6	D2 A3		SETB	BL		;turn off
+  610:	  03F8			SETBL:
+  611:	  03F8	12 0F C5	CALL	DEL500m	;keyboard delay
+  612:	  03FB	20 B3 03	JB	BTNBL,$+6	;toggle backlight
+  613:	  03FE	12 10 2E	CALL	BACKLIGHT
+  614:	  0401	30 B4 0E	JNB	BTNUP,SETSOUND	;press to skip to set sound
+  615:	  0404	20 B5 F4	JB	BTNDN,$-9
+  616:	  0407	12 10 18	CALL	SOUND_TRIG
+  617:	  040A	E5 10		MOV	A,CONFIG
+  618:	  040C	B2 E0		CPL	ACC.0		;toggle value
+  619:	  040E	F5 10		MOV	CONFIG,A
+  620:	  0410	80 B7		JMP	BLSTATUS	;refresh status
+  621:				;-------------------------------------------
+  622:				;2. SET BEEP SOUND
+  623:	  0412			SETSOUND:
+  624:	  0412	12 10 18	CALL	SOUND_TRIG
+  625:	  0415	74 01		MOV	A,#LCD_CLS
+  626:	  0417	12 0E C3	CALL	WRCMD
+  627:	  041A	12 0F D6	CALL	DEL100m
+  628:	  041D	74 80		MOV	A,#LCD_SETDDADDR+00 ;Line 1
+  629:	  041F	12 0E C3	CALL	WRCMD
+  630:	  0422	90 13 20	MOV	DPTR,#MENU12	;set BEEP on/OFF
+  631:	  0425	12 0E 6B	CALL	WRSTR
+  632:	  0428	74 C0		MOV	A,#LCD_SETDDADDR+40h ;Line 1
+  633:	  042A	12 0E C3	CALL	WRCMD
+  634:	  042D	90 14 60	MOV	DPTR,#TOGGLE	;TOGGLE Here
+  635:	  0430	12 0E 6B	CALL	WRSTR
+  636:	  0433			BEEPSTATUS:
+  637:	  0433	74 C0		MOV	A,#LCD_SETDDADDR+40h ;Line 1 set address to write ON or OFF
+  638:	  0435	12 0E C3	CALL	WRCMD
+  639:	  0438	E5 10		MOV	A,CONFIG		;check beep on/off status bit 1
+  640:	  043A	30 E1 12	JNB	ACC.1,BEEPOFF	;goto beep off
+  641:	  043D	74 4F		MOV	A,#4Fh		;O char
+  642:	  043F	12 0E D2	CALL	WRCHAR
+  643:	  0442	74 4E		MOV	A,#4Eh		;N char
+  644:	  0444	12 0E D2	CALL	WRCHAR
+  645:	  0447	74 20		MOV	A,#20h		;space char
+  646:	  0449	12 0E D2	CALL	WRCHAR
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 13
+
+
+
+ Line  I  Addr  Code            Source
+
+  647:	  044C	02 04 5E	JMP	SETBEEP		;jump to set beep
+  648:	  044F			BEEPOFF:
+  649:	  044F	74 4F		MOV	A,#4Fh		;O char
+  650:	  0451	12 0E D2	CALL	WRCHAR
+  651:	  0454	74 46		MOV	A,#46h		;F char
+  652:	  0456	12 0E D2	CALL	WRCHAR
+  653:	  0459	74 46		MOV	A,#46h		;F char
+  654:	  045B	12 0E D2	CALL	WRCHAR
+  655:	  045E			SETBEEP:
+  656:	  045E	12 0F C5	CALL	DEL500m	;keyboard delay
+  657:	  0461	20 B3 03	JB	BTNBL,$+6	;toggle backlight
+  658:	  0464	12 10 2E	CALL	BACKLIGHT
+  659:	  0467	30 B4 0E	JNB	BTNUP,SETUPPID ;skip to setup pid1&2
+  660:	  046A	20 B5 F4	JB	BTNDN,$-9
+  661:	  046D	12 10 18	CALL	SOUND_TRIG
+  662:	  0470	E5 10		MOV	A,CONFIG
+  663:	  0472	B2 E1		CPL	ACC.1		;toggle value
+  664:	  0474	F5 10		MOV	CONFIG,A
+  665:	  0476	80 BB		JMP	BEEPSTATUS	;refresh status
+  666:				;--------------
+  667:				;3. SET startup PID1
+  668:	  0478			SETUPPID:
+  669:	  0478	12 10 18	CALL	SOUND_TRIG
+  670:	  047B	74 01		MOV	A,#LCD_CLS
+  671:	  047D	12 0E C3	CALL	WRCMD
+  672:	  0480	12 0F D6	CALL	DEL100m
+  673:	  0483	74 C0		MOV	A,#LCD_SETDDADDR+40h ;Line 2
+  674:	  0485	12 0E C3	CALL	WRCMD
+  675:	  0488	90 13 35	MOV	DPTR,#MENU13	;PID1
+  676:	  048B	12 0E 6B	CALL	WRSTR
+  677:	  048E			SETPID1:
+  678:	  048E	12 0C 77	CALL	LINE1		;write current PID to line1
+  679:	  0491	12 0F C5	CALL	DEL500m	;keyboard delay
+  680:	  0494	20 B3 03	JB	BTNBL,$+6	;toggle backlight
+  681:	  0497	12 10 2E	CALL	BACKLIGHT
+  682:	  049A	30 B4 11	JNB	BTNUP,PID1OK	;
+  683:	  049D	20 B5 F4	JB	BTNDN,$-9		;Wait BTN down press
+  684:	  04A0	12 10 18	CALL	SOUND_TRIG
+  685:	  04A3	05 08		INC	PID1		;add pid1+1
+  686:	  04A5	E5 08		MOV	A,PID1
+  687:	  04A7	12 09 30	CALL	SKIPPID		;skip unused PID mode
+  688:	  04AA	F5 08		MOV	PID1,A		;Return skipped PID mode
+  689:	  04AC	80 E0		JMP	SETPID1
+  690:	  04AE			PID1OK:			;select OK then write to eeprom
+  691:	  04AE	78 01		MOV	R0,#EPID1	;save in eeprom
+  692:	  04B0	A9 08		MOV	R1,PID1
+  693:	  04B2	12 11 36	CALL	IPW
+  694:				;4. SET statup PID2
+  695:	  04B5	12 10 18	CALL	SOUND_TRIG
+  696:	  04B8	74 01		MOV	A,#LCD_CLS
+  697:	  04BA	12 0E C3	CALL	WRCMD
+  698:	  04BD	12 0F D6	CALL	DEL100m
+  699:	  04C0	74 80		MOV	A,#LCD_SETDDADDR+0 ;Line 1
+  700:	  04C2	12 0E C3	CALL	WRCMD
+  701:	  04C5	90 13 4B	MOV	DPTR,#MENU14	;PID2
+  702:	  04C8	12 0E 6B	CALL	WRSTR
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 14
+
+
+
+ Line  I  Addr  Code            Source
+
+  703:	  04CB			SETPID2:
+  704:	  04CB	12 0D 71	CALL	LINE2		;write current PID to line1
+  705:	  04CE	12 0F C5	CALL	DEL500m	;keyboard delay
+  706:	  04D1	20 B3 03	JB	BTNBL,$+6	;toggle backlight
+  707:	  04D4	12 10 2E	CALL	BACKLIGHT
+  708:	  04D7	30 B4 11	JNB	BTNUP,PID2OK
+  709:	  04DA	20 B5 F4	JB	BTNDN,$-9		;Wait BTN down press
+  710:	  04DD	12 10 18	CALL	SOUND_TRIG
+  711:	  04E0	05 09		INC	PID2		;add pid2+1
+  712:	  04E2	E5 09		MOV	A,PID2
+  713:	  04E4	12 09 30	CALL	SKIPPID		;skip unused PID mode
+  714:	  04E7	F5 09		MOV	PID2,A		;Return skipped PID mode
+  715:	  04E9	80 E0		JMP	SETPID2
+  716:	  04EB			PID2OK:			;select OK then write to eeprom
+  717:	  04EB	78 02		MOV	R0,#EPID2	;save eeprom
+  718:	  04ED	A9 09		MOV	R1,PID2
+  719:	  04EF	12 11 36	CALL	IPW
+  720:				;5 Set Lightup Value for Each PID
+  721:	  04F2	12 10 18	CALL	SOUND_TRIG
+  722:	  04F5	74 01		MOV	A,#LCD_CLS
+  723:	  04F7	12 0E C3	CALL	WRCMD
+  724:	  04FA	12 0F D6	CALL	DEL100m
+  725:	  04FD	74 80		MOV	A,#LCD_SETDDADDR+0 ;Line 1
+  726:	  04FF	12 0E C3	CALL	WRCMD
+  727:	  0502	90 13 61	MOV	DPTR,#MENU15	;Warning Vaule
+  728:	  0505	12 0E 6B	CALL	WRSTR
+  729:	  0508	74 C0		MOV	A,#LCD_SETDDADDR+40h ;Line 1
+  730:	  050A	12 0E C3	CALL	WRCMD
+  731:	  050D	90 14 60	MOV	DPTR,#TOGGLE	;TOGGLE Here
+  732:	  0510	12 0E 6B	CALL	WRSTR
+  733:	  0513			PIDSTATUS:
+  734:	  0513	74 C0		MOV	A,#LCD_SETDDADDR+40h ;Line 1 set address to write ON or OFF
+  735:	  0515	12 0E C3	CALL	WRCMD
+  736:	  0518	E5 10		MOV	A,CONFIG		;check beep on/off status bit 1
+  737:	  051A	30 E3 12	JNB	ACC.3,PIDOFF	;goto PID off
+  738:	  051D	74 4F		MOV	A,#4Fh		;O char
+  739:	  051F	12 0E D2	CALL	WRCHAR
+  740:	  0522	74 4E		MOV	A,#4Eh		;N char
+  741:	  0524	12 0E D2	CALL	WRCHAR
+  742:	  0527	74 20		MOV	A,#20h		;space char
+  743:	  0529	12 0E D2	CALL	WRCHAR
+  744:	  052C	02 05 3E	JMP	SETPID		;jump to set PID
+  745:	  052F			PIDOFF:
+  746:	  052F	74 4F		MOV	A,#4Fh		;O char
+  747:	  0531	12 0E D2	CALL	WRCHAR
+  748:	  0534	74 46		MOV	A,#46h		;F char
+  749:	  0536	12 0E D2	CALL	WRCHAR
+  750:	  0539	74 46		MOV	A,#46h		;F char
+  751:	  053B	12 0E D2	CALL	WRCHAR
+  752:	  053E			SETPID:
+  753:	  053E	12 0F C5	CALL	DEL500m	;keyboard delay
+  754:	  0541	20 B3 03	JB	BTNBL,$+6	;toggle backlight
+  755:	  0544	12 10 2E	CALL	BACKLIGHT
+  756:	  0547	30 B4 0E	JNB	BTNUP,AUTOSLEEP ;skip to set autosleep
+  757:	  054A	20 B5 F4	JB	BTNDN,$-9
+  758:	  054D	12 10 18	CALL	SOUND_TRIG
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 15
+
+
+
+ Line  I  Addr  Code            Source
+
+  759:	  0550	E5 10		MOV	A,CONFIG
+  760:	  0552	B2 E3		CPL	ACC.3		;toggle value
+  761:	  0554	F5 10		MOV	CONFIG,A
+  762:	  0556	80 BB		JMP	PIDSTATUS	;refresh status
+  763:				;--------------
+  764:				;6. Set Auto Sleep Mode
+  765:	  0558			AUTOSLEEP:
+  766:	  0558	12 10 18	CALL	SOUND_TRIG
+  767:	  055B	74 01		MOV	A,#LCD_CLS
+  768:	  055D	12 0E C3	CALL	WRCMD
+  769:	  0560	12 0F D6	CALL	DEL100m
+  770:	  0563	74 80		MOV	A,#LCD_SETDDADDR+0 ;Line 1
+  771:	  0565	12 0E C3	CALL	WRCMD
+  772:	  0568	90 13 77	MOV	DPTR,#MENU16	;Warning Vaule
+  773:	  056B	12 0E 6B	CALL	WRSTR
+  774:	  056E	74 C0		MOV	A,#LCD_SETDDADDR+40h ;Line 1
+  775:	  0570	12 0E C3	CALL	WRCMD
+  776:	  0573	90 14 60	MOV	DPTR,#TOGGLE	;TOGGLE Here
+  777:	  0576	12 0E 6B	CALL	WRSTR
+  778:	  0579			SLEEPSTATUS:
+  779:	  0579	74 C0		MOV	A,#LCD_SETDDADDR+40h ;Line 1 set address to write ON or OFF
+  780:	  057B	12 0E C3	CALL	WRCMD
+  781:	  057E	E5 10		MOV	A,CONFIG		;check beep on/off status bit 1
+  782:	  0580	30 E4 12	JNB	ACC.4,SLEEPOFF	;goto PID off
+  783:	  0583	74 4F		MOV	A,#4Fh		;O char
+  784:	  0585	12 0E D2	CALL	WRCHAR
+  785:	  0588	74 4E		MOV	A,#4Eh		;N char
+  786:	  058A	12 0E D2	CALL	WRCHAR
+  787:	  058D	74 20		MOV	A,#20h		;space char
+  788:	  058F	12 0E D2	CALL	WRCHAR
+  789:	  0592	02 05 A4	JMP	SETSLEEP	;jump to set sleep
+  790:	  0595			SLEEPOFF:
+  791:	  0595	74 4F		MOV	A,#4Fh		;O char
+  792:	  0597	12 0E D2	CALL	WRCHAR
+  793:	  059A	74 46		MOV	A,#46h		;F char
+  794:	  059C	12 0E D2	CALL	WRCHAR
+  795:	  059F	74 46		MOV	A,#46h		;F char
+  796:	  05A1	12 0E D2	CALL	WRCHAR
+  797:	  05A4			SETSLEEP:
+  798:	  05A4	12 0F C5	CALL	DEL500m	;keyboard delay
+  799:	  05A7	20 B3 03	JB	BTNBL,$+6	;toggle backlight
+  800:	  05AA	12 10 2E	CALL	BACKLIGHT
+  801:	  05AD	30 B4 0E	JNB	BTNUP,VERSION ;skip to firmware Version
+  802:	  05B0	20 B5 F4	JB	BTNDN,$-9
+  803:	  05B3	12 10 18	CALL	SOUND_TRIG
+  804:	  05B6	E5 10		MOV	A,CONFIG
+  805:	  05B8	B2 E4		CPL	ACC.4		;toggle value
+  806:	  05BA	F5 10		MOV	CONFIG,A
+  807:	  05BC	80 BB		JMP	SLEEPSTATUS	;refresh status
+  808:				;--------------
+  809:				;7  Firmware Version
+  810:	  05BE			VERSION:
+  811:	  05BE	12 10 18	CALL	SOUND_TRIG
+  812:	  05C1	74 01		MOV	A,#LCD_CLS
+  813:	  05C3	12 0E C3	CALL	WRCMD
+  814:	  05C6	12 0F D6	CALL	DEL100m
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 16
+
+
+
+ Line  I  Addr  Code            Source
+
+  815:	  05C9	74 80		MOV	A,#LCD_SETDDADDR+0 ;Line 1
+  816:	  05CB	12 0E C3	CALL	WRCMD
+  817:	  05CE	90 13 8C	MOV	DPTR,#MENU17	;Upgrade Fimrware
+  818:	  05D1	12 0E 6B	CALL	WRSTR
+  819:	  05D4	74 C0		MOV	A,#LCD_SETDDADDR+40h ;Line 2
+  820:	  05D6	12 0E C3	CALL	WRCMD
+  821:	  05D9	90 13 A2	MOV	DPTR,#RELEASE	;Release Date
+  822:	  05DC	12 0E 6B	CALL	WRSTR
+  823:	  05DF	12 0F C5	CALL	DEL500m	;keyboard delay
+  824:	  05E2	20 B3 03	JB	BTNBL,$+6	;toggle backlight
+  825:	  05E5	12 10 2E	CALL	BACKLIGHT
+  826:	  05E8	20 B4 F7	JB	BTNUP,$-6	;Repeat til press to exit
+  827:	  05EB	12 10 18	CALL	SOUND_TRIG
+  828:	  05EE	12 0F C5	CALL	DEL500m	;keyboard delay
+  829:				;write setting in EEPROM
+  830:	  05F1	A9 10		MOV	R1,CONFIG	;Save CONFIG setting before getting out
+  831:	  05F3	78 00		MOV	R0,#ECONFIG	;set eeprom address
+  832:	  05F5	12 11 36	CALL	IPW		;Write setting to eeprom
+  833:	  05F8	20 14 02	JB     	EEPERR,WRITEERR	;no error exit setup
+  834:	  05FB	41 60		AJMP	METER		;goback to main loop
+  835:	  05FD			WRITEERR:		;eepromp writing error
+  836:	  05FD	74 C0		MOV	A,#LCD_SETDDADDR+40h 	;set address to line2
+  837:	  05FF	12 0E C3	CALL	WRCMD
+  838:	  0602	90 17 F6	MOV	DPTR,#WRERR	;Show EEprom error message
+  839:	  0605	12 0E 6B	CALL	WRSTR
+  840:	  0608	12 10 07	CALL	SOUND_BEEP
+  841:	  060B	12 0F C5	CALL	DEL500m
+  842:	  060E	12 0F C5	CALL	DEL500m
+  843:	  0611	12 0F C5	CALL	DEL500m
+  844:	  0614	12 0F C5	CALL	DEL500m
+  845:	  0617	12 0F C5	CALL	DEL500m
+  846:	  061A	12 0F C5	CALL	DEL500m
+  847:	  061D	41 60		AJMP	METER		;goback to main loop
+  848:				;************************************************************************
+  849:				;Special Function Menu
+  850:	  061F			SPLFUNC:
+  851:				;VIN
+  852:	  061F	12 10 18	CALL	SOUND_TRIG
+  853:	  0622	74 01		MOV	A,#LCD_CLS
+  854:	  0624	12 0E C3	CALL	WRCMD
+  855:	  0627	12 0F D6	CALL	DEL100m
+  856:	  062A	74 80		MOV	A,#LCD_SETDDADDR+00 ;Line 1
+  857:	  062C	12 0E C3	CALL	WRCMD
+  858:	  062F	90 13 CE	MOV	DPTR,#VEHINFO	;show vehicle information no.
+  859:	  0632	12 0E 6B	CALL	WRSTR
+  860:				;additional code here ????
+  861:	  0635	12 0F C5	CALL	DEL500m	;keyboard delay
+  862:	  0638	20 B3 03	JB	BTNBL,$+6	;toggle backlight
+  863:	  063B	12 10 2E	CALL	BACKLIGHT
+  864:	  063E	20 B4 F7	JB	BTNUP,$-6
+  865:				;--------------------------------
+  866:				;NO of DTC
+  867:	  0641	12 10 18	CALL	SOUND_TRIG
+  868:	  0644	74 01		MOV	A,#LCD_CLS
+  869:	  0646	12 0E C3	CALL	WRCMD
+  870:	  0649	12 0F D6	CALL	DEL100m
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 17
+
+
+
+ Line  I  Addr  Code            Source
+
+  871:	  064C	74 80		MOV	A,#LCD_SETDDADDR+00 ;Line 1
+  872:	  064E	12 0E C3	CALL	WRCMD
+  873:	  0651	90 13 E4	MOV	DPTR,#DTC	;no. of DTC
+  874:	  0654	12 0E 6B	CALL	WRSTR
+  875:	  0657	C2 98		CLR	RI		;clear RI
+  876:	  0659	90 14 3C	MOV	DPTR,#DTCPID
+  877:	  065C	12 0F 98	CALL	SBLOCK		;send 0101
+  878:	  065F	12 0F A3	CALL	RBLOCK		;receive result from ELM
+  879:	  0662	12 0E E1	CALL	GETB1B2		;get Byte1 Byte2
+  880:	  0665	E5 0D		MOV	A,B1
+  881:	  0667	60 04		JZ	SHOWDTC	;IF B1=0 then goto SHOWDTC else next
+  882:	  0669	94 80		SUBB	A,#80h		;A - 80h = DTC no.
+  883:	  066B	F5 0D		MOV	B1,A		;keep no. DTC in B1
+  884:	  066D			SHOWDTC:
+  885:	  066D	90 00 00	MOV	DPTR,#0000h
+  886:	  0670	85 0D 82	MOV	DPL,B1
+  887:	  0673	12 0F E7	CALL	HTOD		;Result in R3
+  888:	  0676	74 91		MOV	A,#LCD_SETDDADDR+17	;set cursor position
+  889:	  0678	12 0E C3	CALL	WRCMD
+  890:	  067B	EB		MOV	A,R3
+  891:	  067C	C4		SWAP	A		;get High nibble
+  892:	  067D	54 0F		ANL	A,#0Fh
+  893:	  067F	24 30		ADD	A,#30h
+  894:	  0681	12 0E D2	CALL	WRCHAR		;write 1st digit
+  895:	  0684	EB		MOV	A,R3
+  896:	  0685	54 0F		ANL	A,#0Fh
+  897:	  0687	24 30		ADD	A,#30h
+  898:	  0689	12 0E D2	CALL	WRCHAR		;write 2nd digit
+  899:	  068C	74 C0		MOV	A,#LCD_SETDDADDR+40h	;set to Line2
+  900:	  068E	12 0E C3	CALL	WRCMD
+  901:				;check DTC no. = 0 or not
+  902:	  0691	E5 0D		MOV	A,B1		;Read NO OF DTC
+  903:	  0693	70 1A		JNZ	MILISON		;if MIL off jump MILISON
+  904:	  0695	90 13 FA	MOV	DPTR,#MILOFF
+  905:	  0698	12 0E 6B	CALL	WRSTR
+  906:	  069B	12 0F C5	CALL	DEL500m	;check keyboard delay
+  907:	  069E	20 B3 03	JB	BTNBL,$+6	;toggle backlight
+  908:	  06A1	12 10 2E	CALL	BACKLIGHT
+  909:	  06A4	20 B4 F7	JB	BTNUP,$-6
+  910:	  06A7	12 10 18	CALL	SOUND_TRIG
+  911:				;----------------------
+  912:	  06AA	12 0F C5	CALL	DEL500m	;keyboard delay
+  913:	  06AD	41 60		AJMP	METER		;back to PID mode
+  914:				;----------------------
+  915:	  06AF			MILISON:			;MIL is on next show DTCs
+  916:	  06AF	D2 B6		SETB	LEDUP		;turn on LED UP
+  917:	  06B1	90 14 10	MOV	DPTR,#MILON	;show message "Press to read DTC ->"
+  918:	  06B4	12 0E 6B	CALL	WRSTR
+  919:	  06B7	12 10 07	CALL	SOUND_BEEP	;BEEP warning
+  920:	  06BA	12 0F C5	CALL	DEL500m	;check keyboard delay
+  921:	  06BD	20 B3 03	JB	BTNBL,$+6	;toggle backlight
+  922:	  06C0	12 10 2E	CALL	BACKLIGHT
+  923:	  06C3	20 B5 F7	JB	BTNDN,$-6
+  924:	  06C6	12 10 18	CALL	SOUND_TRIG
+  925:	  06C9	74 C0		MOV	A,#LCD_SETDDADDR+40h	;set to Line2
+  926:	  06CB	12 0E C3	CALL	WRCMD
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 18
+
+
+
+ Line  I  Addr  Code            Source
+
+  927:	  06CE	90 14 46	MOV	DPTR,#DISPDTC
+  928:	  06D1	12 0E 6B	CALL	WRSTR
+  929:				;Read Diagnosis troube code and show here
+  930:	  06D4	90 14 42	MOV	DPTR,#DTCREAD	;send 03 to read all DTC
+  931:	  06D7	12 0F 98	CALL	SBLOCK
+  932:	  06DA	12 0F A3	CALL	RBLOCK		;Receive DTC in buffer
+  933:	  06DD	F6		MOV	@R0,A		;Keep ">" in buffer
+  934:				;------------------- DTC interpreter start here ------------------------
+  935:				;DTC Header checking 43 first
+  936:	  06DE	78 19		MOV	R0,#19h		;R0 point to buffer
+  937:	  06E0			CHECK4:
+  938:	  06E0	08		INC	R0
+  939:	  06E1	B6 34 FC	CJNE	@R0,#34h,CHECK4	;check 43 (check only 4)
+  940:	  06E4	08		INC	R0
+  941:	  06E5	B6 33 F8	CJNE	@R0,#33h,CHECK4
+  942:	  06E8	E8		MOV	A,R0		;found 43
+  943:	  06E9	24 04		ADD	A,#04h		;skip no of DTC byte
+  944:	  06EB	F8		MOV	R0,A		;R0 point to the first byte of DTC
+  945:	  06EC	75 13 00	MOV	TEMP3,#00h	;Counter DTC
+  946:
+  947:	  06EF			DTC1READ:
+  948:	  06EF	74 C0		MOV	A,#LCD_SETDDADDR+40h	;set to Line2
+  949:	  06F1	12 0E C3	CALL	WRCMD
+  950:
+  951:	  06F4			DTCINTP:
+  952:	  06F4	08		INC	R0
+  953:	  06F5	B6 3E 03	CJNE	@R0,#3Eh,$+6	;check ">" if not interpret code now
+  954:	  06F8	02 07 77	JMP	CLEARMIL	;exit to CLEAR MIL
+  955:	  06FB	08		INC	R0
+  956:	  06FC	B6 3E 03	CJNE	@R0,#3Eh,$+6	;check ">" if not interpret code now
+  957:	  06FF	02 07 77	JMP	CLEARMIL	;exit to CLEAR MIL
+  958:	  0702	18		DEC	R0
+  959:	  0703	B6 20 02	CJNE	@R0,#20h,$+5	;check "SP"
+  960:	  0706	80 EC		JMP	DTCINTP
+  961:	  0708	B6 0D 02	CJNE	@R0,#0Dh,$+5	;check "CR"
+  962:	  070B	80 E7		JMP	DTCINTP
+  963:	  070D	B6 3A 02	CJNE	@R0,#3Ah,$+5	;check ":"
+  964:	  0710	80 E2		JMP	DTCINTP
+  965:	  0712	08		INC	R0		;skip to check next byte
+  966:	  0713	B6 3A 02	CJNE	@R0,#3Ah,$+5	;check ":" next byte
+  967:	  0716	80 DC		JMP	DTCINTP
+  968:	  0718	18		DEC	R0		;IF not  1: back last byte
+  969:				;check #00 value to exit from read DTC
+  970:	  0719	B6 30 08	CJNE	@R0,#30h,SKIPNULL1
+  971:	  071C	08		INC	R0
+  972:	  071D	B6 30 03	CJNE	@R0,#30h,SKIPNULL2
+  973:	  0720	02 07 77	JMP	CLEARMIL	;IF read data is 00 then skip to clear MIL
+  974:	  0723			SKIPNULL2:
+  975:	  0723	18		DEC	R0
+  976:	  0724			SKIPNULL1:
+  977:				;1 DTC code read checking for CR
+  978:				;display to LCD  write number first
+  979:	  0724	88 11		MOV	TEMP1,R0	;keep R0
+  980:	  0726	90 00 00	MOV	DPTR,#0000h
+  981:	  0729	05 13		INC	TEMP3
+  982:	  072B	85 13 82	MOV	DPL,TEMP3
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 19
+
+
+
+ Line  I  Addr  Code            Source
+
+  983:	  072E	12 0F E7	CALL	HTOD		;convert counter to dec output R3
+  984:	  0731	EB		MOV	A,R3
+  985:	  0732	54 F0		ANL	A,#11110000b
+  986:	  0734	C4		SWAP	A
+  987:	  0735	12 0F 88	CALL	HTOA
+  988:	  0738	12 0E D2	CALL	WRCHAR		;write 1st digit
+  989:	  073B	EB		MOV	A,R3
+  990:	  073C	54 0F		ANL	A,#00001111b
+  991:	  073E	12 0F 88	CALL	HTOA
+  992:	  0741	12 0E D2	CALL	WRCHAR
+  993:	  0744	74 2D		MOV	A,#2Dh		; "-" sign
+  994:	  0746	12 0E D2	CALL	WRCHAR
+  995:	  0749	A8 11		MOV	R0,TEMP1	;return R0
+  996:				;interpret now
+  997:	  074B	12 12 06	CALL	INTPDTC		;inteprte troube code ,save result PX in buffer
+  998:	  074E	E9		MOV	A,R1		;show DTC 1st digit
+  999:	  074F	12 0E D2	CALL	WRCHAR
+ 1000:	  0752	EA		MOV	A,R2		;show DTC 2nd digit
+ 1001:	  0753	12 0E D2	CALL	WRCHAR
+ 1002:				;PX read now read remaining 3 byte code
+ 1003:	  0756	08		INC	R0		;point to next byte
+ 1004:	  0757	E6		MOV	A,@R0
+ 1005:	  0758	12 0E D2	CALL	WRCHAR		;show DTC 3rd digit
+ 1006:	  075B	08		INC	R0		;skip space
+ 1007:	  075C	08		INC	R0
+ 1008:	  075D	E6		MOV	A,@R0
+ 1009:	  075E	12 0E D2	CALL	WRCHAR		;show DTC 4th digit
+ 1010:	  0761	08		INC	R0
+ 1011:	  0762	E6		MOV	A,@R0
+ 1012:	  0763	12 0E D2	CALL	WRCHAR		;show DTC 5th digit
+ 1013:				;read next line here
+ 1014:	  0766	12 0F C5	CALL	DEL500m	;check keyboard delay
+ 1015:	  0769	20 B3 03	JB	BTNBL,$+6	;toggle backlight
+ 1016:	  076C	12 10 2E	CALL	BACKLIGHT
+ 1017:	  076F	20 B5 F7	JB	BTNDN,$-6
+ 1018:	  0772	12 10 18	CALL	SOUND_TRIG
+ 1019:	  0775	C1 EF		JMP	DTC1READ	;Jump back to read next couple byte
+ 1020:				;change end code from CR to 00
+ 1021:	  0777			CLEARMIL:
+ 1022:				;No more DTC Clear MIL status or not
+ 1023:	  0777	74 C0		MOV	A,#LCD_SETDDADDR+40h ;Line 2
+ 1024:	  0779	12 0E C3	CALL	WRCMD
+ 1025:	  077C	90 14 26	MOV	DPTR,#SETMIL	;Clear MIL  |  [NO ]->
+ 1026:	  077F	12 0E 6B	CALL	WRSTR
+ 1027:	  0782	75 13 00	MOV	TEMP3,#00	;TEMP3= 00  -> not clear ,TEMP3=1 -> clear MIL
+ 1028:	  0785			MILSTATUS:
+ 1029:	  0785	74 CF		MOV	A,#LCD_SETDDADDR+4Fh ;Line 2 set address to write YES or NO
+ 1030:	  0787	12 0E C3	CALL	WRCMD
+ 1031:	  078A	E5 13		MOV	A,TEMP3
+ 1032:	  078C	30 E0 12	JNB	ACC.0,NOTCLR		;no MIL clear
+ 1033:	  078F	74 59		MOV	A,#59h		;Y char
+ 1034:	  0791	12 0E D2	CALL	WRCHAR
+ 1035:	  0794	74 45		MOV	A,#45h		;E char
+ 1036:	  0796	12 0E D2	CALL	WRCHAR
+ 1037:	  0799	74 53		MOV	A,#53h		;S char
+ 1038:	  079B	12 0E D2	CALL	WRCHAR
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 20
+
+
+
+ Line  I  Addr  Code            Source
+
+ 1039:	  079E	02 07 B0	JMP	SETMILOFF	;jump to set MIL off
+ 1040:	  07A1			NOTCLR:
+ 1041:	  07A1	74 4E		MOV	A,#4Eh		;N char
+ 1042:	  07A3	12 0E D2	CALL	WRCHAR
+ 1043:	  07A6	74 4F		MOV	A,#4Fh		;O char
+ 1044:	  07A8	12 0E D2	CALL	WRCHAR
+ 1045:	  07AB	74 20		MOV	A,#20h		;Space
+ 1046:	  07AD	12 0E D2	CALL	WRCHAR
+ 1047:	  07B0			SETMILOFF:
+ 1048:	  07B0	12 0F C5	CALL	DEL500m	;keyboard delay
+ 1049:	  07B3	20 B3 03	JB	BTNBL,$+6	;toggle backlight
+ 1050:	  07B6	12 10 2E	CALL	BACKLIGHT
+ 1051:	  07B9	30 B4 0E	JNB	BTNUP,SPLEXIT       ;skip to exit special function
+ 1052:	  07BC	20 B5 F4	JB	BTNDN,$-9
+ 1053:	  07BF	12 10 18	CALL	SOUND_TRIG
+ 1054:	  07C2	E5 13		MOV	A,TEMP3
+ 1055:	  07C4	B2 E0		CPL	ACC.0		;toggle value
+ 1056:	  07C6	F5 13		MOV	TEMP3,A
+ 1057:	  07C8	80 BB		JMP	MILSTATUS	;refresh status
+ 1058:	  07CA			SPLEXIT:
+ 1059:	  07CA	E5 13		MOV	A,TEMP3
+ 1060:	  07CC	30 E0 06	JNB	ACC.0,$+9		;NO then skip CLR MIL
+ 1061:				;send CLRMIL  0400 Message Here
+ 1062:	  07CF	90 14 5C	MOV	DPTR,#CLRMIL
+ 1063:	  07D2	12 0F 98	CALL	SBLOCK
+ 1064:	  07D5	12 0F C5	CALL	DEL500m	;keyboard delay
+ 1065:	  07D8	41 60		AJMP	METER		;back to PID mode
+ 1066:				;----------------------
+ 1067:				;***********END CONFIG******************
+ 1068:	  07DA			CONSUMP:
+ 1069:	  07DA	74 01		MOV	A,#LCD_CLS
+ 1070:	  07DC	12 0E C3	CALL	WRCMD
+ 1071:	  07DF	12 0F D6	CALL	DEL100m
+ 1072:	  07E2	74 80		MOV	A,#LCD_SETDDADDR+00 ;Line 1
+ 1073:	  07E4	12 0E C3	CALL	WRCMD
+ 1074:	  07E7	90 17 9E	MOV	DPTR,#SPDMAF
+ 1075:	  07EA	12 0E 6B	CALL	WRSTR
+ 1076:	  07ED	74 C0		MOV	A,#LCD_SETDDADDR+40h ;Line 2
+ 1077:	  07EF	12 0E C3	CALL	WRCMD
+ 1078:	  07F2	E5 10		MOV	A,CONFIG		;check default FC mode
+ 1079:	  07F4	20 E2 09	JB	ACC.2,AVRMODE	;goto average mode
+ 1080:				;Instant mode
+ 1081:	  07F7	90 17 B4	MOV	DPTR,#INSTFC
+ 1082:	  07FA	12 0E 6B	CALL	WRSTR
+ 1083:	  07FD	02 08 06	JMP	CONSUMP2
+ 1084:	  0800			AVRMODE:
+ 1085:	  0800	90 17 CA	MOV	DPTR,#AVRFC
+ 1086:	  0803	12 0E 6B	CALL	WRSTR
+ 1087:
+ 1088:	  0806			CONSUMP2:	;calculate loop
+ 1089:				;---Get Vehicle Speed
+ 1090:	  0806	90 14 E3	MOV	DPTR,#SPDPID
+ 1091:	  0809	12 0F 98	CALL	SBLOCK		;send 010D to ELM
+ 1092:	  080C	12 0F A3	CALL	RBLOCK
+ 1093:	  080F	12 0E E1	CALL	GETB1B2
+ 1094:	  0812	85 0D 11	MOV	TEMP1,B1	;keep speed in temp1
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 21
+
+
+
+ Line  I  Addr  Code            Source
+
+ 1095:	  0815	12 0A 7F	CALL	FORMULA3	;calculate speed result in BUFFER
+ 1096:	  0818	74 80		MOV	A,#LCD_SETDDADDR+0	;set cursot line1
+ 1097:	  081A	12 0E C3	CALL	WRCMD
+ 1098:	  081D	A9 0F		MOV	R1,RESULTLEN
+ 1099:	  081F	78 20		MOV	R0,#BUFFER	;point to buffer
+ 1100:	  0821			VEHSPD:
+ 1101:	  0821	E6		MOV	A,@R0			;load char in A
+ 1102:	  0822	12 0E D2	CALL	WRCHAR
+ 1103:	  0825	08		INC	R0
+ 1104:	  0826	D9 F9		DJNZ	R1,VEHSPD		;loop til end of length
+ 1105:				;---Get Manifold Air Flow
+ 1106:	  0828	90 14 E9	MOV	DPTR,#MAFPID
+ 1107:	  082B	12 0F 98	CALL	SBLOCK		;send 010D to ELM
+ 1108:	  082E	12 0F A3	CALL	RBLOCK
+ 1109:	  0831	12 0E E1	CALL	GETB1B2
+ 1110:	  0834	85 0D 12	MOV	TEMP2,B1	;keep airflow in temp2
+ 1111:	  0837	85 0E 13	MOV	TEMP3,B2	;keep airflow in temp3
+ 1112:	  083A	12 0B 6A	CALL	AIRFLOW		;calculate airflow result in buffer
+ 1113:	  083D	74 8B		MOV	A,#LCD_SETDDADDR+11	;set cursor line1
+ 1114:	  083F	12 0E C3	CALL	WRCMD
+ 1115:	  0842	A9 0F		MOV	R1,RESULTLEN
+ 1116:	  0844	78 20		MOV	R0,#BUFFER	;point to buffer
+ 1117:	  0846			MAF:
+ 1118:	  0846	E6		MOV	A,@R0			;load char in A
+ 1119:	  0847	12 0E D2	CALL	WRCHAR
+ 1120:	  084A	08		INC	R0
+ 1121:	  084B	D9 F9		DJNZ	R1,MAF		;loop til end of length
+ 1122:				;calculate fuel consumption & display on Line 2
+ 1123:				;FC = (speed x 1Dhx0Ah)/ (Airflow /0Ah)  [100%]
+ 1124:	  084D	A9 12		MOV	R1,TEMP2	;Airflow /0Ah
+ 1125:	  084F	A8 13		MOV	R0,TEMP3
+ 1126:	  0851	7B 00		MOV	R3,#00h
+ 1127:	  0853	7A 0A		MOV	R2,#0Ah
+ 1128:	  0855	12 10 B5	CALL	UDIV16		;result in R1,R0
+ 1129:	  0858	89 12		MOV	TEMP2,R1
+ 1130:	  085A	88 13		MOV	TEMP3,R0
+ 1131:
+ 1132:	  085C	79 00		MOV	R1,#00h
+ 1133:	  085E	A8 11		MOV	R0,TEMP1		;Speed x 1Dhx0Ah = Speedx 122h
+ 1134:	  0860	7B 01		MOV	R3,#01h
+ 1135:				;FC = (speed x 1Ch,x0Ah)/(Airflow/0Ah)   [ 5% compensation]
+ 1136:	  0862	7A 13		MOV	R2,#13h
+ 1137:				;MOV	R2,#22h		;100%
+ 1138:	  0864	12 10 EB	CALL	UMUL16		;result in R3,R2,R1,R0 (use only R1 R0)
+ 1139:	  0867	AB 12		MOV	R3,TEMP2	;prepare divider
+ 1140:	  0869	AA 13		MOV	R2,TEMP3
+ 1141:
+ 1142:	  086B	12 10 B5	CALL	UDIV16		;result in R1,R0
+ 1143:				;end FC calculate
+ 1144:	  086E	89 83		MOV	DPH,R1		;keep result in DPTR
+ 1145:	  0870	88 82		MOV	DPL,R0
+ 1146:				;check F/C mode
+ 1147:	  0872	E5 10		MOV	A,CONFIG
+ 1148:	  0874	30 E2 4F	JNB	ACC.2,INSTMODE	;skip to INSTANT mode
+ 1149:
+ 1150:				;keep logging data in iram 80h-FFh
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 22
+
+
+
+ Line  I  Addr  Code            Source
+
+ 1151:	  0877	05 15		INC	FCPTR
+ 1152:	  0879	A8 15		MOV	R0,FCPTR	;#80h
+ 1153:	  087B	A6 83		MOV	@R0,DPH
+ 1154:	  087D	08		INC	R0		;#81h
+ 1155:	  087E	A6 82		MOV	@R0,DPL
+ 1156:	  0880	88 15		MOV	FCPTR,R0	;#81h
+ 1157:
+ 1158:	  0882	E5 15		MOV	A,FCPTR		;check end of data at 0FFh or not
+ 1159:	  0884	B4 FF 6C	CJNE	A,#0FFh,FCKEY	;not end of data jump to FCKEY
+ 1160:				;Start average here
+ 1161:	  0887	78 80		MOV	R0,#080h		;R0 point to 81h
+ 1162:	  0889	79 81		MOV	R1,#081h		;R1 point to 83h
+ 1163:	  088B	86 83		MOV	DPH,@R0	;first data HI byte in DPH
+ 1164:	  088D	87 82		MOV	DPL,@R1		;first data LOW byte in DPL
+ 1165:	  088F	78 82		MOV	R0,#082h		;R0 point to 82h
+ 1166:	  0891	E6		MOV	A,@R0
+ 1167:	  0892	FB		MOV	R3,A		;2 nd data High Nibble  in R3
+ 1168:	  0893	08		INC	R0
+ 1169:	  0894	E6		MOV	A,@R0
+ 1170:	  0895	FA		MOV	R2,A		;2nd data Low Nibble  in R2
+ 1171:	  0896	A9 83		MOV	R1,DPH		;1st data in R1,R0
+ 1172:	  0898	A8 82		MOV	R0,DPL		;;1st data in R1,R0
+ 1173:	  089A	75 11 83	MOV	TEMP1,#083h	;data index
+ 1174:	  089D			AVERAGE: 	;average every 64 data logging then divide by 64 at final
+ 1175:	  089D	12 11 2A	CALL	ADD16		;16bit add		result in R1,R0
+ 1176:	  08A0	89 83		MOV	DPH,R1		;keep sum result in DPTR
+ 1177:	  08A2	88 82		MOV	DPL,R0
+ 1178:	  08A4	05 11		INC	TEMP1		;84h
+ 1179:	  08A6	A8 11		MOV	R0,TEMP1
+ 1180:	  08A8	E6		MOV	A,@R0		;Load Next data digit1 84h
+ 1181:	  08A9	FB		MOV	R3,A
+ 1182:	  08AA	08		INC	R0
+ 1183:	  08AB	E6		MOV	A,@R0		;Load Next data digit2 85h
+ 1184:	  08AC	FA		MOV	R2,A
+ 1185:	  08AD	88 11		MOV	TEMP1,R0	;TEMP1 = 85h
+ 1186:	  08AF	A9 83		MOV	R1,DPH		;1st data in R1,R0 load result back
+ 1187:	  08B1	A8 82		MOV	R0,DPL		;;1st data in R1,R0
+ 1188:	  08B3	E5 11		MOV	A,TEMP1
+ 1189:	  08B5	B4 FF E5	CJNE	A,#0FFh,AVERAGE	;not end of data average again
+ 1190:	  08B8	7B 00		MOV	R3,#00h
+ 1191:	  08BA	7A 40		MOV	R2,#64
+ 1192:	  08BC	12 10 B5	CALL	UDIV16		;Divide by 64 Result in R1,R0
+ 1193:	  08BF	89 83		MOV	DPH,R1
+ 1194:	  08C1	88 82		MOV	DPL,R0		;Prepare data for HTOD
+ 1195:	  08C3	75 15 7F	MOV	FCPTR,#7Fh	;reset pointer
+ 1196:	  08C6			INSTMODE:
+ 1197:	  08C6	12 0F E7	CALL	HTOD		;convert result to DEC
+ 1198:	  08C9	74 CC		MOV	A,#LCD_SETDDADDR+76	;set cursot line1
+ 1199:	  08CB	12 0E C3	CALL	WRCMD
+ 1200:	  08CE	EA		MOV	A,R2
+ 1201:	  08CF	54 0F		ANL	A,#0Fh
+ 1202:	  08D1	60 05		JZ	FCZERO
+ 1203:	  08D3	24 30		ADD	A,#30h		;change to ascii
+ 1204:	  08D5	02 08 DA	JMP	FCNONZERO
+ 1205:	  08D8			FCZERO:
+ 1206:	  08D8	74 17		MOV	A,#17h		;space
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 23
+
+
+
+ Line  I  Addr  Code            Source
+
+ 1207:	  08DA			FCNONZERO:
+ 1208:	  08DA	12 0E D2	CALL	WRCHAR		;write 1 st digit
+ 1209:	  08DD	EB		MOV	A,R3
+ 1210:	  08DE	C4		SWAP	A
+ 1211:	  08DF	54 0F		ANL	A,#0Fh
+ 1212:	  08E1	24 30		ADD	A,#30h
+ 1213:	  08E3	12 0E D2	CALL	WRCHAR		;write 2nd digit
+ 1214:	  08E6	74 2E		MOV	A,#2Eh
+ 1215:	  08E8	12 0E D2	CALL	WRCHAR		;write full stop
+ 1216:	  08EB	EB		MOV	A,R3
+ 1217:	  08EC	54 0F		ANL	A,#0Fh
+ 1218:	  08EE	24 30		ADD	A,#30h
+ 1219:	  08F0	12 0E D2	CALL	WRCHAR		;write 3nd digit
+ 1220:				;end calculation fuel consumption and check button press
+ 1221:	  08F3			FCKEY:
+ 1222:	  08F3	20 B3 03	JB	BTNBL,$+6	;toggle back light
+ 1223:	  08F6	12 10 2E	CALL	BACKLIGHT
+ 1224:	  08F9	20 B4 0C	JB	BTNUP,FCMODE
+ 1225:	  08FC	12 10 18	CALL	SOUND_TRIG
+ 1226:	  08FF	E5 10		MOV	A,CONFIG		;Instant mode
+ 1227:	  0901	C2 E2		CLR	ACC.2
+ 1228:	  0903	F5 10		MOV	CONFIG,A
+ 1229:	  0905	02 07 DA	LJMP	CONSUMP	;restart FC
+ 1230:	  0908			FCMODE:
+ 1231:	  0908	20 B5 0C	JB	BTNDN,FCEXIT
+ 1232:	  090B	12 10 18	CALL	SOUND_TRIG
+ 1233:	  090E	E5 10		MOV	A,CONFIG
+ 1234:	  0910	D2 E2		SETB	ACC.2		;Average mode;
+ 1235:	  0912	F5 10		MOV	CONFIG,A
+ 1236:	  0914	02 07 DA	LJMP	CONSUMP	;Restart FC
+ 1237:	  0917			FCEXIT:
+ 1238:	  0917	20 B2 13	JB	BTNMENU,CONSUMP3	;jump back to calculte consump
+ 1239:	  091A	12 10 18	CALL	SOUND_TRIG
+ 1240:	  091D	78 00		MOV	R0,#ECONFIG	;set eeprom address
+ 1241:	  091F	A9 10		MOV	R1,CONFIG	;save last mode in EEPROM
+ 1242:	  0921	12 11 36	CALL	IPW		;Write setting to eeprom
+ 1243:	  0924	12 0F C5	CALL	DEL500m
+ 1244:	  0927	12 0F C5	CALL	DEL500m	;key delay
+ 1245:	  092A	02 02 60	LJMP	METER		;Exit
+ 1246:	  092D			CONSUMP3:
+ 1247:	  092D	02 08 06	LJMP	CONSUMP2
+ 1248:				;============SUB ROUTINE=======================
+ 1249:				;SKIP PID  IN A(PID mode) OUT  A and PID
+ 1250:	  0930			SKIPPID:
+ 1251:	  0930	B4 08 03	CJNE	A,#08h,$+6
+ 1252:	  0933	74 0A		MOV	A,#0Ah
+ 1253:	  0935	22		RET
+ 1254:	  0936	B4 12 03	CJNE	A,#12h,$+6
+ 1255:	  0939	74 14		MOV	A,#14h
+ 1256:	  093B	22		RET
+ 1257:	  093C	B4 16 03	CJNE	A,#16h,$+6
+ 1258:	  093F	74 2C		MOV	A,#2Ch
+ 1259:	  0941	22		RET
+ 1260:	  0942	B4 30 03	CJNE	A,#30h,$+6
+ 1261:	  0945	74 33		MOV	A,#33h
+ 1262:	  0947	22		RET
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 24
+
+
+
+ Line  I  Addr  Code            Source
+
+ 1263:	  0948	B4 34 03	CJNE	A,#34h,$+6
+ 1264:	  094B	74 3C		MOV	A,#3Ch
+ 1265:	  094D	22		RET
+ 1266:	  094E	B4 3E 03	CJNE	A,#3Eh,$+6
+ 1267:	  0951	74 42		MOV	A,#42h
+ 1268:	  0953	22		RET
+ 1269:	  0954	B4 47 02	CJNE	A,#47h,$+5
+ 1270:	  0957	74 04		MOV	A,#04h
+ 1271:	  0959	22		RET
+ 1272:				;*********************************
+ 1273:				;IN   B1,B2 ,R2
+ 1274:				;OUT   BUFFER,RESULTLEN
+ 1275:	  095A			CALCULATE:  ;Determine PID mode / calculate /translate to ASCII / keep in BUFFER/RESULTLEN
+ 1276:
+ 1277:	  095A	BA 04 04	CJNE	R2,#04h,$+7	;CAL Engine Load
+ 1278:	  095D	12 0A 10	CALL	FORMULA1
+ 1279:	  0960	22		RET
+ 1280:	  0961	BA 05 04	CJNE	R2,#05h,$+7	;Coolant Temp
+ 1281:	  0964	12 0A 51	CALL	FORMULA2
+ 1282:	  0967	22		RET
+ 1283:	  0968	BA 06 04	CJNE	R2,#06h,$+7	;Short Term Fuel TRim B1
+ 1284:	  096B	12 0A B5	CALL	FUELTRIM
+ 1285:	  096E	22		RET
+ 1286:	  096F	BA 07 04	CJNE	R2,#07h,$+7	;Long Term Fuel Trim B1
+ 1287:	  0972	12 0A B5	CALL	FUELTRIM
+ 1288:	  0975	22		RET
+ 1289:	  0976	BA 0A 04	CJNE	R2,#0Ah,$+7	;Fuel Pressure
+ 1290:	  0979	12 0A 7F	CALL	FORMULA3
+ 1291:	  097C	22		RET
+ 1292:	  097D	BA 0B 04	CJNE	R2,#0Bh,$+7	;MAN air Press
+ 1293:	  0980	12 0A 7F	CALL	FORMULA3
+ 1294:	  0983	22		RET
+ 1295:	  0984	BA 0C 04	CJNE	R2,#0Ch,$+7	;ENG Speed
+ 1296:	  0987	12 0A F3	CALL	ENGSPEED
+ 1297:	  098A	22		RET
+ 1298:	  098B	BA 0D 04	CJNE	R2,#0Dh,$+7	;VEH Speed
+ 1299:	  098E	12 0A 7F	CALL	FORMULA3
+ 1300:	  0991	22		RET
+ 1301:	  0992	BA 0E 04	CJNE	R2,#0Eh,$+7	;IGN ADV Timing
+ 1302:	  0995	12 0B 34	CALL	IGNTIME
+ 1303:	  0998	22		RET
+ 1304:	  0999	BA 0F 04	CJNE	R2,#0Fh,$+7	;Intake Air Temp
+ 1305:	  099C	12 0A 51	CALL	FORMULA2
+ 1306:	  099F	22		RET
+ 1307:	  09A0	BA 10 04	CJNE	R2,#10h,$+7	;Air Flow
+ 1308:	  09A3	12 0B 6A	CALL	AIRFLOW
+ 1309:	  09A6	22		RET
+ 1310:	  09A7	BA 11 04	CJNE	R2,#11h,$+7	;Throttle Pos
+ 1311:	  09AA	12 0A 10	CALL	FORMULA1
+ 1312:	  09AD	22		RET
+ 1313:	  09AE	BA 14 04	CJNE	R2,#14h,$+7	;HO2S 1 voltage
+ 1314:	  09B1	12 0C 43	CALL	HO2SVOLT
+ 1315:	  09B4	22		RET
+ 1316:	  09B5	BA 15 04	CJNE	R2,#15h,$+7	;HO2S 2 voltage
+ 1317:	  09B8	12 0C 43	CALL	HO2SVOLT
+ 1318:	  09BB	22		RET
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 25
+
+
+
+ Line  I  Addr  Code            Source
+
+ 1319:	  09BC	BA 2C 04	CJNE	R2,#2Ch,$+7	;Command EGR
+ 1320:	  09BF	12 0A 10	CALL	FORMULA1
+ 1321:	  09C2	22		RET
+ 1322:	  09C3	BA 2D 04	CJNE	R2,#2Dh,$+7	;EGR error
+ 1323:	  09C6	12 0A 10	CALL	FORMULA1
+ 1324:	  09C9	22		RET
+ 1325:	  09CA	BA 2E 04	CJNE	R2,#2Eh,$+7	;Command Evap Purge
+ 1326:	  09CD	12 0A 10	CALL	FORMULA1
+ 1327:	  09D0	22		RET
+ 1328:	  09D1	BA 2F 04	CJNE	R2,#2Fh,$+7	;Fuel Level
+ 1329:	  09D4	12 0A 10	CALL	FORMULA1
+ 1330:	  09D7	22		RET
+ 1331:	  09D8	BA 33 04	CJNE	R2,#33h,$+7	;Baro Press
+ 1332:	  09DB	12 0A 7F	CALL	FORMULA3
+ 1333:	  09DE	22		RET
+ 1334:	  09DF	BA 3C 04	CJNE	R2,#3Ch,$+7	;CAT 1 Temp
+ 1335:	  09E2	12 0B A9	CALL	CATTEMP
+ 1336:	  09E5	22		RET
+ 1337:	  09E6	BA 3D 04	CJNE	R2,#3Dh,$+7	;CAT 2 Temp
+ 1338:	  09E9	12 0B A9	CALL	CATTEMP
+ 1339:	  09EC	22		RET
+ 1340:	  09ED	BA 42 04	CJNE	R2,#42h,$+7	;ECU Volt
+ 1341:	  09F0	12 0B DE	CALL	ECUVOLT
+ 1342:	  09F3	22		RET
+ 1343:	  09F4	BA 43 04	CJNE	R2,#43h,$+7	;ABS ENgine load
+ 1344:	  09F7	12 0A 10	CALL	FORMULA1
+ 1345:	  09FA	22		RET
+ 1346:	  09FB	BA 44 04	CJNE	R2,#44h,$+7	;CMD EQV RAtio
+ 1347:	  09FE	12 0C 11	CALL	CMDEQV
+ 1348:	  0A01	22		RET
+ 1349:	  0A02	BA 45 04	CJNE	R2,#45h,$+7	;REL Throt Pos
+ 1350:	  0A05	12 0A 10	CALL	FORMULA1
+ 1351:	  0A08	22		RET
+ 1352:	  0A09	BA 46 03	CJNE	R2,#46h,$+6	;AMB Air Temp
+ 1353:	  0A0C	12 0A 51	CALL	FORMULA2
+ 1354:	  0A0F	22		RET
+ 1355:				;***********************************
+ 1356:				;--SUB Formula Caculation---------------------------------------
+ 1357:				;IN   B1,B2
+ 1358:				;OUT BUFFER, RESULTLEN
+ 1359:	  0A10			FORMULA1:	;Percentage calculate B1/255 x 100
+ 1360:	  0A10	E5 0D		MOV	A,B1
+ 1361:	  0A12	75 F0 64	MOV	B,#100
+ 1362:	  0A15	A4		MUL	AB	;result in BA
+ 1363:	  0A16	90 00 00	MOV	DPTR,#0000h	;DPTR=0
+ 1364:	  0A19	F5 82		MOV	DPL,A	;DPL=A
+ 1365:	  0A1B	12 0F E7	CALL	HTOD	;Result fraction A keep in R2,R3  take only R2 low nibble
+ 1366:	  0A1E	EA		MOV	A,R2	;keep carry in A
+ 1367:	  0A1F	90 00 00	MOV	DPTR,#0000h
+ 1368:	  0A22	85 F0 82	MOV	DPL,B	;take byte1
+ 1369:	  0A25	25 F0		ADD	A,B	;add byte1 with carry
+ 1370:	  0A27	90 00 00	MOV	DPTR,#000h	;final result for HTOD
+ 1371:	  0A2A	F5 82		MOV	DPL,A
+ 1372:	  0A2C	12 0F E7	CALL	HTOD	;Result in R2,R2
+ 1373:
+ 1374:	  0A2F	EA		MOV	A,R2
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 26
+
+
+
+ Line  I  Addr  Code            Source
+
+ 1375:	  0A30	54 0F		ANL	A,#0Fh
+ 1376:	  0A32	FC		MOV	R4,A	;keep
+ 1377:	  0A33	60 07		JZ	$+9	;IF A = 0 then skip to BUFFER = #17h
+ 1378:	  0A35	24 30		ADD	A,#30h	;convert dec to ASCII
+ 1379:	  0A37	F5 20		MOV	BUFFER,A	;digit1
+ 1380:	  0A39	80 04		JMP	$+6
+ 1381:	  0A3B	75 20 17	MOV	BUFFER,#17h	;Result is 0 then put SPACE
+ 1382:	  0A3E	EB		MOV	A,R3
+ 1383:	  0A3F	C4		SWAP	A
+ 1384:	  0A40	54 0F		ANL	A,#0Fh
+ 1385:	  0A42	24 30		ADD	A,#30h	;convert dec to ASCII
+ 1386:	  0A44	F5 21		MOV	BUFFER+1,A	;digit2
+ 1387:	  0A46	EB		MOV	A,R3
+ 1388:	  0A47	54 0F		ANL	A,#0Fh
+ 1389:	  0A49	24 30		ADD	A,#30h	;convert dec to ASCII
+ 1390:	  0A4B	F5 22		MOV	BUFFER+2,A	;digit1
+ 1391:	  0A4D	75 0F 03	MOV	RESULTLEN,#03
+ 1392:	  0A50	22		RET
+ 1393:				;------------------
+ 1394:	  0A51			FORMULA2:	;Temperature B1-40
+ 1395:	  0A51	90 00 00	MOV	DPTR,#0000h
+ 1396:	  0A54	E5 0D		MOV	A,B1
+ 1397:	  0A56	C3		CLR	C
+ 1398:	  0A57	94 28		SUBB	A,#40
+ 1399:	  0A59	F5 82		MOV	DPL,A
+ 1400:	  0A5B	12 0F E7	CALL	HTOD
+ 1401:	  0A5E	EA		MOV	A,R2
+ 1402:	  0A5F	54 0F		ANL	A,#0Fh
+ 1403:	  0A61	60 07		JZ	$+9	;IF A = 0 then skip to BUFFER = #17h
+ 1404:	  0A63	24 30		ADD	A,#30h	;convert dec to ASCII
+ 1405:	  0A65	F5 20		MOV	BUFFER,A	;digit1
+ 1406:	  0A67	80 04		JMP	$+6
+ 1407:	  0A69	75 20 17	MOV	BUFFER,#17h	;Result is 0 then put SPACE
+ 1408:	  0A6C	EB		MOV	A,R3
+ 1409:	  0A6D	C4		SWAP	A
+ 1410:	  0A6E	54 0F		ANL	A,#0Fh
+ 1411:	  0A70	24 30		ADD	A,#30h	;convert dec to ASCII
+ 1412:	  0A72	F5 21		MOV	BUFFER+1,A	;digit2
+ 1413:	  0A74	EB		MOV	A,R3
+ 1414:	  0A75	54 0F		ANL	A,#0Fh
+ 1415:	  0A77	24 30		ADD	A,#30h	;convert dec to ASCII
+ 1416:	  0A79	F5 22		MOV	BUFFER+2,A	;digit1
+ 1417:	  0A7B	75 0F 03	MOV	RESULTLEN,#03
+ 1418:	  0A7E	22		RET
+ 1419:				;------------------
+ 1420:	  0A7F			FORMULA3:	;direct byte
+ 1421:	  0A7F	90 00 00	MOV	DPTR,#0000h
+ 1422:	  0A82	85 0D 82	MOV	DPL,B1
+ 1423:	  0A85	12 0F E7	CALL	HTOD	;convert hex to Decimal (R1,R2,R3)
+ 1424:	  0A88	EA		MOV	A,R2
+ 1425:	  0A89	54 0F		ANL	A,#0Fh
+ 1426:	  0A8B	60 07		JZ	$+9	;IF A = 0 then skip to BUFFER = #17
+ 1427:	  0A8D	24 30		ADD	A,#30h	;convert dec to ASCII
+ 1428:	  0A8F	F5 20		MOV	BUFFER,A	;digit1
+ 1429:	  0A91	80 04		JMP	$+6
+ 1430:	  0A93	75 20 17	MOV	BUFFER,#17h	;Result is 0 then put SPACE
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 27
+
+
+
+ Line  I  Addr  Code            Source
+
+ 1431:	  0A96	EB		MOV	A,R3
+ 1432:	  0A97	C4		SWAP	A
+ 1433:	  0A98	54 0F		ANL	A,#0Fh
+ 1434:	  0A9A	AF 20		MOV	R7,BUFFER	;check space or not
+ 1435:	  0A9C	BF 17 02	CJNE	R7,#17h,$+5
+ 1436:	  0A9F	60 07		JZ	$+9		;If 1digit =0 and 2 digit = 0 then jump
+ 1437:	  0AA1	24 30		ADD	A,#30h	;convert dec to ASCII
+ 1438:	  0AA3	F5 21		MOV	BUFFER+1,A	;digit2
+ 1439:	  0AA5	80 04		JMP	$+6
+ 1440:	  0AA7	75 21 17	MOV	BUFFER+1,#17h	;Result is 0 then put SPACE
+ 1441:	  0AAA	EB		MOV	A,R3
+ 1442:	  0AAB	54 0F		ANL	A,#0Fh
+ 1443:	  0AAD	24 30		ADD	A,#30h	;convert dec to ASCII
+ 1444:	  0AAF	F5 22		MOV	BUFFER+2,A	;digit1
+ 1445:	  0AB1	75 0F 03	MOV	RESULTLEN,#03
+ 1446:	  0AB4	22		RET
+ 1447:				;--------------------
+ 1448:	  0AB5			FUELTRIM:	;( B1x64h)/80h - 64h
+ 1449:	  0AB5	E5 0D		MOV	A,B1
+ 1450:	  0AB7	75 F0 64	MOV	B,#64h
+ 1451:	  0ABA	A4		MUL	AB	;Result in B,A
+ 1452:	  0ABB	A9 F0		MOV	R1,B
+ 1453:	  0ABD	F8		MOV	R0,A
+ 1454:	  0ABE	7B 00		MOV	R3,#00
+ 1455:	  0AC0	7A 80		MOV	R2,#80h
+ 1456:	  0AC2	12 10 B5	CALL	UDIV16	;Result in R1,R0
+ 1457:	  0AC5	C3		CLR	C	;clear carry flag
+ 1458:	  0AC6	E8		MOV	A,R0
+ 1459:	  0AC7	94 64		SUBB	A,#64h	;Result in ACC
+ 1460:				;Sign checking
+ 1461:	  0AC9	40 07		JC	$+9	; OV set then negative sign
+ 1462:	  0ACB	75 20 2B	MOV	BUFFER,#2Bh	;+sign
+ 1463:	  0ACE	02 0A D8	JMP	POSFT
+ 1464:	  0AD1	75 20 2D	MOV	BUFFER,#2Dh	;-Sign
+ 1465:	  0AD4	FC		MOV	R4,A
+ 1466:	  0AD5	74 64		MOV	A,#64h
+ 1467:	  0AD7	9C		SUBB	A,R4		;64h - A
+ 1468:	  0AD8			POSFT:
+ 1469:	  0AD8	90 00 00	MOV	DPTR,#0000h
+ 1470:	  0ADB	F5 82		MOV	DPL,A
+ 1471:	  0ADD	12 0F E7	CALL	HTOD	;convert hex to Decimal (R1,R2,R3)
+ 1472:	  0AE0	EB		MOV	A,R3
+ 1473:	  0AE1	C4		SWAP	A
+ 1474:	  0AE2	54 0F		ANL	A,#0Fh
+ 1475:	  0AE4	24 30		ADD	A,#30h	;convert dec to ASCII
+ 1476:	  0AE6	F5 21		MOV	BUFFER+1,A	;digit2
+ 1477:	  0AE8	EB		MOV	A,R3
+ 1478:	  0AE9	54 0F		ANL	A,#0Fh
+ 1479:	  0AEB	24 30		ADD	A,#30h	;convert dec to ASCII
+ 1480:	  0AED	F5 22		MOV	BUFFER+2,A	;digit1
+ 1481:	  0AEF	75 0F 03	MOV	RESULTLEN,#03
+ 1482:	  0AF2	22		RET
+ 1483:				;--------------------
+ 1484:	  0AF3			ENGSPEED:	;[(B1x256) + B2] / 4
+ 1485:	  0AF3	E5 0D		MOV	A,B1
+ 1486:	  0AF5	75 F0 04	MOV	B,#04h
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 28
+
+
+
+ Line  I  Addr  Code            Source
+
+ 1487:	  0AF8	84		DIV	AB	;B1/4  fraction in B
+ 1488:	  0AF9	F5 83		MOV	DPH,A	;keep A in DPH
+ 1489:	  0AFB	74 40		MOV	A,#40h
+ 1490:	  0AFD	A4		MUL	AB	;A = B x #40h   Result in BA
+ 1491:	  0AFE	FC		MOV	R4,A	;keep result in R4
+ 1492:	  0AFF	E5 0E		MOV	A,B2
+ 1493:	  0B01	75 F0 04	MOV	B,#04h
+ 1494:	  0B04	84		DIV	AB
+ 1495:	  0B05	2C		ADD	A,R4	;B2/4 + R4
+ 1496:	  0B06	F5 82		MOV	DPL,A	;keep A in DPL
+ 1497:	  0B08	12 0F E7	CALL	HTOD	;Result  in R2,R3 then convert to ASCII
+ 1498:	  0B0B	EA		MOV	A,R2	;digit1
+ 1499:	  0B0C	C4		SWAP	A
+ 1500:	  0B0D	54 0F		ANL	A,#0Fh
+ 1501:	  0B0F	60 07		JZ	$+9	;IF A = 0 then skip to BUFFER = #17h
+ 1502:	  0B11	24 30		ADD	A,#30h	;convert dec to ASCII
+ 1503:	  0B13	F5 20		MOV	BUFFER,A	;digit1
+ 1504:	  0B15	80 04		JMP	$+6
+ 1505:	  0B17	75 20 17	MOV	BUFFER,#17h	;Result is 0 then put SPACE
+ 1506:	  0B1A	EA		MOV	A,R2	;digit2
+ 1507:	  0B1B	54 0F		ANL	A,#0Fh
+ 1508:	  0B1D	24 30		ADD	A,#30h	;convert dec to ASCII
+ 1509:	  0B1F	F5 21		MOV	BUFFER+1,A	;digit2
+ 1510:	  0B21	EB		MOV	A,R3	;digit3
+ 1511:	  0B22	C4		SWAP	A
+ 1512:	  0B23	54 0F		ANL	A,#0Fh
+ 1513:	  0B25	24 30		ADD	A,#30h	;convert dec to ASCII
+ 1514:	  0B27	F5 22		MOV	BUFFER+2,A	;digit3
+ 1515:	  0B29	EB		MOV	A,R3	;digit4
+ 1516:	  0B2A	54 0F		ANL	A,#0Fh
+ 1517:	  0B2C	24 30		ADD	A,#30h	;convert dec to ASCII
+ 1518:	  0B2E	F5 23		MOV	BUFFER+3,A	;digit4
+ 1519:	  0B30	75 0F 04	MOV	RESULTLEN,#04
+ 1520:	  0B33	22		RET
+ 1521:				;-------------------
+ 1522:	  0B34			IGNTIME:		;(B1 / 2) -64h
+ 1523:	  0B34	E5 0D		MOV 	A,B1
+ 1524:	  0B36	75 F0 02	MOV	B,#02h
+ 1525:	  0B39	84		DIV	AB
+ 1526:	  0B3A	C3		CLR	C
+ 1527:	  0B3B	94 40		SUBB	A,#64
+ 1528:				;Sign checking
+ 1529:	  0B3D	40 07		JC	$+9	; OV set then negative sign
+ 1530:	  0B3F	75 20 2B	MOV	BUFFER,#2Bh	;+sign
+ 1531:	  0B42	02 0B 4E	JMP	POS
+ 1532:	  0B45	75 20 2D	MOV	BUFFER,#2Dh	;-Sign
+ 1533:	  0B48	FC		MOV	R4,A
+ 1534:	  0B49	74 FF		MOV	A,#0FFh
+ 1535:	  0B4B	9C		SUBB	A,R4
+ 1536:	  0B4C	24 02		ADD	A,#02h		;correction
+ 1537:
+ 1538:	  0B4E			POS:
+ 1539:	  0B4E	90 00 00	MOV	DPTR,#0000h
+ 1540:	  0B51	F5 82		MOV	DPL,A
+ 1541:	  0B53	FC		MOV	R4,A		;keep A in R4
+ 1542:	  0B54	12 0F E7	CALL	HTOD	;convert hex to Decimal (R1,R2,R3)
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 29
+
+
+
+ Line  I  Addr  Code            Source
+
+ 1543:	  0B57	EB		MOV	A,R3
+ 1544:	  0B58	C4		SWAP	A
+ 1545:	  0B59	54 0F		ANL	A,#0Fh
+ 1546:	  0B5B	24 30		ADD	A,#30h	;convert dec to ASCII
+ 1547:	  0B5D	F5 21		MOV	BUFFER+1,A	;digit2
+ 1548:	  0B5F	EB		MOV	A,R3
+ 1549:	  0B60	54 0F		ANL	A,#0Fh
+ 1550:	  0B62	24 30		ADD	A,#30h	;convert dec to ASCII
+ 1551:	  0B64	F5 22		MOV	BUFFER+2,A	;digit1
+ 1552:	  0B66	75 0F 03	MOV	RESULTLEN,#03
+ 1553:	  0B69	22		RET
+ 1554:				;-------------------------
+ 1555:	  0B6A			AIRFLOW:		;[(B1x256)+B2]/100
+ 1556:	  0B6A	85 0D 83	MOV	DPH,B1
+ 1557:	  0B6D	85 0E 82	MOV	DPL,B2	;keep A in DPL
+ 1558:	  0B70	12 0F E7	CALL	HTOD	;Result  in R2,R3 then convert to ASCII
+ 1559:	  0B73	E9		MOV	A,R1	;digit1
+ 1560:	  0B74	60 07		JZ	$+9	;IF A = 0 then skip to BUFFER = #17h
+ 1561:	  0B76	24 30		ADD	A,#30h	;convert dec to ASCII
+ 1562:	  0B78	F5 20		MOV	BUFFER,A	;digit1
+ 1563:	  0B7A	80 04		JMP	$+6
+ 1564:	  0B7C	75 20 17	MOV	BUFFER,#17h	;Result is 0 then put SPACE
+ 1565:
+ 1566:	  0B7F	EA		MOV	A,R2	;digit2
+ 1567:	  0B80	C4		SWAP	A
+ 1568:	  0B81	54 0F		ANL	A,#0Fh
+ 1569:	  0B83	AF 20		MOV	R7,BUFFER	;check 1digit is zero or not
+ 1570:	  0B85	BF 17 02	CJNE	R7,#17h,$+5	;if BUFFER <> space then jump to ADD  A,#20h
+ 1571:	  0B88	60 07		JZ	$+9
+ 1572:	  0B8A	24 30		ADD	A,#30h	;convert dec to ASCII
+ 1573:	  0B8C	F5 21		MOV	BUFFER+1,A
+ 1574:	  0B8E	80 04		JMP	$+6
+ 1575:	  0B90	75 21 17	MOV	BUFFER+1,#17h	;Result is 0 then put SPACE
+ 1576:	  0B93	EA		MOV	A,R2	;digit4
+ 1577:	  0B94	54 0F		ANL	A,#0Fh
+ 1578:	  0B96	24 30		ADD	A,#30h	;convert dec to ASCII
+ 1579:	  0B98	F5 22		MOV	BUFFER+2,A	;digit2
+ 1580:	  0B9A	EB		MOV	A,R3	;digit5
+ 1581:	  0B9B	C4		SWAP	A
+ 1582:	  0B9C	54 0F		ANL	A,#0Fh
+ 1583:	  0B9E	24 30		ADD	A,#30h	;convert dec to ASCII
+ 1584:	  0BA0	F5 24		MOV	BUFFER+4,A	;digit3
+ 1585:	  0BA2	75 23 2E	MOV	BUFFER+3,#2Eh	;full stop
+ 1586:	  0BA5	75 0F 05	MOV	RESULTLEN,#05
+ 1587:	  0BA8	22		RET
+ 1588:				;-------------------------
+ 1589:	  0BA9			CATTEMP:	;[(B1x256)+B2]/10
+ 1590:	  0BA9	85 0D 83	MOV	DPH,B1
+ 1591:	  0BAC	85 0E 82	MOV	DPL,B2
+ 1592:	  0BAF	12 0F E7	CALL	HTOD	;Result  in R2,R3 then convert to ASCII
+ 1593:	  0BB2	EA		MOV	A,R2	;digit1
+ 1594:	  0BB3	C4		SWAP	A
+ 1595:	  0BB4	54 0F		ANL	A,#0Fh
+ 1596:	  0BB6	60 07		JZ	$+9	;IF A = 0 then skip to BUFFER = #17h
+ 1597:	  0BB8	24 30		ADD	A,#30h	;convert dec to ASCII
+ 1598:	  0BBA	F5 20		MOV	BUFFER,A	;digit1
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 30
+
+
+
+ Line  I  Addr  Code            Source
+
+ 1599:	  0BBC	80 04		JMP	$+6
+ 1600:	  0BBE	75 20 17	MOV	BUFFER,#17h	;Result is 0 then put SPACE
+ 1601:	  0BC1	EA		MOV	A,R2	;digit2
+ 1602:	  0BC2	54 0F		ANL	A,#0Fh
+ 1603:	  0BC4	24 30		ADD	A,#30h	;convert dec to ASCII
+ 1604:	  0BC6	F5 21		MOV	BUFFER+1,A	;digit2
+ 1605:	  0BC8	EB		MOV	A,R3	;digit3
+ 1606:	  0BC9	C4		SWAP	A
+ 1607:	  0BCA	54 0F		ANL	A,#0Fh
+ 1608:	  0BCC	24 30		ADD	A,#30h	;convert dec to ASCII
+ 1609:	  0BCE	F5 22		MOV	BUFFER+2,A	;digit3
+ 1610:	  0BD0	EB		MOV	A,R3	;digit4
+ 1611:	  0BD1	54 0F		ANL	A,#0Fh
+ 1612:	  0BD3	24 30		ADD	A,#30h	;convert dec to ASCII
+ 1613:	  0BD5	F5 24		MOV	BUFFER+4,A	;digit4
+ 1614:	  0BD7	75 23 2E	MOV	BUFFER+3,#2Eh	;full stop
+ 1615:	  0BDA	75 0F 05	MOV	RESULTLEN,#05
+ 1616:	  0BDD	22		RET
+ 1617:				;-------------------------
+ 1618:	  0BDE			ECUVOLT:	;[(B1x256)+B2]/1000
+ 1619:	  0BDE	85 0D 83	MOV	DPH,B1
+ 1620:	  0BE1	85 0E 82	MOV	DPL,B2	;keep A in DPL
+ 1621:	  0BE4	12 0F E7	CALL	HTOD	;Result  in R2,R3 then convert to ASCII
+ 1622:	  0BE7	E9		MOV	A,R1	;digit1
+ 1623:	  0BE8	60 07		JZ	$+9	;IF A = 0 then skip to BUFFER = #17h
+ 1624:	  0BEA	24 30		ADD	A,#30h	;convert dec to ASCII
+ 1625:	  0BEC	F5 20		MOV	BUFFER,A	;digit1
+ 1626:	  0BEE	80 04		JMP	$+6
+ 1627:	  0BF0	75 20 17	MOV	BUFFER,#17h	;Result is 0 then put SPACE
+ 1628:	  0BF3	EA		MOV	A,R2	;digit2
+ 1629:	  0BF4	C4		SWAP	A
+ 1630:	  0BF5	54 0F		ANL	A,#0Fh
+ 1631:	  0BF7	24 30		ADD	A,#30h	;convert dec to ASCII
+ 1632:	  0BF9	F5 21		MOV	BUFFER+1,A	;digit2
+ 1633:	  0BFB	EA		MOV	A,R2	;digit4
+ 1634:	  0BFC	54 0F		ANL	A,#0Fh
+ 1635:	  0BFE	24 30		ADD	A,#30h	;convert dec to ASCII
+ 1636:	  0C00	F5 23		MOV	BUFFER+3,A	;digit2
+ 1637:	  0C02	EB		MOV	A,R3	;digit5
+ 1638:	  0C03	C4		SWAP	A
+ 1639:	  0C04	54 0F		ANL	A,#0Fh
+ 1640:	  0C06	24 30		ADD	A,#30h	;convert dec to ASCII
+ 1641:	  0C08	F5 24		MOV	BUFFER+4,A	;digit3
+ 1642:	  0C0A	75 22 2E	MOV	BUFFER+2,#2Eh	;full stop
+ 1643:	  0C0D	75 0F 05	MOV	RESULTLEN,#05
+ 1644:	  0C10	22		RET
+ 1645:	  0C11			CMDEQV:		;calculate commanded equivalent ratio (B1x256 + B2) / 32768
+ 1646:	  0C11	E5 0D		MOV	A,B1
+ 1647:	  0C13	75 F0 64	MOV	B,#64h
+ 1648:	  0C16	A4		MUL	AB	;B1x100  Result in BA
+ 1649:	  0C17	A9 F0		MOV	R1,B
+ 1650:	  0C19	F8		MOV	R0,A
+ 1651:	  0C1A	7B 00		MOV	R3,#00h
+ 1652:	  0C1C	7A 80		MOV	R2,#80h
+ 1653:	  0C1E	12 10 B5	CALL	UDIV16    ; {B1x100 /128} Result in R1,R0
+ 1654:	  0C21	89 83		MOV	DPH,R1
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 31
+
+
+
+ Line  I  Addr  Code            Source
+
+ 1655:	  0C23	88 82		MOV	DPL,R0
+ 1656:	  0C25	12 0F E7	CALL	HTOD	;convert to decimal resultin R1,R2,R3
+ 1657:	  0C28	EA		MOV	A,R2
+ 1658:	  0C29	24 30		ADD	A,#30h
+ 1659:	  0C2B	F5 20		MOV	BUFFER,A	;1st digit
+ 1660:	  0C2D	75 21 2E	MOV	BUFFER+1,#2Eh	;full stop
+ 1661:	  0C30	EB		MOV	A,R3
+ 1662:	  0C31	C4		SWAP	A
+ 1663:	  0C32	54 0F		ANL	A,#0Fh
+ 1664:	  0C34	24 30		ADD	A,#30h
+ 1665:	  0C36	F5 22		MOV	BUFFER+2,A	;2nd digit
+ 1666:	  0C38	EB		MOV	A,R3
+ 1667:	  0C39	54 0F		ANL	A,#0Fh
+ 1668:	  0C3B	24 30		ADD	A,#30h
+ 1669:	  0C3D	F5 23		MOV	BUFFER+3,A	;3rd digit
+ 1670:	  0C3F	75 0F 04	MOV	RESULTLEN,#04
+ 1671:	  0C42	22		RET
+ 1672:	  0C43			HO2SVOLT:	;Volt = B1/200
+ 1673:	  0C43	E5 0D		MOV	A,B1
+ 1674:	  0C45	75 F0 64	MOV	B,#100
+ 1675:	  0C48	A4		MUL	AB	;result in BA
+ 1676:	  0C49	A9 F0		MOV	R1,B
+ 1677:	  0C4B	F8		MOV	R0,A
+ 1678:	  0C4C	7B 00		MOV	R3,#00h
+ 1679:	  0C4E	7A C8		MOV	R2,#0C8h
+ 1680:	  0C50	12 10 B5	CALL	UDIV16    ; {B1B2 / #0C8h} Result in R1,R0
+ 1681:	  0C53	89 83		MOV	DPH,R1
+ 1682:	  0C55	88 82		MOV	DPL,R0
+ 1683:	  0C57	12 0F E7	CALL	HTOD	;convert to decimal resultin R1,R2,R3
+ 1684:	  0C5A	EA		MOV	A,R2
+ 1685:	  0C5B	54 0F		ANL	A,#0Fh
+ 1686:	  0C5D	24 30		ADD	A,#30h	;convert dec to ASCII
+ 1687:	  0C5F	F5 20		MOV	BUFFER,A	;digit1
+ 1688:	  0C61	75 21 2E	MOV	BUFFER+1,#2Eh	;full stop
+ 1689:	  0C64	EB		MOV	A,R3
+ 1690:	  0C65	C4		SWAP	A
+ 1691:	  0C66	54 0F		ANL	A,#0Fh
+ 1692:	  0C68	24 30		ADD	A,#30h	;convert dec to ASCII
+ 1693:	  0C6A	F5 22		MOV	BUFFER+2,A	;digit2
+ 1694:	  0C6C	EB		MOV	A,R3
+ 1695:	  0C6D	54 0F		ANL	A,#0Fh
+ 1696:	  0C6F	24 30		ADD	A,#30h	;convert dec to ASCII
+ 1697:	  0C71	F5 23		MOV	BUFFER+3,A	;digit3
+ 1698:	  0C73	75 0F 04	MOV	RESULTLEN,#04
+ 1699:	  0C76	22		RET
+ 1700:				;**********************************
+ 1701:				;------------- SUB  PID mode select Line1-----------------------
+ 1702:	  0C77			LINE1:
+ 1703:	  0C77	74 80		MOV	A,#LCD_SETDDADDR+0h ;Line1
+ 1704:	  0C79	12 0E C3	CALL	WRCMD
+ 1705:
+ 1706:	  0C7C	E5 08		MOV	A,PID1
+ 1707:	  0C7E	B4 04 06	CJNE	A,#04h,$+9
+ 1708:	  0C81	90 15 49	MOV	DPTR,#PID04
+ 1709:	  0C84	02 0D 6B	JMP	LINE12
+ 1710:	  0C87	B4 05 06	CJNE	A,#05h,$+9
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 32
+
+
+
+ Line  I  Addr  Code            Source
+
+ 1711:	  0C8A	90 15 5F	MOV	DPTR,#PID05
+ 1712:	  0C8D	02 0D 6B	JMP	LINE12
+ 1713:	  0C90	B4 06 06	CJNE	A,#06h,$+9
+ 1714:	  0C93	90 15 75	MOV	DPTR,#PID06
+ 1715:	  0C96	02 0D 6B	JMP	LINE12
+ 1716:	  0C99	B4 07 06	CJNE	A,#07h,$+9
+ 1717:	  0C9C	90 15 8B	MOV	DPTR,#PID07
+ 1718:	  0C9F	02 0D 6B	JMP	LINE12
+ 1719:	  0CA2	B4 0A 06	CJNE	A,#0Ah,$+9
+ 1720:	  0CA5	90 15 A1	MOV	DPTR,#PID0A
+ 1721:	  0CA8	02 0D 6B	JMP	LINE12
+ 1722:	  0CAB	B4 0B 06	CJNE	A,#0Bh,$+9
+ 1723:	  0CAE	90 15 B7	MOV	DPTR,#PID0B
+ 1724:	  0CB1	02 0D 6B	JMP	LINE12
+ 1725:	  0CB4	B4 0C 06	CJNE	A,#0Ch,$+9
+ 1726:	  0CB7	90 15 CD	MOV	DPTR,#PID0C
+ 1727:	  0CBA	02 0D 6B	JMP	LINE12
+ 1728:	  0CBD	B4 0D 06	CJNE	A,#0Dh,$+9
+ 1729:	  0CC0	90 15 E3	MOV	DPTR,#PID0D
+ 1730:	  0CC3	02 0D 6B	JMP	LINE12
+ 1731:	  0CC6	B4 0E 06	CJNE	A,#0Eh,$+9
+ 1732:	  0CC9	90 15 F9	MOV	DPTR,#PID0E
+ 1733:	  0CCC	02 0D 6B	JMP	LINE12
+ 1734:	  0CCF	B4 0F 06	CJNE	A,#0Fh,$+9
+ 1735:	  0CD2	90 16 0F	MOV	DPTR,#PID0F
+ 1736:	  0CD5	02 0D 6B	JMP	LINE12
+ 1737:	  0CD8	B4 10 06	CJNE	A,#10h,$+9
+ 1738:	  0CDB	90 16 25	MOV	DPTR,#PID10
+ 1739:	  0CDE	02 0D 6B	JMP	LINE12
+ 1740:	  0CE1	B4 11 06	CJNE	A,#11h,$+9
+ 1741:	  0CE4	90 16 3B	MOV	DPTR,#PID11
+ 1742:	  0CE7	02 0D 6B	JMP	LINE12
+ 1743:	  0CEA	B4 14 06	CJNE	A,#14h,$+9
+ 1744:	  0CED	90 16 52	MOV	DPTR,#PID14
+ 1745:	  0CF0	02 0D 6B	JMP	LINE12
+ 1746:	  0CF3	B4 15 06	CJNE	A,#15h,$+9
+ 1747:	  0CF6	90 16 68	MOV	DPTR,#PID15
+ 1748:	  0CF9	02 0D 6B	JMP	LINE12
+ 1749:	  0CFC	B4 2C 06	CJNE	A,#2Ch,$+9
+ 1750:	  0CFF	90 16 7E	MOV	DPTR,#PID2C
+ 1751:	  0D02	02 0D 6B	JMP	LINE12
+ 1752:	  0D05	B4 2D 06	CJNE	A,#2Dh,$+9
+ 1753:	  0D08	90 16 94	MOV	DPTR,#PID2D
+ 1754:	  0D0B	02 0D 6B	JMP	LINE12
+ 1755:	  0D0E	B4 2E 06	CJNE	A,#2Eh,$+9
+ 1756:	  0D11	90 16 AA	MOV	DPTR,#PID2E
+ 1757:	  0D14	02 0D 6B	JMP	LINE12
+ 1758:	  0D17	B4 2F 06	CJNE	A,#2Fh,$+9
+ 1759:	  0D1A	90 16 C0	MOV	DPTR,#PID2F
+ 1760:	  0D1D	02 0D 6B	JMP	LINE12
+ 1761:	  0D20	B4 33 06	CJNE	A,#33h,$+9
+ 1762:	  0D23	90 16 D6	MOV	DPTR,#PID33
+ 1763:	  0D26	02 0D 6B	JMP	LINE12
+ 1764:	  0D29	B4 3C 06	CJNE	A,#3Ch,$+9
+ 1765:	  0D2C	90 16 EC	MOV	DPTR,#PID3C
+ 1766:	  0D2F	02 0D 6B	JMP	LINE12
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 33
+
+
+
+ Line  I  Addr  Code            Source
+
+ 1767:	  0D32	B4 3D 06	CJNE	A,#3Dh,$+9
+ 1768:	  0D35	90 17 02	MOV	DPTR,#PID3D
+ 1769:	  0D38	02 0D 6B	JMP	LINE12
+ 1770:	  0D3B	B4 42 06	CJNE	A,#42h,$+9
+ 1771:	  0D3E	90 17 18	MOV	DPTR,#PID42
+ 1772:	  0D41	02 0D 6B	JMP	LINE12
+ 1773:	  0D44	B4 43 06	CJNE	A,#43h,$+9
+ 1774:	  0D47	90 17 2E	MOV	DPTR,#PID43
+ 1775:	  0D4A	02 0D 6B	JMP	LINE12
+ 1776:	  0D4D	B4 44 06	CJNE	A,#44h,$+9
+ 1777:	  0D50	90 17 44	MOV	DPTR,#PID44
+ 1778:	  0D53	02 0D 6B	JMP	LINE12
+ 1779:	  0D56	B4 45 06	CJNE	A,#45h,$+9
+ 1780:	  0D59	90 17 5C	MOV	DPTR,#PID45
+ 1781:	  0D5C	02 0D 6B	JMP	LINE12
+ 1782:	  0D5F	B4 46 06	CJNE	A,#46h,$+9
+ 1783:	  0D62	90 17 72	MOV	DPTR,#PID46
+ 1784:	  0D65	02 0D 6B	JMP	LINE12
+ 1785:	  0D68	90 17 88	MOV	DPTR,#NODATA
+ 1786:	  0D6B			LINE12:
+ 1787:	  0D6B	12 0E 6B	CALL	WRSTR		;write to LCD 1 Line
+ 1788:	  0D6E	89 0B		MOV	WRADDL1,R1	;keep write address from R1
+ 1789:	  0D70	22		RET
+ 1790:				;*************************************
+ 1791:				;---SUB  PID mode select Line2
+ 1792:	  0D71			LINE2:
+ 1793:	  0D71	74 C0		MOV	A,#LCD_SETDDADDR+40h ;Line2
+ 1794:	  0D73	12 0E C3	CALL	WRCMD
+ 1795:
+ 1796:	  0D76	E5 09		MOV	A,PID2
+ 1797:	  0D78	B4 04 06	CJNE	A,#04h,$+9
+ 1798:	  0D7B	90 15 49	MOV	DPTR,#PID04
+ 1799:	  0D7E	02 0E 65	JMP	LINE22
+ 1800:	  0D81	B4 05 06	CJNE	A,#05h,$+9
+ 1801:	  0D84	90 15 5F	MOV	DPTR,#PID05
+ 1802:	  0D87	02 0E 65	JMP	LINE22
+ 1803:	  0D8A	B4 06 06	CJNE	A,#06h,$+9
+ 1804:	  0D8D	90 15 75	MOV	DPTR,#PID06
+ 1805:	  0D90	02 0E 65	JMP	LINE22
+ 1806:	  0D93	B4 07 06	CJNE	A,#07h,$+9
+ 1807:	  0D96	90 15 8B	MOV	DPTR,#PID07
+ 1808:	  0D99	02 0E 65	JMP	LINE22
+ 1809:	  0D9C	B4 0A 06	CJNE	A,#0Ah,$+9
+ 1810:	  0D9F	90 15 A1	MOV	DPTR,#PID0A
+ 1811:	  0DA2	02 0E 65	JMP	LINE22
+ 1812:	  0DA5	B4 0B 06	CJNE	A,#0Bh,$+9
+ 1813:	  0DA8	90 15 B7	MOV	DPTR,#PID0B
+ 1814:	  0DAB	02 0E 65	JMP	LINE22
+ 1815:	  0DAE	B4 0C 06	CJNE	A,#0Ch,$+9
+ 1816:	  0DB1	90 15 CD	MOV	DPTR,#PID0C
+ 1817:	  0DB4	02 0E 65	JMP	LINE22
+ 1818:	  0DB7	B4 0D 06	CJNE	A,#0Dh,$+9
+ 1819:	  0DBA	90 15 E3	MOV	DPTR,#PID0D
+ 1820:	  0DBD	02 0E 65	JMP	LINE22
+ 1821:	  0DC0	B4 0E 06	CJNE	A,#0Eh,$+9
+ 1822:	  0DC3	90 15 F9	MOV	DPTR,#PID0E
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 34
+
+
+
+ Line  I  Addr  Code            Source
+
+ 1823:	  0DC6	02 0E 65	JMP	LINE22
+ 1824:	  0DC9	B4 0F 06	CJNE	A,#0Fh,$+9
+ 1825:	  0DCC	90 16 0F	MOV	DPTR,#PID0F
+ 1826:	  0DCF	02 0E 65	JMP	LINE22
+ 1827:	  0DD2	B4 10 06	CJNE	A,#10h,$+9
+ 1828:	  0DD5	90 16 25	MOV	DPTR,#PID10
+ 1829:	  0DD8	02 0E 65	JMP	LINE22
+ 1830:	  0DDB	B4 11 06	CJNE	A,#11h,$+9
+ 1831:	  0DDE	90 16 3B	MOV	DPTR,#PID11
+ 1832:	  0DE1	02 0E 65	JMP	LINE22
+ 1833:	  0DE4	B4 14 06	CJNE	A,#14h,$+9
+ 1834:	  0DE7	90 16 52	MOV	DPTR,#PID14
+ 1835:	  0DEA	02 0E 65	JMP	LINE22
+ 1836:	  0DED	B4 15 06	CJNE	A,#15h,$+9
+ 1837:	  0DF0	90 16 68	MOV	DPTR,#PID15
+ 1838:	  0DF3	02 0E 65	JMP	LINE22
+ 1839:	  0DF6	B4 2C 06	CJNE	A,#2Ch,$+9
+ 1840:	  0DF9	90 16 7E	MOV	DPTR,#PID2C
+ 1841:	  0DFC	02 0E 65	JMP	LINE22
+ 1842:	  0DFF	B4 2D 06	CJNE	A,#2Dh,$+9
+ 1843:	  0E02	90 16 94	MOV	DPTR,#PID2D
+ 1844:	  0E05	02 0E 65	JMP	LINE22
+ 1845:	  0E08	B4 2E 06	CJNE	A,#2Eh,$+9
+ 1846:	  0E0B	90 16 AA	MOV	DPTR,#PID2E
+ 1847:	  0E0E	02 0E 65	JMP	LINE22
+ 1848:	  0E11	B4 2F 06	CJNE	A,#2Fh,$+9
+ 1849:	  0E14	90 16 C0	MOV	DPTR,#PID2F
+ 1850:	  0E17	02 0E 65	JMP	LINE22
+ 1851:	  0E1A	B4 33 06	CJNE	A,#33h,$+9
+ 1852:	  0E1D	90 16 D6	MOV	DPTR,#PID33
+ 1853:	  0E20	02 0E 65	JMP	LINE22
+ 1854:	  0E23	B4 3C 06	CJNE	A,#3Ch,$+9
+ 1855:	  0E26	90 16 EC	MOV	DPTR,#PID3C
+ 1856:	  0E29	02 0E 65	JMP	LINE22
+ 1857:	  0E2C	B4 3D 06	CJNE	A,#3Dh,$+9
+ 1858:	  0E2F	90 17 02	MOV	DPTR,#PID3D
+ 1859:	  0E32	02 0E 65	JMP	LINE22
+ 1860:	  0E35	B4 42 06	CJNE	A,#42h,$+9
+ 1861:	  0E38	90 17 18	MOV	DPTR,#PID42
+ 1862:	  0E3B	02 0E 65	JMP	LINE22
+ 1863:	  0E3E	B4 43 06	CJNE	A,#43h,$+9
+ 1864:	  0E41	90 17 2E	MOV	DPTR,#PID43
+ 1865:	  0E44	02 0E 65	JMP	LINE22
+ 1866:	  0E47	B4 44 06	CJNE	A,#44h,$+9
+ 1867:	  0E4A	90 17 44	MOV	DPTR,#PID44
+ 1868:	  0E4D	02 0E 65	JMP	LINE22
+ 1869:	  0E50	B4 45 06	CJNE	A,#45h,$+9
+ 1870:	  0E53	90 17 5C	MOV	DPTR,#PID45
+ 1871:	  0E56	02 0E 65	JMP	LINE22
+ 1872:	  0E59	B4 46 06	CJNE	A,#46h,$+9
+ 1873:	  0E5C	90 17 72	MOV	DPTR,#PID46
+ 1874:	  0E5F	02 0E 65	JMP	LINE22
+ 1875:	  0E62	90 17 88	MOV	DPTR,#NODATA
+ 1876:	  0E65			LINE22:
+ 1877:	  0E65	12 0E 6B	CALL	WRSTR		;Write to LCD Line2
+ 1878:	  0E68	89 0C		MOV	WRADDL2,R1	;keep write address from R1
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 35
+
+
+
+ Line  I  Addr  Code            Source
+
+ 1879:	  0E6A	22		RET
+ 1880:				;-----------------------
+ 1881:				;Write string line to LCD & read WRADDR sub routine (INPUT   MOV DPTR,#xxxxx)
+ 1882:				;Uses R0 for pointer R1 for WRADDR
+ 1883:	  0E6B			WRSTR:
+ 1884:	  0E6B	78 20		MOV	R0,#BUFFER
+ 1885:	  0E6D			WRSTR1:	;Load string to buffer
+ 1886:	  0E6D	E4		CLR	 A
+ 1887:	  0E6E	93		MOVC	 A,@A+DPTR	;read from table
+ 1888:	  0E6F	F6		MOV	@R0,A
+ 1889:	  0E70	B4 0D 03	CJNE	 A,#0Dh,$+6
+ 1890:	  0E73	02 0E 7A	JMP	WRSTR2
+ 1891:	  0E76	A3		INC	DPTR
+ 1892:	  0E77	08		INC	R0
+ 1893:	  0E78	80 F3		JMP	WRSTR1
+ 1894:	  0E7A			WRSTR2:  ;write buffer to LCD
+ 1895:	  0E7A	08		INC	R0
+ 1896:	  0E7B	76 0D		MOV	@R0,#0Dh
+ 1897:	  0E7D	A3		INC	DPTR
+ 1898:	  0E7E	E4		CLR	A
+ 1899:	  0E7F	93		MOVC	 A,@A+DPTR
+ 1900:	  0E80	F9		MOV	R1,A	; for use to write calculated data to any DDRAM address
+ 1901:	  0E81	78 20		MOV	R0,#BUFFER	;point to buffer
+ 1902:	  0E83			WRSTR3:
+ 1903:	  0E83	E6		MOV	A,@R0		; A = data in iram
+ 1904:	  0E84	B4 0D 01	CJNE	A,#0Dh,$+4
+ 1905:	  0E87	22		RET			;return back
+ 1906:				;write char to LCD
+ 1907:	  0E88	D2 A2		SETB	EN
+ 1908:	  0E8A	00		NOP
+ 1909:	  0E8B	D2 A1		SETB	RS
+ 1910:	  0E8D	00		NOP
+ 1911:	  0E8E	F5 80		MOV	LCDDATA,A
+ 1912:	  0E90	00		NOP
+ 1913:	  0E91	C2 A2		CLR	EN
+ 1914:	  0E93	12 0F C0	CALL	DEL5m
+ 1915:				;-----
+ 1916:	  0E96	08		INC	R0		;next char
+ 1917:	  0E97	80 EA		JMP	WRSTR3
+ 1918:				;********************************
+ 1919:				;Write & Scroll string line to LCD sub routine (INPUT   MOV DPTR,#xxxxx)
+ 1920:	  0E99			WRSCR:
+ 1921:	  0E99	78 20		MOV	R0,#BUFFER
+ 1922:	  0E9B			WRSCR1:	;Load string to buffer
+ 1923:	  0E9B	E4		CLR	 A
+ 1924:	  0E9C	93		MOVC	 A,@A+DPTR	;read from table
+ 1925:	  0E9D	F6		MOV	@R0,A
+ 1926:	  0E9E	B4 0D 03	CJNE	 A,#0Dh,$+6
+ 1927:	  0EA1	02 0E A8	JMP	WRSCR2
+ 1928:	  0EA4	A3		INC	DPTR
+ 1929:	  0EA5	08		INC	R0
+ 1930:	  0EA6	80 F3		JMP	WRSCR1
+ 1931:	  0EA8			WRSCR2:  ;write buffer to LCD
+ 1932:	  0EA8	08		INC	R0
+ 1933:	  0EA9	76 0D		MOV	@R0,#0Dh
+ 1934:	  0EAB	78 20		MOV	R0,#BUFFER	;point to buffer
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 36
+
+
+
+ Line  I  Addr  Code            Source
+
+ 1935:	  0EAD			WRSCR3:
+ 1936:	  0EAD	E6		MOV	A,@R0		; A = data in iram
+ 1937:	  0EAE	B4 0D 01	CJNE	A,#0Dh,$+4
+ 1938:	  0EB1	22		RET
+ 1939:				;write char to LCD
+ 1940:	  0EB2	D2 A2		SETB	EN
+ 1941:	  0EB4	00		NOP
+ 1942:	  0EB5	D2 A1		SETB	RS
+ 1943:	  0EB7	00		NOP
+ 1944:	  0EB8	F5 80		MOV	LCDDATA,A
+ 1945:	  0EBA	00		NOP
+ 1946:	  0EBB	C2 A2		CLR	EN
+ 1947:	  0EBD	12 0F D6	CALL	DEL100m
+ 1948:				;-----
+ 1949:	  0EC0	08		INC	R0		;next char
+ 1950:	  0EC1	80 EA		JMP	WRSCR3
+ 1951:				;********************************
+ 1952:	  0EC3			WRCMD:	;write command  INPUT ACC
+ 1953:	  0EC3	D2 A2		SETB	EN
+ 1954:	  0EC5	00		NOP
+ 1955:	  0EC6	C2 A1		CLR	RS
+ 1956:	  0EC8	00		NOP
+ 1957:	  0EC9	F5 80		MOV	LCDDATA,A
+ 1958:	  0ECB	00		NOP
+ 1959:	  0ECC	C2 A2		CLR	EN
+ 1960:	  0ECE	12 0F D6	CALL	DEL100m
+ 1961:	  0ED1	22		RET
+ 1962:				;********************************
+ 1963:	  0ED2			WRCHAR: ;wite data to LCD  INPUT ACC
+ 1964:	  0ED2	D2 A2		SETB	EN
+ 1965:	  0ED4	00		NOP
+ 1966:	  0ED5	D2 A1		SETB	RS
+ 1967:	  0ED7	00		NOP
+ 1968:	  0ED8	F5 80		MOV	LCDDATA,A
+ 1969:	  0EDA	00		NOP
+ 1970:	  0EDB	C2 A2		CLR	EN
+ 1971:	  0EDD	12 0F C0	CALL	DEL5m
+ 1972:	  0EE0	22		RET
+ 1973:				;********************************
+ 1974:				;get result in buffer and translate to B1,B2
+ 1975:				;USE	R0,R1
+ 1976:				;IN 	BUFFER
+ 1977:				;OUT	B1,B2,PID
+ 1978:	  0EE1			GETB1B2:
+ 1979:	  0EE1	E5 20		MOV	A,BUFFER	;check 41 01 response first
+ 1980:	  0EE3	B4 34 26	CJNE	A,#34h,PWRDOWN	;If A = "4" then next else jump
+ 1981:	  0EE6	75 18 24	MOV	SLEEPCNT,#24h	;Reset sleep mode counter
+ 1982:	  0EE9	78 26		MOV	R0,#BUFFER+6	;point to byte1
+ 1983:	  0EEB	E6		MOV	A,@R0
+ 1984:	  0EEC	12 0F 79	CALL	ATOH		;translate 1st byte
+ 1985:	  0EEF	C4		SWAP	A		;keep data in B7-B4
+ 1986:	  0EF0	F5 0D		MOV	B1,A		;keep B7-B4 in BYTE1
+ 1987:	  0EF2	08		INC	R0
+ 1988:	  0EF3	E6		MOV	A,@R0
+ 1989:	  0EF4	12 0F 79	CALL	ATOH		;translate 2nd byte
+ 1990:	  0EF7	79 0D		MOV	R1,#B1		;point bo B1
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 37
+
+
+
+ Line  I  Addr  Code            Source
+
+ 1991:	  0EF9	D7		XCHD	A,@R1		;keep B3-B0 in BYTE1
+ 1992:				;---Byte 1 Get OK
+ 1993:	  0EFA	78 29		MOV	R0,#BUFFER+9	;point to byte2
+ 1994:	  0EFC	E6		MOV	A,@R0
+ 1995:	  0EFD	12 0F 79	CALL	ATOH		;translate 1st byte
+ 1996:	  0F00	C4		SWAP	A		;keep data in B7-B4
+ 1997:	  0F01	F5 0E		MOV	B2,A		;keep B7-B4 in BYTE1
+ 1998:	  0F03	08		INC	R0
+ 1999:	  0F04	E6		MOV	A,@R0
+ 2000:	  0F05	12 0F 79	CALL	ATOH		;translate 2nd byte
+ 2001:	  0F08	79 0E		MOV	R1,#B2		;point bo B1
+ 2002:	  0F0A	D7		XCHD	A,@R1		;keep B3-B0 in BYTE1
+ 2003:	  0F0B	22		RET
+ 2004:	  0F0C			PWRDOWN:	 	;Error mesasge receive then goto sleep mode
+ 2005:	  0F0C	D5 18 43	DJNZ	SLEEPCNT,NO_DATA
+ 2006:	  0F0F	E5 10		MOV	A,CONFIG		;Check Auto sleep On or OFF
+ 2007:	  0F11	30 E4 3E	JNB	ACC.4,NO_DATA	;If auto sleep mode is off then skip to NODATA
+ 2008:	  0F14	12 10 07	CALL	SOUND_BEEP
+ 2009:	  0F17	74 01		MOV	A,#LCD_CLS
+ 2010:	  0F19	D1 C3		CALL	WRCMD
+ 2011:	  0F1B	12 0F D6	CALL	DEL100m
+ 2012:	  0F1E	74 80		MOV	A,#LCD_SETDDADDR+0 ;Line 1
+ 2013:	  0F20	D1 C3		CALL	WRCMD
+ 2014:	  0F22	90 18 0C	MOV	DPTR,#PDOWN1	;Power Down Mode
+ 2015:	  0F25	D1 6B		CALL	WRSTR
+ 2016:	  0F27	74 C0		MOV	A,#LCD_SETDDADDR+40h ;Line 2
+ 2017:	  0F29	D1 C3		CALL	WRCMD
+ 2018:	  0F2B	90 18 22	MOV	DPTR,#PDOWN2	;Power Down Mode
+ 2019:	  0F2E	D1 6B		CALL	WRSTR
+ 2020:	  0F30	12 0F C5	CALL	DEL500m
+ 2021:	  0F33	12 10 18	CALL	SOUND_TRIG
+ 2022:	  0F36	12 0F C5	CALL	DEL500m
+ 2023:	  0F39	12 10 18	CALL	SOUND_TRIG
+ 2024:	  0F3C	12 0F C5	CALL	DEL500m
+ 2025:	  0F3F	12 10 18	CALL	SOUND_TRIG
+ 2026:	  0F42	12 0F C5	CALL	DEL500m
+ 2027:	  0F45	74 08		MOV	A,#LCD_SETVISIBLE+000b      ; display off + nocursor + noblink
+ 2028:	  0F47	D1 C3		CALL	WRCMD
+ 2029:	  0F49	C2 B6		CLR	LEDUP		;turn off LED
+ 2030:	  0F4B	C2 B7		CLR	LEDDN
+ 2031:	  0F4D	D2 A3		SETB	BL		;Turn off Back light
+ 2032:				;MOV	PCON,#02h	;set PCON.1 the power down...........
+ 2033:				;System shut down here
+ 2034:	  0F4F	02 0F 59	JMP	TURNONCHK
+ 2035:	  0F52			NO_DATA:
+ 2036:	  0F52	75 0D 00	MOV	B1,#00h
+ 2037:	  0F55	75 0E 00	MOV	B2,#00h
+ 2038:	  0F58	22		RET
+ 2039:				;check engine turn on again or not
+ 2040:	  0F59			TURNONCHK:
+ 2041:	  0F59	90 12 86	MOV	DPTR,#CHKCAN
+ 2042:	  0F5C	12 0F 98	CALL	SBLOCK
+ 2043:	  0F5F	12 0F B8	CALL	RBYTE		;Receive "SEARCHING...."
+ 2044:	  0F62	B4 34 09	CJNE	A,#34h,$+12	;If A = "4" then start watch dog to make all reset
+ 2045:	  0F65	90 12 AE	MOV	DPTR,#SERWS	;send warm start message
+ 2046:	  0F68	12 0F 98	CALL	SBLOCK
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 38
+
+
+
+ Line  I  Addr  Code            Source
+
+ 2047:	  0F6B	12 11 FF	CALL	WDRESET	;All System Reset Here
+ 2048:	  0F6E	75 11 0A	MOV	TEMP1,#10
+ 2049:	  0F71			DEL5SEC:
+ 2050:	  0F71	12 0F C5	CALL	DEL500m
+ 2051:	  0F74	D5 11 FA	DJNZ	TEMP1,DEL5SEC
+ 2052:	  0F77	80 E0		JMP	TURNONCHK	;check turn on key again
+ 2053:				;add some thing here
+ 2054:
+ 2055:
+ 2056:				;-------------ASCII to HEX-----------------------------
+ 2057:				;IN = A,R1
+ 2058:				;OUT = A
+ 2059:	  0F79			ATOH:			;ASCII to Hex Converter
+ 2060:	  0F79	75 F0 41	MOV	B,#41h
+ 2061:	  0F7C	84		DIV	AB
+ 2062:	  0F7D	B4 01 04	CJNE	A,#01h,ATOF2	;IF A=>B then goto ATOF2
+ 2063:	  0F80	E6		MOV	A,@R0		;data in buffer
+ 2064:	  0F81	94 37		SUBB	A,#37h
+ 2065:	  0F83	22		RET
+ 2066:	  0F84			ATOF2:
+ 2067:	  0F84	E6		MOV	A,@R0		;data in buffer
+ 2068:	  0F85	94 2F		SUBB	A,#2Fh
+ 2069:	  0F87	22		RET
+ 2070:				;--------------HexToASCII----------------
+ 2071:				;IN = A,R7
+ 2072:				;OUT = A
+ 2073:	  0F88			HTOA:
+ 2074:	  0F88	FF		MOV	R7,A
+ 2075:	  0F89	75 F0 0A	MOV	B,#0Ah		;Hex value to ASCII Code Sub Routine Use ACC
+ 2076:	  0F8C	84		DIV	AB
+ 2077:	  0F8D	B4 01 04	CJNE	A,#01h,ATOF	;If A=>B then goto ATOF
+ 2078:	  0F90	EF		MOV	A,R7
+ 2079:	  0F91	24 37		ADD	A,#37h		;Result in A  (for 0 - 9)
+ 2080:	  0F93	22		RET
+ 2081:	  0F94			ATOF:
+ 2082:	  0F94	EF		MOV	A,R7		;Return IRAM data to A
+ 2083:	  0F95	24 30		ADD	A,#30h		;REsult in A  (for  A-F)
+ 2084:	  0F97	22		RET
+ 2085:				; ********** SBLOCK SUB **********
+ 2086:				; SEND BLOCK
+ 2087:				; IN  = DPTR ROM-ADDRESS (END BY 0 OR 0DH)
+ 2088:				; OUT = DPTR (NEXT)
+ 2089:				; REG = A,DPTR
+ 2090:	  0F98			SBLOCK:
+ 2091:	  0F98	E4		CLR	 A
+ 2092:	  0F99	93		MOVC 	 A,@A+DPTR
+ 2093:	  0F9A	70 01		JNZ	SBLOCK1
+ 2094:	  0F9C	22		RET                      		;EXIT BY 0
+ 2095:	  0F9D			SBLOCK1:
+ 2096:	  0F9D	A3		INC	DPTR		;next char
+ 2097:	  0F9E	12 0F B0	CALL	SBYTE		;send char
+ 2098:	  0FA1	80 F5		JMP	SBLOCK
+ 2099:				;===========RBLOCK=========
+ 2100:				; IN  = A
+ 2101:				; OUT = BUFFER
+ 2102:				; REG = R0,DPTR
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 39
+
+
+
+ Line  I  Addr  Code            Source
+
+ 2103:	  0FA3			RBLOCK:
+ 2104:	  0FA3	78 20		MOV	R0,#BUFFER	;R0 point to buffer memory address
+ 2105:	  0FA5			RBLOCK1:
+ 2106:	  0FA5	12 0F B8	CALL	RBYTE		;wait for incoming char
+ 2107:	  0FA8	B4 3E 01	CJNE	A,#3Eh,RBLOCK2	;If A = '>' then end message
+ 2108:	  0FAB	22		RET                      		;EXIT BY '>'
+ 2109:	  0FAC			RBLOCK2:
+ 2110:	  0FAC	F6		MOV	@R0,A		;Save char in buffer
+ 2111:	  0FAD	08		INC	R0		;point next address
+ 2112:	  0FAE	80 F5		JMP	RBLOCK1
+ 2113:				 ; ----------------------------------
+ 2114:	  0FB0			SBYTE:   			;Send Data from RS232
+ 2115:	  0FB0	30 99 FD	JNB 	TI,$    	 	;WAIT FOR SEND OK
+ 2116:	  0FB3	C2 99		CLR 	TI
+ 2117:	  0FB5	F5 99		MOV        SBUF,A
+ 2118:	  0FB7	22		RET
+ 2119:				;------------------------------------
+ 2120:	  0FB8			RBYTE:			;Receive Data from RS232
+ 2121:	  0FB8	30 98 FD	JNB    	RI,$                ;WAIT FOR RECEIVE OK
+ 2122:	  0FBB	C2 98		CLR   	RI
+ 2123:	  0FBD	E5 99		MOV    	A,SBUF
+ 2124:	  0FBF	22		RET
+ 2125:				;-------- Delay 50 usec-----------------------------------
+ 2126:				;USE = R6,R7
+ 2127:	  0FC0			DEL5m:
+ 2128:	  0FC0	7E 1F		MOV	R6,#1Fh
+ 2129:	  0FC2	DE FE		DJNZ	R6,$
+ 2130:	  0FC4	22		RET
+ 2131:				;----------delay 0.5 sec-----------------------------
+ 2132:				;USE = R4,R5,R6,R7
+ 2133:	  0FC5			DEL500m:
+ 2134:	  0FC5	7C 0A		MOV	R4,#0Ah
+ 2135:	  0FC7			DEL500m1:
+ 2136:	  0FC7	7D 64		MOV	R5,#064h
+ 2137:	  0FC9			DEL500m3:
+ 2138:	  0FC9	7F 03		MOV	R7,#03h
+ 2139:	  0FCB			DEL500m2:
+ 2140:	  0FCB	7E 98		MOV	R6,#098h
+ 2141:	  0FCD	DE FE		DJNZ	R6,$
+ 2142:	  0FCF	DF FA		DJNZ	R7,DEL500m2
+ 2143:	  0FD1	DD F6		DJNZ         R5,DEL500m3
+ 2144:	  0FD3	DC F2		DJNZ	R4,DEL500m1
+ 2145:	  0FD5	22		RET
+ 2146:				;----------delay 0.1 sec-----------------------------
+ 2147:				;USE = R4,R5,R6,R7
+ 2148:	  0FD6			DEL100m:
+ 2149:	  0FD6	7C 02		MOV	R4,#02h
+ 2150:	  0FD8			DEL100m1:
+ 2151:	  0FD8	7D 32		MOV	R5,#032h
+ 2152:	  0FDA			DEL100m3:
+ 2153:	  0FDA	7F 03		MOV	R7,#03h
+ 2154:	  0FDC			DEL100m2:
+ 2155:	  0FDC	7E 98		MOV	R6,#098h
+ 2156:	  0FDE	DE FE		DJNZ	R6,$
+ 2157:	  0FE0	DF FA		DJNZ	R7,DEL100m2
+ 2158:	  0FE2	DD F6		DJNZ          R5,DEL100m3
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 40
+
+
+
+ Line  I  Addr  Code            Source
+
+ 2159:	  0FE4	DC F2		DJNZ	R4,DEL100m1
+ 2160:	  0FE6	22		RET
+ 2161:				;---------Hex to Dec------------------
+ 2162:				;IN = DPTR		;FFFF
+ 2163:				;OUT = R1,R2,R3		;R1=6  R2=55 R3=35
+ 2164:				;REG = A,R0,R1-R5,DPTR
+ 2165:	  0FE7			HTOD:
+ 2166:	  0FE7	74 00		MOV	A,#00h
+ 2167:	  0FE9	F9		MOV	R1,A
+ 2168:	  0FEA	FA		MOV	R2,A
+ 2169:	  0FEB	FB		MOV	R3,A
+ 2170:	  0FEC	7C 10		MOV	R4,#16
+ 2171:	  0FEE			HTOD1:
+ 2172:	  0FEE	E5 82		MOV	A,DPL
+ 2173:	  0FF0	33		RLC	A
+ 2174:	  0FF1	F5 82		MOV	DPL,A
+ 2175:	  0FF3	E5 83		MOV	A,DPH
+ 2176:	  0FF5	33		RLC	A
+ 2177:	  0FF6	F5 83		MOV	DPH,A
+ 2178:	  0FF8	7D 03		MOV	R5,#3
+ 2179:	  0FFA	78 03		MOV	R0,#3
+ 2180:	  0FFC			HTOD2:
+ 2181:	  0FFC	E6		MOV	A,@R0
+ 2182:	  0FFD	35 E0		ADDC	A,ACC
+ 2183:	  0FFF	D4		DA	A
+ 2184:	  1000	F6		MOV	@R0,A
+ 2185:	  1001	18		DEC	R0
+ 2186:	  1002	DD F8		DJNZ	R5,HTOD2
+ 2187:	  1004	DC E8		DJNZ	R4,HTOD1
+ 2188:	  1006	22		RET
+ 2189:				;********************************
+ 2190:	  1007			SOUND_BEEP:
+ 2191:	  1007	C2 A4		CLR  	 BUZZER	     ;buzzer on
+ 2192:	  1009	7B 07		MOV	R3,#07h
+ 2193:	  100B			DELS1:
+ 2194:	  100B	7C FF		MOV	R4,#0FFh
+ 2195:	  100D			SOUND_BEEP1:
+ 2196:	  100D	7D FF		MOV	R5,#0FFh
+ 2197:	  100F	DD FE		DJNZ	R5,$
+ 2198:	  1011	DC FA		DJNZ	R4,SOUND_BEEP1
+ 2199:	  1013	DB F6		DJNZ	R3,DELS1
+ 2200:	  1015	D2 A4		SETB   	 BUZZER	    ;buzzer off
+ 2201:	  1017	22		RET
+ 2202:				;************************************************
+ 2203:	  1018			SOUND_TRIG:
+ 2204:	  1018	E5 10		MOV	A,CONFIG
+ 2205:	  101A	20 E1 04	JB	ACC.1,SOUND_TRIG0	;If BEEP on Do next
+ 2206:	  101D	12 0F D6	CALL	DEL100m	;delay compensate trig loop
+ 2207:	  1020	22		RET
+ 2208:	  1021			SOUND_TRIG0:
+ 2209:	  1021	C2 A4		CLR  	 BUZZER	     ;buzzer on
+ 2210:	  1023	7B 30		MOV	 R3,#030h                                    ;SOUND LOOP
+ 2211:	  1025			SOUND_TRIG1:
+ 2212:	  1025	7C FF		MOV	R4,#0FFh
+ 2213:	  1027	DC FE		DJNZ	R4,$
+ 2214:	  1029	DB FA		DJNZ	 R3,SOUND_TRIG1 	             ;NEXT LOOP
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 41
+
+
+
+ Line  I  Addr  Code            Source
+
+ 2215:	  102B	D2 A4		SETB   	 BUZZER	    ;buzzer off
+ 2216:	  102D	22		RET 			             ;back to main routine
+ 2217:				;**********************************************
+ 2218:	  102E			BACKLIGHT: ;toggle back light
+ 2219:	  102E	20 A3 06	JB	BL,BACKLIGHT2
+ 2220:	  1031	D2 A3		SETB	BL	;turn off
+ 2221:	  1033	12 0F C5	CALL	DEL500m
+ 2222:	  1036	22		RET
+ 2223:	  1037			BACKLIGHT2:
+ 2224:	  1037	C2 A3		CLR	BL	;turn on
+ 2225:	  1039	12 0F C5	CALL	DEL500m
+ 2226:	  103C	22		RET
+ 2227:				;*********************************************
+ 2228:	  103D			LIGHT1:	;warning light up  checking compare value by diviation
+ 2229:	  103D	E5 10		MOV	A,CONFIG		;check PID warning lamp status on/off
+ 2230:	  103F	30 E3 2C	JNB	ACC.3,LIGHT11 	;off then jump LIGHT11
+ 2231:				;INPUT current pid in ACC
+ 2232:	  1042	E5 0D		MOV	A,B1	;load first byte only
+ 2233:	  1044	85 16 F0	MOV	B,LIMITCHK1
+ 2234:	  1047	84		DIV	AB
+ 2235:	  1048	FF		MOV	R7,A	;keep result in R7
+ 2236:	  1049	E5 08		MOV	A,PID1
+ 2237:	  104B	B4 0A 03	CJNE	A,#0Ah,$+6
+ 2238:	  104E	02 10 71	JMP	LOWLIMIT1
+ 2239:	  1051	B4 14 03	CJNE	A,#014h,$+6
+ 2240:	  1054	02 10 71	JMP	LOWLIMIT1
+ 2241:	  1057	B4 15 03	CJNE	A,#015h,$+6
+ 2242:	  105A	02 10 71	JMP	LOWLIMIT1
+ 2243:	  105D	B4 2F 03	CJNE	A,#02Fh,$+6
+ 2244:	  1060	02 10 71	JMP	LOWLIMIT1
+ 2245:	  1063	B4 42 03	CJNE	A,#042h,$+6
+ 2246:	  1066	02 10 71	JMP	LOWLIMIT1
+ 2247:				;check high limit
+ 2248:	  1069	EF		MOV	A,R7	;return RESULT
+ 2249:	  106A	60 02		JZ	LIGHT11	;if A>0 then OK  , if A=0 then Over limit-> warning on
+ 2250:	  106C	D2 B6		SETB	LEDUP
+ 2251:	  106E			LIGHT11:
+ 2252:	  106E	C2 B7		CLR	LEDDN	;off LEDDN
+ 2253:	  1070	22		RET
+ 2254:	  1071			LOWLIMIT1:	;check lowlimit
+ 2255:	  1071	EF		MOV	A,R7
+ 2256:	  1072	70 FA		JNZ	LIGHT11 ;if A = 0 then lower limit -> warning on
+ 2257:	  1074	D2 B6		SETB	LEDUP
+ 2258:	  1076	C2 B7		CLR	LEDDN	;off LEDDN
+ 2259:	  1078	22		RET
+ 2260:				;*********************************************
+ 2261:	  1079			LIGHT2:	;warning light down checking
+ 2262:	  1079	E5 10		MOV	A,CONFIG		;check PID warning lamp status on/off
+ 2263:	  107B	30 E3 2C	JNB	ACC.3,LIGHT22 	;off then jump LIGHT22
+ 2264:				;INPUT current pid in ACC
+ 2265:	  107E	E5 0D		MOV	A,B1	;load first byte only
+ 2266:	  1080	85 17 F0	MOV	B,LIMITCHK2
+ 2267:	  1083	84		DIV	AB
+ 2268:	  1084	FF		MOV	R7,A	;keep result in R7
+ 2269:	  1085	E5 09		MOV	A,PID2
+ 2270:	  1087	B4 0A 03	CJNE	A,#0Ah,$+6
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 42
+
+
+
+ Line  I  Addr  Code            Source
+
+ 2271:	  108A	02 10 AD	JMP	LOWLIMIT2
+ 2272:	  108D	B4 14 03	CJNE	A,#014h,$+6
+ 2273:	  1090	02 10 AD	JMP	LOWLIMIT2
+ 2274:	  1093	B4 15 03	CJNE	A,#015h,$+6
+ 2275:	  1096	02 10 AD	JMP	LOWLIMIT2
+ 2276:	  1099	B4 2F 03	CJNE	A,#02Fh,$+6
+ 2277:	  109C	02 10 AD	JMP	LOWLIMIT2
+ 2278:	  109F	B4 42 03	CJNE	A,#042h,$+6
+ 2279:	  10A2	02 10 AD	JMP	LOWLIMIT2
+ 2280:				;check high limit
+ 2281:	  10A5	EF		MOV	A,R7	;return RESULT
+ 2282:	  10A6	60 02		JZ	LIGHT22	;if A>0 then OK  , if A=0 then Over limit-> warning on
+ 2283:	  10A8	D2 B7		SETB	LEDDN
+ 2284:	  10AA			LIGHT22:
+ 2285:	  10AA	C2 B6		CLR	LEDUP	;off LEDDN
+ 2286:	  10AC	22		RET
+ 2287:	  10AD			LOWLIMIT2:	;check lowlimit
+ 2288:	  10AD	EF		MOV	A,R7
+ 2289:	  10AE	70 FA		JNZ	LIGHT22 ;if A = 0 then lower limit -> warning on
+ 2290:	  10B0	D2 B7		SETB	LEDDN
+ 2291:	  10B2	C2 B6		CLR	LEDUP	;off LEDDN
+ 2292:	  10B4	22		RET
+ 2293:				;*********************************************
+ 2294:
+ 2295:				; subroutine UDIV16
+ 2296:				; 16-Bit / 16-Bit to 16-Bit Quotient & Remainder Unsigned Divide
+ 2297:				;
+ 2298:				; input:    r1, r0 = Dividend X
+ 2299:				;           r3, r2 = Divisor Y
+ 2300:				;
+ 2301:				; output:   r1, r0 = quotient Q of division Q = X / Y
+ 2302:				;           r3, r2 = remainder
+ 2303:				;
+ 2304:				; alters:   acc, B, dpl, dph, r4, r5, r6, r7, flags
+ 2305:				;====================================================================
+ 2306:
+ 2307:	  10B5	7F 00		UDIV16:        mov     r7, #0          ; clear partial remainder
+ 2308:	  10B7	7E 00		               mov     r6, #0
+ 2309:	  10B9	75 F0 10	               mov     B, #16          ; set loop count
+ 2310:
+ 2311:	  10BC	C3		div_loop:      clr     C               ; clear carry flag
+ 2312:	  10BD	E8		               mov     a, r0           ; shift the highest bit of
+ 2313:	  10BE	33		               rlc     a               ; the dividend into...
+ 2314:	  10BF	F8		               mov     r0, a
+ 2315:	  10C0	E9		               mov     a, r1
+ 2316:	  10C1	33		               rlc     a
+ 2317:	  10C2	F9		               mov     r1, a
+ 2318:	  10C3	EE		               mov     a, r6           ; ... the lowest bit of the
+ 2319:	  10C4	33		               rlc     a               ; partial remainder
+ 2320:	  10C5	FE		               mov     r6, a
+ 2321:	  10C6	EF		               mov     a, r7
+ 2322:	  10C7	33		               rlc     a
+ 2323:	  10C8	FF		               mov     r7, a
+ 2324:	  10C9	EE		               mov     a, r6           ; trial subtract divisor
+ 2325:	  10CA	C3		               clr     C               ; from partial remainder
+ 2326:	  10CB	9A		               subb    a, r2
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 43
+
+
+
+ Line  I  Addr  Code            Source
+
+ 2327:	  10CC	F5 82		               mov     dpl, a
+ 2328:	  10CE	EF		               mov     a, r7
+ 2329:	  10CF	9B		               subb    a, r3
+ 2330:	  10D0	F5 83		               mov     dph, a
+ 2331:	  10D2	B3		               cpl     C               ; complement external borrow
+ 2332:	  10D3	50 04		               jnc     div_1           ; update partial remainder if
+ 2333:				                                       ; borrow
+ 2334:	  10D5	AF 83		               mov     r7, dph         ; update partial remainder
+ 2335:	  10D7	AE 82		               mov     r6, dpl
+ 2336:	  10D9	EC		div_1:         mov     a, r4           ; shift result bit into partial
+ 2337:	  10DA	33		               rlc     a               ; quotient
+ 2338:	  10DB	FC		               mov     r4, a
+ 2339:	  10DC	ED		               mov     a, r5
+ 2340:	  10DD	33		               rlc     a
+ 2341:	  10DE	FD		               mov     r5, a
+ 2342:	  10DF	D5 F0 DA	               djnz    B, div_loop
+ 2343:	  10E2	ED		               mov     a, r5           ; put quotient in r0, and r1
+ 2344:	  10E3	F9		               mov     r1, a
+ 2345:	  10E4	EC		               mov     a, r4
+ 2346:	  10E5	F8		               mov     r0, a
+ 2347:	  10E6	EF		               mov     a, r7           ; get remainder, saved before the
+ 2348:	  10E7	FB		               mov     r3, a           ; last subtraction
+ 2349:	  10E8	EE		               mov     a, r6
+ 2350:	  10E9	FA		               mov     r2, a
+ 2351:	  10EA	22		               ret
+ 2352:				;===================================================
+ 2353:				; subroutine UMUL16
+ 2354:				; 16-Bit x 16-Bit to 32-Bit Product Unsigned Multiply
+ 2355:				;
+ 2356:				; input:    r1, r0 = multiplicand X
+ 2357:				;           r3, r2 = multiplier Y
+ 2358:				;
+ 2359:				; output:   r3, r2, r1, r0 = product P = X x Y
+ 2360:				;
+ 2361:				; alters:   acc, C
+ 2362:				;====================================================================
+ 2363:
+ 2364:	  10EB	C0 F0		UMUL16:        push    B
+ 2365:	  10ED	C0 82		               push    dpl
+ 2366:	  10EF	E8		               mov     a, r0
+ 2367:	  10F0	8A F0		               mov     b, r2
+ 2368:	  10F2	A4		               mul     ab              ; multiply XL x YL
+ 2369:	  10F3	C0 E0		               push    acc             ; stack result low byte
+ 2370:	  10F5	C0 F0		               push    b               ; stack result high byte
+ 2371:	  10F7	E8		               mov     a, r0
+ 2372:	  10F8	8B F0		               mov     b, r3
+ 2373:	  10FA	A4		               mul     ab              ; multiply XL x YH
+ 2374:	  10FB	D0 00		               pop     00H
+ 2375:	  10FD	28		               add     a, r0
+ 2376:	  10FE	F8		               mov     r0, a
+ 2377:	  10FF	E4		               clr     a
+ 2378:	  1100	35 F0		               addc    a, b
+ 2379:	  1102	F5 82		               mov     dpl, a
+ 2380:	  1104	EA		               mov     a, r2
+ 2381:	  1105	89 F0		               mov     b, r1
+ 2382:	  1107	A4		               mul     ab              ; multiply XH x YL
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 44
+
+
+
+ Line  I  Addr  Code            Source
+
+ 2383:	  1108	28		               add     a, r0
+ 2384:	  1109	F8		               mov     r0, a
+ 2385:	  110A	E5 82		               mov     a, dpl
+ 2386:	  110C	35 F0		               addc    a, b
+ 2387:	  110E	F5 82		               mov     dpl, a
+ 2388:	  1110	E4		               clr     a
+ 2389:	  1111	34 00		               addc    a, #0
+ 2390:	  1113	C0 E0		               push    acc             ; save intermediate carry
+ 2391:	  1115	EB		               mov     a, r3
+ 2392:	  1116	89 F0		               mov     b, r1
+ 2393:	  1118	A4		               mul     ab              ; multiply XH x YH
+ 2394:	  1119	25 82		               add     a, dpl
+ 2395:	  111B	FA		               mov     r2, a
+ 2396:	  111C	D0 E0		               pop     acc             ; retrieve carry
+ 2397:	  111E	35 F0		               addc    a, b
+ 2398:	  1120	FB		               mov     r3, a
+ 2399:	  1121	A9 00		               mov     r1, 00H
+ 2400:	  1123	D0 00		               pop     00H             ; retrieve result low byte
+ 2401:	  1125	D0 82		               pop     dpl
+ 2402:	  1127	D0 F0		               pop     B
+ 2403:	  1129	22		               ret
+ 2404:				;====================================================================
+ 2405:				; subroutine ADD16
+ 2406:				; 16-Bit Signed (2's Complement) Addition
+ 2407:				;
+ 2408:				; input:     r1, r0 = X
+ 2409:				;            r3, r2 = Y
+ 2410:				;
+ 2411:				; output:    r1, r0 = signed sum S = X + Y
+ 2412:				;            Carry C is set if the result (S) is out of range
+ 2413:				;
+ 2414:				; alters:    acc, C, OV
+ 2415:				;====================================================================
+ 2416:	  112A	53 D0 E7	ADD16:         anl    PSW, #0E7H       ; Register Bank 0
+ 2417:	  112D	E8		               mov     a, r0           ; load X low byte into acc
+ 2418:	  112E	2A		               add     a, r2           ; add Y low byte
+ 2419:	  112F	F8		               mov     r0, a           ; put result in Z low byte
+ 2420:	  1130	E9		               mov     a, r1           ; load X high byte into acc
+ 2421:	  1131	3B		               addc    a, r3           ; add Y high byte with carry
+ 2422:	  1132	F9		               mov     r1, a           ; save result in Z high byte
+ 2423:	  1133	A2 D2		               mov     C, OV
+ 2424:	  1135	22		               ret
+ 2425:				;====================================================================
+ 2426:				;EEPROM 24LC01B  Sub Routine
+ 2427:				; ********** IPW SUB **********
+ 2428:				; 24LC01B WRITE
+ 2429:				;IN   	 R0=  ADDRESS,   R1 = DATA
+ 2430:				;OUT	 EEPERR  0=OK 1=ERROR
+ 2431:				; REG = A,R2
+ 2432:	  1136			IPW:
+ 2433:	  1136	C2 A7		CLR	EEPWP		;disable write protect
+ 2434:	  1138	12 11 F9	CALL	CDEL		;delay
+ 2435:	  113B	D2 A5		SETB	EEPSDA             ;START CONDITION
+ 2436:	  113D	D2 A6		SETB	EEPSCL
+ 2437:	  113F	C2 A5		CLR    	EEPSDA
+ 2438:	  1141	12 11 F9	CALL   	CDEL
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 45
+
+
+
+ Line  I  Addr  Code            Source
+
+ 2439:	  1144	C2 A6		CLR    	EEPSCL
+ 2440:	  1146	D2 A5		SETB   	EEPSDA
+ 2441:	  1148	74 A0		MOV    	A,#10100000B      	;Write Control Code  1010AAAW
+ 2442:	  114A	12 11 69	CALL   	IPWRB		;1 Byte Write
+ 2443:	  114D	20 14 0D	JB     	EEPERR,IPW9
+ 2444:	  1150	E8		MOV    	A,R0  	           	 ;WORD ADDRESS
+ 2445:	  1151	54 7F		ANL    	A,#01111111B	;Limit Address to 128 byte only
+ 2446:	  1153	12 11 69	CALL   	IPWRB		;1 Byte Write
+ 2447:	  1156	20 14 04	JB     	EEPERR,IPW9
+ 2448:	  1159	E9		MOV   	 A,R1 		 ;DATA
+ 2449:	  115A	12 11 69	CALL  	 IPWRB		;1 Byte Write
+ 2450:	  115D			IPW9:
+ 2451:	  115D	C2 A5		CLR	EEPSDA  	 ;STOP CONDITION
+ 2452:	  115F	D2 A6		SETB   	EEPSCL
+ 2453:	  1161	12 11 F9	CALL   	CDEL
+ 2454:	  1164	D2 A5		SETB 	EEPSDA
+ 2455:	  1166	D2 A7		SETB	EEPWP		;ENable write protech
+ 2456:	  1168	22		RET
+ 2457:				; ********** IPWRB SUB **********
+ 2458:				; 24LC01B WRITE 1 BYTE
+ 2459:				; IN  = A
+ 2460:				; OUT = EEPERR  0=OK 1=ERROR
+ 2461:				; REG = A,R2
+ 2462:	  1169			IPWRB:
+ 2463:	  1169	C2 14		CLR	EEPERR            ;Reset Error Byte
+ 2464:	  116B	7A 08		MOV    	R2,#8
+ 2465:	  116D			IPWRB1:
+ 2466:	  116D	33		RLC    	A
+ 2467:	  116E	92 A5		MOV    	EEPSDA,C
+ 2468:	  1170	12 11 E9	CALL   	CHIGH             ;CLOCK
+ 2469:	  1173	12 11 F1	CALL   	CLOW
+ 2470:	  1176	DA F5		DJNZ   	R2,IPWRB1
+ 2471:	  1178	D2 A5		SETB   	EEPSDA            ;ACKNOWLEDGE BIT
+ 2472:	  117A	12 11 E9	CALL   	CHIGH
+ 2473:	  117D	30 A5 02	JNB    	EEPSDA,IPWRB2
+ 2474:	  1180	D2 14		SETB   	EEPERR
+ 2475:	  1182			IPWRB2:
+ 2476:	  1182	12 11 F1	CALL   	CLOW
+ 2477:	  1185	22		RET
+ 2478:				; ********** IPR SUB **********
+ 2479:				;24LC01B READ
+ 2480:				;IN  = R0  ADDRESS
+ 2481:				;OUT = R1  DATA
+ 2482:				; EEPERR  0=OK 1=ERROR
+ 2483:				; REG = A,R2
+ 2484:	  1186			IPR:
+ 2485:	  1186	D2 A5		SETB  	EEPSDA             ;START CONDITION
+ 2486:	  1188	D2 A6		SETB   	EEPSCL
+ 2487:	  118A	C2 A5		CLR    	EEPSDA
+ 2488:	  118C	12 11 F9	CALL   	CDEL
+ 2489:	  118F	C2 A6		CLR    	EEPSCL
+ 2490:	  1191	74 A0		MOV    	A,#10100000B      ;DEVICE ADDRESS 1010AAAW
+ 2491:	  1193	31 69		CALL   	IPWRB
+ 2492:	  1195	20 14 2A	JB     	EEPERR,IPR9
+ 2493:	  1198	E8		MOV    	A,R0              ;WORD ADDRESS
+ 2494:	  1199	54 7F		ANL    	A,#01111111B
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 46
+
+
+
+ Line  I  Addr  Code            Source
+
+ 2495:	  119B	31 69		CALL   	IPWRB
+ 2496:	  119D	20 14 22	JB     	EEPERR,IPR9
+ 2497:	  11A0	C2 A5		CLR    	EEPSDA             ;STOP CONDITION
+ 2498:	  11A2	D2 A6		SETB   	EEPSCL
+ 2499:	  11A4	12 11 F9	CALL   	CDEL
+ 2500:	  11A7	D2 A5		SETB   	EEPSDA
+ 2501:	  11A9	D2 A5		SETB   	EEPSDA             ;START CONDITION
+ 2502:	  11AB	D2 A6		SETB   	EEPSCL
+ 2503:	  11AD	C2 A5		CLR    	EEPSDA
+ 2504:	  11AF	12 11 F9	CALL   	CDEL
+ 2505:	  11B2	C2 A6		CLR    	EEPSCL
+ 2506:	  11B4	74 A1		MOV    	A,#10100001B      ;DEVICE ADDRESS 1010AAAR
+ 2507:	  11B6	31 69		CALL   	IPWRB
+ 2508:	  11B8	20 14 07	JB     	EEPERR,IPR9
+ 2509:	  11BB	12 11 CC	CALL   	IPRDB             ;Read DATA
+ 2510:	  11BE	20 14 01	JB     	EEPERR,IPR9
+ 2511:	  11C1	F9		MOV    	R1,A
+ 2512:	  11C2			IPR9:
+ 2513:	  11C2	C2 A5		CLR    	EEPSDA             ;STOP CONDITION
+ 2514:	  11C4	D2 A6		SETB   	EEPSCL
+ 2515:	  11C6	12 11 F9	CALL   	CDEL
+ 2516:	  11C9	D2 A5		SETB   	EEPSDA
+ 2517:	  11CB	22		RET
+ 2518:				; ********** IPRDB SUB **********
+ 2519:				; READ BYTE
+ 2520:				; OUT = A
+ 2521:				; EEPERR  0=OK 1=ERROR
+ 2522:				; REG = A,R2
+ 2523:	  11CC			IPRDB:
+ 2524:	  11CC	C2 14		CLR    	EEPERR		;reset Error Byte
+ 2525:	  11CE	7A 08		MOV    	R2,#8
+ 2526:	  11D0			IPRDB1:
+ 2527:	  11D0	12 11 E9	CALL   	CHIGH
+ 2528:	  11D3	A2 A5		MOV    	C,EEPSDA
+ 2529:	  11D5	33		RLC   	 A
+ 2530:	  11D6	12 11 F1	CALL   	CLOW
+ 2531:	  11D9	DA F5		DJNZ   	R2,IPRDB1
+ 2532:	  11DB	D2 A5		SETB   	EEPSDA            ;ACKNOWLEDGE BIT (1)
+ 2533:	  11DD	12 11 E9	CALL   	CHIGH
+ 2534:	  11E0	20 A5 02	JB     	EEPSDA,IPRDB2
+ 2535:	  11E3	D2 14		SETB   	EEPERR
+ 2536:	  11E5			IPRDB2:
+ 2537:	  11E5	12 11 F1	CALL   	CLOW
+ 2538:	  11E8	22		RET
+ 2539:				;********EEPROM Clock***************
+ 2540:	  11E9			CHIGH:
+ 2541:	  11E9	D2 A6		SETB   EEPSCL            ;**** SCL HIGH + DELAY ****
+ 2542:	  11EB	00		NOP
+ 2543:	  11EC	00		NOP
+ 2544:	  11ED	00		NOP
+ 2545:	  11EE	00		NOP
+ 2546:	  11EF	00		NOP
+ 2547:	  11F0	22		RET
+ 2548:
+ 2549:	  11F1			CLOW:
+ 2550:	  11F1	C2 A6		CLR    EEPSCL            ;**** SCL LOW + DELAY ****
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 47
+
+
+
+ Line  I  Addr  Code            Source
+
+ 2551:	  11F3	00		NOP
+ 2552:	  11F4	00		NOP
+ 2553:	  11F5	00		NOP
+ 2554:	  11F6	00		NOP
+ 2555:	  11F7	00		NOP
+ 2556:	  11F8	22		RET
+ 2557:
+ 2558:	  11F9			CDEL:
+ 2559:	  11F9	00		NOP                      ;**** DELAY ****
+ 2560:	  11FA	00		NOP
+ 2561:	  11FB	00		NOP
+ 2562:	  11FC	00		NOP
+ 2563:	  11FD	00		NOP
+ 2564:	  11FE	22		RET
+ 2565:				;================================================
+ 2566:	  11FF			WDRESET:	;Reset watchdog timer
+ 2567:	  11FF	75 A6 1E	MOV	WDTRST,#01Eh
+ 2568:	  1202	75 A6 E1	MOV	WDTRST,#0E1h
+ 2569:	  1205	22		RET
+ 2570:				;------------------------------------------------------------------
+ 2571:				;Interprete trouble code
+ 2572:				;IN = R0  OUT = R1,R2
+ 2573:	  1206			INTPDTC:
+ 2574:	  1206	B6 30 05	CJNE	@R0,#30h,$+8
+ 2575:	  1209	79 50		MOV	R1,#50h	;P char
+ 2576:	  120B	7A 30		MOV	R2,#30h	;0 char
+ 2577:	  120D	22		RET
+ 2578:	  120E	B6 31 05	CJNE	@R0,#31h,$+8
+ 2579:	  1211	79 50		MOV	R1,#50h	;P char
+ 2580:	  1213	7A 31		MOV	R2,#31h	;1 char
+ 2581:	  1215	22		RET
+ 2582:	  1216	B6 32 05	CJNE	@R0,#32h,$+8
+ 2583:	  1219	79 50		MOV	R1,#50h	;P char
+ 2584:	  121B	7A 32		MOV	R2,#32h	;2 char
+ 2585:	  121D	22		RET
+ 2586:	  121E	B6 33 05	CJNE	@R0,#33h,$+8
+ 2587:	  1221	79 50		MOV	R1,#50h	;P char
+ 2588:	  1223	7A 33		MOV	R2,#33h	;3 char
+ 2589:	  1225	22		RET
+ 2590:	  1226	B6 34 05	CJNE	@R0,#34h,$+8
+ 2591:	  1229	79 43		MOV	R1,#43h	;C char
+ 2592:	  122B	7A 30		MOV	R2,#30h	;0 char
+ 2593:	  122D	22		RET
+ 2594:	  122E	B6 35 05	CJNE	@R0,#35h,$+8
+ 2595:	  1231	79 43		MOV	R1,#43h	;C char
+ 2596:	  1233	7A 31		MOV	R2,#31h	;1 char
+ 2597:	  1235	22		RET
+ 2598:	  1236	B6 36 05	CJNE	@R0,#36h,$+8
+ 2599:	  1239	79 43		MOV	R1,#43h	;C char
+ 2600:	  123B	7A 32		MOV	R2,#32h	;2 char
+ 2601:	  123D	22		RET
+ 2602:	  123E	B6 37 05	CJNE	@R0,#37h,$+8
+ 2603:	  1241	79 43		MOV	R1,#43h	;C char
+ 2604:	  1243	7A 33		MOV	R2,#33h	;3 char
+ 2605:	  1245	22		RET
+ 2606:	  1246	B6 38 05	CJNE	@R0,#38h,$+8
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 48
+
+
+
+ Line  I  Addr  Code            Source
+
+ 2607:	  1249	79 42		MOV	R1,#42h	;B char
+ 2608:	  124B	7A 30		MOV	R2,#30h	;0 char
+ 2609:	  124D	22		RET
+ 2610:	  124E	B6 39 05	CJNE	@R0,#39h,$+8
+ 2611:	  1251	79 42		MOV	R1,#42h	;B char
+ 2612:	  1253	7A 31		MOV	R2,#31h	;1 char
+ 2613:	  1255	22		RET
+ 2614:	  1256	B6 41 05	CJNE	@R0,#41h,$+8
+ 2615:	  1259	79 42		MOV	R1,#42h	;B char
+ 2616:	  125B	7A 32		MOV	R2,#32h	;2 char
+ 2617:	  125D	22		RET
+ 2618:	  125E	B6 42 05	CJNE	@R0,#42h,$+8
+ 2619:	  1261	79 42		MOV	R1,#42h	;B char
+ 2620:	  1263	7A 33		MOV	R2,#33h	;3 char
+ 2621:	  1265	22		RET
+ 2622:	  1266	B6 43 05	CJNE	@R0,#43h,$+8
+ 2623:	  1269	79 55		MOV	R1,#55h	;U char
+ 2624:	  126B	7A 30		MOV	R2,#30h	;0 char
+ 2625:	  126D	22		RET
+ 2626:	  126E	B6 44 05	CJNE	@R0,#44h,$+8
+ 2627:	  1271	79 55		MOV	R1,#55h	;U char
+ 2628:	  1273	7A 31		MOV	R2,#31h	;1 char
+ 2629:	  1275	22		RET
+ 2630:	  1276	B6 45 05	CJNE	@R0,#45h,$+8
+ 2631:	  1279	79 55		MOV	R1,#55h	;U char
+ 2632:	  127B	7A 32		MOV	R2,#32h	;2 char
+ 2633:	  127D	22		RET
+ 2634:	  127E	B6 46 05	CJNE	@R0,#46h,$+8
+ 2635:	  1281	79 55		MOV	R1,#55h	;U char
+ 2636:	  1283	7A 33		MOV	R2,#33h	;3 char
+ 2637:	  1285	22		RET
+ 2638:				;================================================
+ 2639:				;Looking Table
+ 2640:	  1286	30 31 30 30	CHKCAN:DB "0100",0Dh,00h		;PID send to check CAN connection
+	  128A	0D 00
+ 2641:	  128C	41 54 45 30	SERINIT1:DB "ATE0",0Dh,00h		;set Echo off
+	  1290	0D 00
+ 2642:	  1292	41 54 4C 30	SERINIT2:DB "ATL0",0Dh,00h		;set Lind Feed off
+	  1296	0D 00
+ 2643:	  1298	41 54 48 30	SERINIT3:DB "ATH0",0Dh,00h		;set Msg Header  off
+	  129C	0D 00
+ 2644:	  129E	41 54 53 54	SERINIT4:DB "ATST00",0DH,00h	;set wait time = 4 msec
+	  12A2	30 30 0D 00
+ 2645:	  12A6	41 54 53 50	SERINIT5:DB "ATSPA6",0Dh,00h	;set Default CAN Bus and auto search
+	  12AA	41 36 0D 00
+ 2646:	  12AE	41 54 57 53	SERWS:DB "ATWS",0Dh,00h		;ELM warm start message
+	  12B2	0D 00
+ 2647:	  12B4	00 01 02 20	TITLE1:DB  00h,01h,02h," OBDII ",07h,"-METER V1",0Dh
+	  12B8	4F 42 44 49
+	  12BC	49 20 07 2D
+	  12C0	4D 45 54 45
+	  12C4	52 20 56 31
+	  12C8	0D
+ 2648:	  12C9	03 04 05 20	TITLE2:DB  03h,04h,05h," ----------------",0Dh
+	  12CD	2D 2D 2D 2D
+	  12D1	2D 2D 2D 2D
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 49
+
+
+
+ Line  I  Addr  Code            Source
+
+	  12D5	2D 2D 2D 2D
+	  12D9	2D 2D 2D 2D
+	  12DD	0D
+ 2649:	  12DE	42 79 20 4A	TITLE3:DB  "By Jerry @ThaiMazda",06h,0Dh,00h
+	  12E2	65 72 72 79
+	  12E6	20 40 54 68
+	  12EA	61 69 4D 61
+	  12EE	7A 64 61 06
+	  12F2	0D 00
+ 2650:
+ 2651:	  12F4	53 65 6C 65	MENU1:DB "Select SETUP Menu[~]",0Dh,00h
+	  12F8	63 74 20 53
+	  12FC	45 54 55 50
+	  1300	20 4D 65 6E
+	  1304	75 5B 7E 5D
+	  1308	0D 00
+ 2652:	  130A	31 2E 20 53	MENU11:DB "1. Set LCD backlight",0Dh,00h
+	  130E	65 74 20 4C
+	  1312	43 44 20 62
+	  1316	61 63 6B 6C
+	  131A	69 67 68 74
+	  131E	0D 00
+ 2653:	  1320	32 2E 20 53	MENU12: DB "2. Set SPEAKER     ",0Dh,00h
+	  1324	65 74 20 53
+	  1328	50 45 41 4B
+	  132C	45 52 20 20
+	  1330	20 20 20 0D
+	  1334	00
+ 2654:	  1335	33 2E 20 53	MENU13: DB "3. Set start-up PID1",0Dh,00h
+	  1339	65 74 20 73
+	  133D	74 61 72 74
+	  1341	2D 75 70 20
+	  1345	50 49 44 31
+	  1349	0D 00
+ 2655:	  134B	34 2E 20 53	MENU14: DB "4. Set start-up PID2",0Dh,00h
+	  134F	65 74 20 73
+	  1353	74 61 72 74
+	  1357	2D 75 70 20
+	  135B	50 49 44 32
+	  135F	0D 00
+ 2656:	  1361	35 2E 20 50	MENU15: DB "5. PID Warning Light",0Dh,00h
+	  1365	49 44 20 57
+	  1369	61 72 6E 69
+	  136D	6E 67 20 4C
+	  1371	69 67 68 74
+	  1375	0D 00
+ 2657:	  1377	36 2E 20 41	MENU16: DB "6. Auto Sleep Mode.",0Dh,00h
+	  137B	75 74 6F 20
+	  137F	53 6C 65 65
+	  1383	70 20 4D 6F
+	  1387	64 65 2E 0D
+	  138B	00
+ 2658:	  138C	37 2E 20 46	MENU17: DB "7. Firmware Ver 1.04",0Dh,00h
+	  1390	69 72 6D 77
+	  1394	61 72 65 20
+	  1398	56 65 72 20
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 50
+
+
+
+ Line  I  Addr  Code            Source
+
+	  139C	31 2E 30 34
+	  13A0	0D 00
+ 2659:	  13A2	30 31 2D 4D	RELEASE: DB "01-May-2007  | Java ",00Dh,00h
+	  13A6	61 79 2D 32
+	  13AA	30 30 37 20
+	  13AE	20 7C 20 4A
+	  13B2	61 76 61 20
+	  13B6	0D 00
+ 2660:
+ 2661:	  13B8	53 70 65 63	MENU2:DB "Special Function [~]",0Dh,00h
+	  13BC	69 61 6C 20
+	  13C0	46 75 6E 63
+	  13C4	74 69 6F 6E
+	  13C8	20 5B 7E 5D
+	  13CC	0D 00
+ 2662:	  13CE	31 2E 20 56	VEHINFO:DB "1. Veh Info Numbers:",0Dh,00h
+	  13D2	65 68 20 49
+	  13D6	6E 66 6F 20
+	  13DA	4E 75 6D 62
+	  13DE	65 72 73 3A
+	  13E2	0D 00
+ 2663:	  13E4	32 2E 20 4E	DTC:DB "2. No. of DTCs = -- ",0Dh,16
+	  13E8	6F 2E 20 6F
+	  13EC	66 20 44 54
+	  13F0	43 73 20 3D
+	  13F4	20 2D 2D 20
+	  13F8	0D 10
+ 2664:	  13FA	4D 49 4C 20	MILOFF:DB "MIL status is OFF...",0Dh,00h
+	  13FE	73 74 61 74
+	  1402	75 73 20 69
+	  1406	73 20 4F 46
+	  140A	46 2E 2E 2E
+	  140E	0D 00
+ 2665:	  1410	50 72 65 73	MILON:DB "Press to read DTC[~]",0Dh,00h
+	  1414	73 20 74 6F
+	  1418	20 72 65 61
+	  141C	64 20 44 54
+	  1420	43 5B 7E 5D
+	  1424	0D 00
+ 2666:	  1426	43 6C 65 61	SETMIL:DB "Clear MIL now?[NO ]~",0Dh,00h
+	  142A	72 20 4D 49
+	  142E	4C 20 6E 6F
+	  1432	77 3F 5B 4E
+	  1436	4F 20 5D 7E
+	  143A	0D 00
+ 2667:	  143C	30 31 30 31	DTCPID:DB "0101",0Dh,00h	;for SBLOCK  check no of DTC
+	  1440	0D 00
+ 2668:	  1442	30 33 0D 00	DTCREAD:DB "03",0Dh,00h	;for SBLOCK  read DTC
+ 2669:	  1446	20 20 20 20	DISPDTC:DB "         next DTC[~]",0Dh,00h
+	  144A	20 20 20 20
+	  144E	20 6E 65 78
+	  1452	74 20 44 54
+	  1456	43 5B 7E 5D
+	  145A	0D 00
+ 2670:	  145C	30 34 0D 00	CLRMIL:DB "04",0Dh,00h    ;for SBLOCK  clear MIL status
+ 2671:	  1460	20 20 20 20	TOGGLE:DB "     Press to set[~]",0Dh,00h
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 51
+
+
+
+ Line  I  Addr  Code            Source
+
+	  1464	20 50 72 65
+	  1468	73 73 20 74
+	  146C	6F 20 73 65
+	  1470	74 5B 7E 5D
+	  1474	0D 00
+ 2672:
+ 2673:	  1476	5B 53 45 54	LIMITMSG: DB "[SET LIMITTED VALUE]",0Dh,00h
+	  147A	20 4C 49 4D
+	  147E	49 54 54 45
+	  1482	44 20 56 41
+	  1486	4C 55 45 5D
+	  148A	0D 00
+ 2674:	  148C	53 65 74 74	LIMITFIN: DB "Setting complete!...",0Dh,00h
+	  1490	69 6E 67 20
+	  1494	63 6F 6D 70
+	  1498	6C 65 74 65
+	  149C	21 2E 2E 2E
+	  14A0	0D 00
+ 2675:	  14A2	5B 20 55 50	UGFIRM1: DB "[ UPGRADE FIRMWARE ]",0Dh,00h
+	  14A6	47 52 41 44
+	  14AA	45 20 46 49
+	  14AE	52 4D 57 41
+	  14B2	52 45 20 5D
+	  14B6	0D 00
+ 2676:	  14B8	57 61 69 74	UGFIRM2: DB "Waiting connection.",0Dh,00h
+	  14BC	69 6E 67 20
+	  14C0	63 6F 6E 6E
+	  14C4	65 63 74 69
+	  14C8	6F 6E 2E 0D
+	  14CC	00
+ 2677:	  14CD	4E 6F 77 20	UGFIRM3: DB "Now Upgrading...    ",0Dh,00h
+	  14D1	55 70 67 72
+	  14D5	61 64 69 6E
+	  14D9	67 2E 2E 2E
+	  14DD	20 20 20 20
+	  14E1	0D 00
+ 2678:
+ 2679:	  14E3	30 31 30 44	SPDPID:DB "010D",0Dh,00h    ;for SBLOCK fuel consumption calculate
+	  14E7	0D 00
+ 2680:	  14E9	30 31 31 30	MAFPID:DB "0110",0Dh,00h
+	  14ED	0D 00
+ 2681:
+ 2682:	  14EF	00 00 1E 15	CGM:DB 00h,00h,1Eh,15h,15h,15h,15h,00h,0Dh,00h
+	  14F3	15 15 15 00
+	  14F7	0D 00
+ 2683:				;CGD:DB 00h,00h,1Eh,11h,11h,11h,1Eh,00h,0Dh,00h
+ 2684:	  14F9	00 0E 01 0E	CG3:DB 00h,0Eh,01h,0Eh,01h,03h,1Eh,00h,0Dh,00h
+	  14FD	01 03 1E 00
+	  1501	0D 00
+ 2685:	  1503	00 00 01 06	CGUL:DB 00h,00h,01h,06h,08h,0Ch,1Bh,10h,0Dh,00h
+	  1507	08 0C 1B 10
+	  150B	0D 00
+ 2686:	  150D	00 00 1F 00	CGUM:DB 00h,00h,1Fh,00h,00h,00h,11h,0Ah,0Dh,00h
+	  1511	00 00 11 0A
+	  1515	0D 00
+ 2687:	  1517	00 00 10 0C	CGUR:DB 00h,00h,10h,0Ch,02h,06h,1Bh,01h,0Dh,00h
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 52
+
+
+
+ Line  I  Addr  Code            Source
+
+	  151B	02 06 1B 01
+	  151F	0D 00
+ 2688:	  1521	10 10 08 0E	CGLL:DB 10h,10h,08h,0Eh,03h,00h,00h,00h,0Dh,00h
+	  1525	03 00 00 00
+	  1529	0D 00
+ 2689:	  152B	04 04 00 00	CGLM:DB 04h,04h,00h,00h,11h,1Fh,00h,00h,0Dh,00h
+	  152F	11 1F 00 00
+	  1533	0D 00
+ 2690:	  1535	01 01 02 0E	CGLR:DB 01h,01h,02h,0Eh,18h,00h,00h,00h,0Dh,00h
+	  1539	18 00 00 00
+	  153D	0D 00
+ 2691:				;CGX:DB 11h,0Ah,04h,04h,04h,04h,0Ah,11h,0Dh,00h
+ 2692:	  153F	11 1B 0E 04	CGX:DB 11h,1Bh,0Eh,04h,04h,0Eh,1Bh,11h,0Dh,00h
+	  1543	04 0E 1B 11
+	  1547	0D 00
+ 2693:	  1549	43 41 4C 20	PID04: DB "CAL Engine Load ---%",0Dh,16
+	  154D	45 6E 67 69
+	  1551	6E 65 20 4C
+	  1555	6F 61 64 20
+	  1559	2D 2D 2D 25
+	  155D	0D 10
+ 2694:	  155F	43 6F 6F 6C	PID05: DB "Coolant Temp: --- ",0DFh,"c",0Dh,14
+	  1563	61 6E 74 20
+	  1567	54 65 6D 70
+	  156B	3A 20 2D 2D
+	  156F	2D 20 DF 63
+	  1573	0D 0E
+ 2695:	  1575	53 2D 54 20	PID06: DB "S-T Fuel Trim1 --- %",0Dh,15
+	  1579	46 75 65 6C
+	  157D	20 54 72 69
+	  1581	6D 31 20 2D
+	  1585	2D 2D 20 25
+	  1589	0D 0F
+ 2696:	  158B	4C 2D 54 20	PID07: DB "L-T Fuel Trim1 --- %",0Dh,15
+	  158F	46 75 65 6C
+	  1593	20 54 72 69
+	  1597	6D 31 20 2D
+	  159B	2D 2D 20 25
+	  159F	0D 0F
+ 2697:
+ 2698:	  15A1	46 75 65 6C	PID0A: DB "Fuel Pressure ---kPa",0Dh,14
+	  15A5	20 50 72 65
+	  15A9	73 73 75 72
+	  15AD	65 20 2D 2D
+	  15B1	2D 6B 50 61
+	  15B5	0D 0E
+ 2699:	  15B7	4D 41 4E 20	PID0B: DB "MAN Air Press ---kPa",0Dh,14
+	  15BB	41 69 72 20
+	  15BF	50 72 65 73
+	  15C3	73 20 2D 2D
+	  15C7	2D 6B 50 61
+	  15CB	0D 0E
+ 2700:	  15CD	45 4E 47 20	PID0C: DB "ENG Speed: ---- RPM ",0Dh,11
+	  15D1	53 70 65 65
+	  15D5	64 3A 20 2D
+	  15D9	2D 2D 2D 20
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 53
+
+
+
+ Line  I  Addr  Code            Source
+
+	  15DD	52 50 4D 20
+	  15E1	0D 0B
+ 2701:	  15E3	56 45 48 20	PID0D: DB "VEH Speed: --- km/h ",0Dh,11
+	  15E7	53 70 65 65
+	  15EB	64 3A 20 2D
+	  15EF	2D 2D 20 6B
+	  15F3	6D 2F 68 20
+	  15F7	0D 0B
+ 2702:	  15F9	49 47 4E 20	PID0E: DB "IGN ADV Timing: ---",0DFh,0Dh,16
+	  15FD	41 44 56 20
+	  1601	54 69 6D 69
+	  1605	6E 67 3A 20
+	  1609	2D 2D 2D DF
+	  160D	0D 10
+ 2703:	  160F	49 6E 74 61	PID0F: DB "Intake Air Temp --",0DFh,"c",0Dh,15
+	  1613	6B 65 20 41
+	  1617	69 72 20 54
+	  161B	65 6D 70 20
+	  161F	2D 2D DF 63
+	  1623	0D 0F
+ 2704:	  1625	41 69 72 20	PID10: DB "Air Flow ---.- g/sec",0Dh,9
+	  1629	46 6C 6F 77
+	  162D	20 2D 2D 2D
+	  1631	2E 2D 20 67
+	  1635	2F 73 65 63
+	  1639	0D 09
+ 2705:	  163B	54 68 72 6F	PID11: DB "Throttle Pos: --- %  ",0Dh,14
+	  163F	74 74 6C 65
+	  1643	20 50 6F 73
+	  1647	3A 20 2D 2D
+	  164B	2D 20 25 20
+	  164F	20 0D 0E
+ 2706:	  1652	46 72 6F 6E	PID14: DB "Front HO2S Volt -.--",0Dh,16
+	  1656	74 20 48 4F
+	  165A	32 53 20 56
+	  165E	6F 6C 74 20
+	  1662	2D 2E 2D 2D
+	  1666	0D 10
+ 2707:	  1668	52 65 61 72	PID15: DB "Rear  HO2S Volt -.--",0Dh,16
+	  166C	20 20 48 4F
+	  1670	32 53 20 56
+	  1674	6F 6C 74 20
+	  1678	2D 2E 2D 2D
+	  167C	0D 10
+ 2708:
+ 2709:	  167E	43 6F 6D 6D	PID2C: DB "Commanded EGR: --- %",0Dh,15
+	  1682	61 6E 64 65
+	  1686	64 20 45 47
+	  168A	52 3A 20 2D
+	  168E	2D 2D 20 25
+	  1692	0D 0F
+ 2710:	  1694	45 47 52 20	PID2D:DB "EGR Error: --- %    ",0Dh,11
+	  1698	45 72 72 6F
+	  169C	72 3A 20 2D
+	  16A0	2D 2D 20 25
+	  16A4	20 20 20 20
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 54
+
+
+
+ Line  I  Addr  Code            Source
+
+	  16A8	0D 0B
+ 2711:	  16AA	43 4D 44 20	PID2E:DB "CMD Evap Purge --- %",0Dh,15
+	  16AE	45 76 61 70
+	  16B2	20 50 75 72
+	  16B6	67 65 20 2D
+	  16BA	2D 2D 20 25
+	  16BE	0D 0F
+ 2712:	  16C0	46 75 65 6C	PID2F: DB "Fuel Level: --- %   ",0Dh,12
+	  16C4	20 4C 65 76
+	  16C8	65 6C 3A 20
+	  16CC	2D 2D 2D 20
+	  16D0	25 20 20 20
+	  16D4	0D 0C
+ 2713:
+ 2714:	  16D6	42 61 72 6F	PID33: DB "Baro Pressure ---kPa",0Dh,14
+	  16DA	20 50 72 65
+	  16DE	73 73 75 72
+	  16E2	65 20 2D 2D
+	  16E6	2D 6B 50 61
+	  16EA	0D 0E
+ 2715:
+ 2716:	  16EC	43 41 54 20	PID3C: DB "CAT 1 Temp: ---.- ",0DFh,"c",0Dh,12
+	  16F0	31 20 54 65
+	  16F4	6D 70 3A 20
+	  16F8	2D 2D 2D 2E
+	  16FC	2D 20 DF 63
+	  1700	0D 0C
+ 2717:	  1702	43 41 54 20	PID3D: DB "CAT 2 Temp: ---.- ",0DFh,"c",0Dh,12
+	  1706	32 20 54 65
+	  170A	6D 70 3A 20
+	  170E	2D 2D 2D 2E
+	  1712	2D 20 DF 63
+	  1716	0D 0C
+ 2718:
+ 2719:	  1718	50 43 4D 20	PID42: DB "PCM Voltage: --.-- V",0Dh,13
+	  171C	56 6F 6C 74
+	  1720	61 67 65 3A
+	  1724	20 2D 2D 2E
+	  1728	2D 2D 20 56
+	  172C	0D 0D
+ 2720:	  172E	41 42 53 20	PID43: DB "ABS Engine Load ---%",0Dh,16
+	  1732	45 6E 67 69
+	  1736	6E 65 20 4C
+	  173A	6F 61 64 20
+	  173E	2D 2D 2D 25
+	  1742	0D 10
+ 2721:	  1744	43 4D 44 20	PID44: DB "CMD EQV Ratio: -.--   ",0Dh,15
+	  1748	45 51 56 20
+	  174C	52 61 74 69
+	  1750	6F 3A 20 2D
+	  1754	2E 2D 2D 20
+	  1758	20 20 0D 0F
+ 2722:	  175C	52 45 4C 20	PID45: DB "REL Throt Pos: --- %",0Dh,15
+	  1760	54 68 72 6F
+	  1764	74 20 50 6F
+	  1768	73 3A 20 2D
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 55
+
+
+
+ Line  I  Addr  Code            Source
+
+	  176C	2D 2D 20 25
+	  1770	0D 0F
+ 2723:	  1772	41 4D 42 20	PID46: DB "AMB Air Temp: --- ",0DFh,"c",0Dh,14
+	  1776	41 69 72 20
+	  177A	54 65 6D 70
+	  177E	3A 20 2D 2D
+	  1782	2D 20 DF 63
+	  1786	0D 0E
+ 2724:	  1788	20 20 20 20	NODATA:DB "                    ",0Dh,00
+	  178C	20 20 20 20
+	  1790	20 20 20 20
+	  1794	20 20 20 20
+	  1798	20 20 20 20
+	  179C	0D 00
+ 2725:	  179E	2D 2D 2D 20	SPDMAF: DB "--- km/h|AF --.- g/s",0Dh,00h
+	  17A2	6B 6D 2F 68
+	  17A6	7C 41 46 20
+	  17AA	2D 2D 2E 2D
+	  17AE	20 67 2F 73
+	  17B2	0D 00
+ 2726:	  17B4	43 75 72 72	INSTFC: DB "Current F/C --.-km/L",0Dh,00h
+	  17B8	65 6E 74 20
+	  17BC	46 2F 43 20
+	  17C0	2D 2D 2E 2D
+	  17C4	6B 6D 2F 4C
+	  17C8	0D 00
+ 2727:	  17CA	41 76 65 72	AVRFC: DB "Average F/C --.-km/L",0Dh,00h
+	  17CE	61 67 65 20
+	  17D2	46 2F 43 20
+	  17D6	2D 2D 2E 2D
+	  17DA	6B 6D 2F 4C
+	  17DE	0D 00
+ 2728:	  17E0	45 45 50 52	RDERR: DB "EEPROM Reading Error",0Dh,00h
+	  17E4	4F 4D 20 52
+	  17E8	65 61 64 69
+	  17EC	6E 67 20 45
+	  17F0	72 72 6F 72
+	  17F4	0D 00
+ 2729:	  17F6	45 45 50 52	WRERR: DB "EEPROM Writing Error",0Dh,00h
+	  17FA	4F 4D 20 57
+	  17FE	72 69 74 69
+	  1802	6E 67 20 45
+	  1806	72 72 6F 72
+	  180A	0D 00
+ 2730:	  180C	45 6E 67 69	PDOWN1: DB "Engine is turned off",0Dh,00h
+	  1810	6E 65 20 69
+	  1814	73 20 74 75
+	  1818	72 6E 65 64
+	  181C	20 6F 66 66
+	  1820	0D 00
+ 2731:	  1822	53 77 69 74	PDOWN2: DB "Switch to SLEEP mode",0Dh,00h
+	  1826	63 68 20 74
+	  182A	6F 20 53 4C
+	  182E	45 45 50 20
+	  1832	6D 6F 64 65
+	  1836	0D 00
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 56
+
+
+
+ Line  I  Addr  Code            Source
+
+ 2732:
+ 2733:				END
+
+
+
+
+
+                     register banks used:  ---
+
+                     2 errors detected
+
+
+
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 57
+
+
+
+
+
+	       L I S T   O F   S Y M B O L S
+	       =============================
+
+
+SYMBOL				  TYPE     VALUE	LINE
+------------------------------------------------------------
+??ASEM_51			  NUMBER    8051
+??VERSION			  NUMBER    0130
+AC				  BIT	      D6
+ACC				  DATA	      E0
+ADD16				  CODE	    112A	2416
+AIRFLOW				  CODE	    0B6A	1555
+ATOF				  CODE	    0F94	2081
+ATOF2				  CODE	    0F84	2066
+ATOH				  CODE	    0F79	2059
+AUTOSLEEP			  CODE	    0558	 765
+AVERAGE				  CODE	    089D	1174
+AVRFC				  CODE	    17CA	2727
+AVRMODE				  CODE	    0800	1084
+B				  DATA	      F0
+B1				  NUMBER    000D	  39
+B2				  NUMBER    000E	  40
+BACKLIGHT			  CODE	    102E	2218
+BACKLIGHT2			  CODE	    1037	2223
+BEEPOFF				  CODE	    044F	 648
+BEEPSTATUS			  CODE	    0433	 636
+BL				  BIT	      A3	  20
+BLOFF				  CODE	    03E7	 602
+BLSTATUS			  CODE	    03C9	 589
+BTNBL				  BIT	      B3	  27
+BTNDN				  BIT	      B5	  29
+BTNMENU				  BIT	      B2	  26
+BTNUP				  BIT	      B4	  28
+BUFFER				  NUMBER    0020	  54
+BUZZER				  BIT	      A4	  21
+CALCULATE			  CODE	    095A	1275
+CATTEMP				  CODE	    0BA9	1589
+CDEL				  CODE	    11F9	2558
+CG3				  CODE	    14F9	2684
+CGLL				  CODE	    1521	2688
+CGLM				  CODE	    152B	2689
+CGLR				  CODE	    1535	2690
+CGM				  CODE	    14EF	2682
+CGUL				  CODE	    1503	2685
+CGUM				  CODE	    150D	2686
+CGUR				  CODE	    1517	2687
+CGX				  CODE	    153F	2692
+CHECK4				  CODE	    06E0	 937
+CHECKING			  CODE	    0154	 276
+CHIGH				  CODE	    11E9	2540
+CHKCAN				  CODE	    1286	2640
+CLEARMIL			  CODE	    0777	1021
+CLOW				  CODE	    11F1	2549
+CLRMIL				  CODE	    145C	2670
+CMDEQV				  CODE	    0C11	1645
+CONFIG				  NUMBER    0010	  42
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 58
+
+
+
+SYMBOL				  TYPE     VALUE	LINE
+------------------------------------------------------------
+CONNECT				  CODE	    01FF	 348
+CONSUMP				  CODE	    07DA	1068
+CONSUMP0			  CODE	    0368	 538
+CONSUMP2			  CODE	    0806	1088
+CONSUMP3			  CODE	    092D	1246
+CY				  BIT	      D7
+DEL100M				  CODE	    0FD6	2148
+DEL100M1			  CODE	    0FD8	2150
+DEL100M2			  CODE	    0FDC	2154
+DEL100M3			  CODE	    0FDA	2152
+DEL500M				  CODE	    0FC5	2133
+DEL500M1			  CODE	    0FC7	2135
+DEL500M2			  CODE	    0FCB	2139
+DEL500M3			  CODE	    0FC9	2137
+DEL5M				  CODE	    0FC0	2127
+DEL5M1				  CODE	    0373	 546
+DEL5M2				  CODE	    0377	 550
+DEL5M3				  CODE	    0375	 548
+DEL5SEC				  CODE	    0F71	2049
+DELS1				  CODE	    100B	2193
+DISPDTC				  CODE	    1446	2669
+DIV_1				  CODE	    10D9	2336
+DIV_LOOP			  CODE	    10BC	2311
+DPH				  DATA	      83
+DPL				  DATA	      82
+DTC				  CODE	    13E4	2663
+DTC1READ			  CODE	    06EF	 947
+DTCINTP				  CODE	    06F4	 951
+DTCPID				  CODE	    143C	2667
+DTCREAD				  CODE	    1442	2668
+EA				  BIT	      AF
+ECONFIG				  NUMBER    0000	  59
+ECUVOLT				  CODE	    0BDE	1618
+EEPERR				  NUMBER    0014	  48
+EEPSCL				  BIT	      A6	  23
+EEPSDA				  BIT	      A5	  22
+EEPWP				  BIT	      A7	  24
+EN				  BIT	      A2	  19
+ENGSPEED			  CODE	    0AF3	1484
+EPID1				  NUMBER    0001	  60
+EPID2				  NUMBER    0002	  61
+ES				  BIT	      AC
+ET0				  BIT	      A9
+ET1				  BIT	      AB
+EX0				  BIT	      A8
+EX1				  BIT	      AA
+EXTI0				  CODE	    0003
+EXTI1				  CODE	    0013
+F0				  BIT	      D5
+FCEXIT				  CODE	    0917	1237
+FCKEY				  CODE	    08F3	1221
+FCMODE				  CODE	    0908	1230
+FCNONZERO			  CODE	    08DA	1207
+FCPTR				  NUMBER    0015	  49
+FCZERO				  CODE	    08D8	1205
+FORMULA1			  CODE	    0A10	1359
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 59
+
+
+
+SYMBOL				  TYPE     VALUE	LINE
+------------------------------------------------------------
+FORMULA2			  CODE	    0A51	1394
+FORMULA3			  CODE	    0A7F	1420
+FUELTRIM			  CODE	    0AB5	1448
+GETB1B2				  CODE	    0EE1	1978
+GOSET				  CODE	    03A5	 573
+HO2SVOLT			  CODE	    0C43	1672
+HTOA				  CODE	    0F88	2073
+HTOD				  CODE	    0FE7	2165
+HTOD1				  CODE	    0FEE	2171
+HTOD2				  CODE	    0FFC	2180
+IE				  DATA	      A8
+IE0				  BIT	      89
+IE1				  BIT	      8B
+IGNTIME				  CODE	    0B34	1522
+INSTFC				  CODE	    17B4	2726
+INSTMODE			  CODE	    08C6	1196
+INT0				  BIT	      B2
+INT1				  BIT	      B3
+INTPDTC				  CODE	    1206	2573
+IP				  DATA	      B8
+IPR				  CODE	    1186	2484
+IPR9				  CODE	    11C2	2512
+IPRDB				  CODE	    11CC	2523
+IPRDB1				  CODE	    11D0	2526
+IPRDB2				  CODE	    11E5	2536
+IPW				  CODE	    1136	2432
+IPW9				  CODE	    115D	2450
+IPWRB				  CODE	    1169	2462
+IPWRB1				  CODE	    116D	2465
+IPWRB2				  CODE	    1182	2475
+IT0				  BIT	      88
+IT1				  BIT	      8A
+LCDDATA				  NUMBER    0080	  11
+LCD_CLS				  NUMBER    0001	  94
+LCD_HOME			  NUMBER    0002	  95
+LCD_SETCGADDR			  NUMBER    0040	 111
+LCD_SETDDADDR			  NUMBER    0080	 112
+LCD_SETFUNC			  NUMBER    0020	 107
+LCD_SETMODE			  NUMBER    0004	  96
+LCD_SETVISIBLE			  NUMBER    0008	  99
+LCD_SHIFT			  NUMBER    0010	 103
+LEDDN				  BIT	      B7	  31
+LEDUP				  BIT	      B6	  30
+LENGTH1				  CODE	    02EE	 474
+LENGTH2				  CODE	    0336	 512
+LIGHT1				  CODE	    103D	2228
+LIGHT11				  CODE	    106E	2251
+LIGHT2				  CODE	    1079	2261
+LIGHT22				  CODE	    10AA	2284
+LIMITCHK1			  NUMBER    0016	  50
+LIMITCHK2			  NUMBER    0017	  51
+LIMITFIN			  CODE	    148C	2674
+LIMITMSG			  CODE	    1476	2673
+LIMITREAD			  CODE	    00E5	 225
+LINE1				  CODE	    0C77	1702
+LINE12				  CODE	    0D6B	1786
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 60
+
+
+
+SYMBOL				  TYPE     VALUE	LINE
+------------------------------------------------------------
+LINE2				  CODE	    0D71	1792
+LINE22				  CODE	    0E65	1876
+LOADEEP				  CODE	    020A	 355
+LOWLIMIT1			  CODE	    1071	2254
+LOWLIMIT2			  CODE	    10AD	2287
+MAF				  CODE	    0846	1117
+MAFPID				  CODE	    14E9	2680
+MAIN				  CODE	    026B	 404
+MAIN2				  CODE	    02A5	 435
+MAIN3				  CODE	    027C	 414
+MENU1				  CODE	    12F4	2651
+MENU11				  CODE	    130A	2652
+MENU12				  CODE	    1320	2653
+MENU13				  CODE	    1335	2654
+MENU14				  CODE	    134B	2655
+MENU15				  CODE	    1361	2656
+MENU16				  CODE	    1377	2657
+MENU17				  CODE	    138C	2658
+MENU2				  CODE	    13B8	2661
+METER				  CODE	    0260	 397
+MILISON				  CODE	    06AF	 915
+MILOFF				  CODE	    13FA	2664
+MILON				  CODE	    1410	2665
+MILSTATUS			  CODE	    0785	1028
+MISO				  BIT	      96	  14
+MOSI				  BIT	      95	  13
+NODATA				  CODE	    1788	2724
+NOTCLR				  CODE	    07A1	1040
+NO_DATA				  CODE	    0F52	2035
+OV				  BIT	      D2
+P				  BIT	      D0
+P0				  DATA	      80
+P1				  DATA	      90
+P2				  DATA	      A0
+P3				  DATA	      B0
+PCON				  DATA	      87
+PDOWN1				  CODE	    180C	2730
+PDOWN2				  CODE	    1822	2731
+PID04				  CODE	    1549	2693
+PID05				  CODE	    155F	2694
+PID06				  CODE	    1575	2695
+PID07				  CODE	    158B	2696
+PID0A				  CODE	    15A1	2698
+PID0B				  CODE	    15B7	2699
+PID0C				  CODE	    15CD	2700
+PID0D				  CODE	    15E3	2701
+PID0E				  CODE	    15F9	2702
+PID0F				  CODE	    160F	2703
+PID1				  NUMBER    0008	  34
+PID10				  CODE	    1625	2704
+PID11				  CODE	    163B	2705
+PID14				  CODE	    1652	2706
+PID15				  CODE	    1668	2707
+PID1OK				  CODE	    04AE	 690
+PID2				  NUMBER    0009	  35
+PID2C				  CODE	    167E	2709
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 61
+
+
+
+SYMBOL				  TYPE     VALUE	LINE
+------------------------------------------------------------
+PID2D				  CODE	    1694	2710
+PID2E				  CODE	    16AA	2711
+PID2F				  CODE	    16C0	2712
+PID2OK				  CODE	    04EB	 716
+PID33				  CODE	    16D6	2714
+PID3C				  CODE	    16EC	2716
+PID3D				  CODE	    1702	2717
+PID42				  CODE	    1718	2719
+PID43				  CODE	    172E	2720
+PID44				  CODE	    1744	2721
+PID45				  CODE	    175C	2722
+PID46				  CODE	    1772	2723
+PIDOFF				  CODE	    052F	 745
+PIDSTATUS			  CODE	    0513	 733
+PIDTURN				  NUMBER    000A	  36
+PIDTURN2			  CODE	    0320	 500
+POS				  CODE	    0B4E	1538
+POSFT				  CODE	    0AD8	1468
+PS				  BIT	      BC
+PSW				  DATA	      D0
+PT0				  BIT	      B9
+PT1				  BIT	      BB
+PWRDOWN				  CODE	    0F0C	2004
+PX0				  BIT	      B8
+PX1				  BIT	      BA
+RB8				  BIT	      9A
+RBLOCK				  CODE	    0FA3	2103
+RBLOCK1				  CODE	    0FA5	2105
+RBLOCK2				  CODE	    0FAC	2109
+RBYTE				  CODE	    0FB8	2120
+RD				  BIT	      B7
+RDERR				  CODE	    17E0	2728
+READ8BIT			  CODE	    00E9	 228
+READERR				  CODE	    023A	 381
+RECEIVE				  CODE	    02D0	 458
+RELEASE				  CODE	    13A2	2659
+REN				  BIT	      9C
+RES				  CODE	    0000	 116
+RES1				  CODE	    0002	 118
+RESET				  CODE	    0000
+RESULTLEN			  NUMBER    000F	  41
+RI				  BIT	      98
+RS				  BIT	      A1	  18
+RS0				  BIT	      D3
+RS1				  BIT	      D4
+RW				  BIT	      A0	  17
+RXD				  BIT	      B0
+SBLOCK				  CODE	    0F98	2090
+SBLOCK1				  CODE	    0F9D	2095
+SBUF				  DATA	      99
+SBYTE				  CODE	    0FB0	2114
+SCK				  BIT	      97	  15
+SCON				  DATA	      98
+SELECT				  CODE	    039A	 568
+SERINIT1			  CODE	    128C	2641
+SERINIT2			  CODE	    1292	2642
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 62
+
+
+
+SYMBOL				  TYPE     VALUE	LINE
+------------------------------------------------------------
+SERINIT3			  CODE	    1298	2643
+SERINIT4			  CODE	    129E	2644
+SERINIT5			  CODE	    12A6	2645
+SERWS				  CODE	    12AE	2646
+SETBEEP				  CODE	    045E	 655
+SETBL				  CODE	    03F8	 610
+SETMIL				  CODE	    1426	2666
+SETMILOFF			  CODE	    07B0	1047
+SETPID				  CODE	    053E	 752
+SETPID1				  CODE	    048E	 677
+SETPID2				  CODE	    04CB	 703
+SETSLEEP			  CODE	    05A4	 797
+SETSOUND			  CODE	    0412	 623
+SETUP				  CODE	    036A	 541
+SETUP0				  CODE	    02CE	 455
+SETUPPID			  CODE	    0478	 668
+SHOWDTC				  CODE	    066D	 884
+SINT				  CODE	    0023
+SKIPNULL1			  CODE	    0724	 976
+SKIPNULL2			  CODE	    0723	 974
+SKIPPID				  CODE	    0930	1250
+SLEEPCNT			  NUMBER    0018	  52
+SLEEPOFF			  CODE	    0595	 790
+SLEEPSTATUS			  CODE	    0579	 778
+SM0				  BIT	      9F
+SM1				  BIT	      9E
+SM2				  BIT	      9D
+SOUND_BEEP			  CODE	    1007	2190
+SOUND_BEEP1			  CODE	    100D	2195
+SOUND_TRIG			  CODE	    1018	2203
+SOUND_TRIG0			  CODE	    1021	2208
+SOUND_TRIG1			  CODE	    1025	2211
+SP				  DATA	      81
+SPDMAF				  CODE	    179E	2725
+SPDPID				  CODE	    14E3	2679
+SPLEXIT				  CODE	    07CA	1058
+SPLFUNC				  CODE	    061F	 850
+T0				  BIT	      B4
+T1				  BIT	      B5
+TB8				  BIT	      9B
+TCON				  DATA	      88
+TEMP1				  NUMBER    0011	  45
+TEMP2				  NUMBER    0012	  46
+TEMP3				  NUMBER    0013	  47
+TF0				  BIT	      8D
+TF1				  BIT	      8F
+TH0				  DATA	      8C
+TH1				  DATA	      8D
+TI				  BIT	      99
+TIMER0				  CODE	    000B
+TIMER1				  CODE	    001B
+TITLE1				  CODE	    12B4	2647
+TITLE2				  CODE	    12C9	2648
+TITLE3				  CODE	    12DE	2649
+TL0				  DATA	      8A
+TL1				  DATA	      8B
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 63
+
+
+
+SYMBOL				  TYPE     VALUE	LINE
+------------------------------------------------------------
+TMOD				  DATA	      89
+TOGGLE				  CODE	    1460	2671
+TR0				  BIT	      8C
+TR1				  BIT	      8E
+TRYCAN				  CODE	    01B2	 315
+TRYCAN1				  CODE	    01CC	 326
+TRYCAN2				  CODE	    01D8	 331
+TRYCAN3				  CODE	    01E2	 337
+TURNONCHK			  CODE	    0F59	2040
+TXD				  BIT	      B1
+UDIV16				  CODE	    10B5	2307
+UGFIRM1				  CODE	    14A2	2675
+UGFIRM2				  CODE	    14B8	2676
+UGFIRM3				  CODE	    14CD	2677
+UMUL16				  CODE	    10EB	2364
+UPGRADE				  CODE	    010E	 248
+VEHINFO				  CODE	    13CE	2662
+VEHSPD				  CODE	    0821	1100
+VERSION				  CODE	    05BE	 810
+WDRESET				  CODE	    11FF	2566
+WDTRST				  NUMBER    00A6	  57
+WR				  BIT	      B6
+WRADDL1				  NUMBER    000B	  37
+WRADDL2				  NUMBER    000C	  38
+WRCHAR				  CODE	    0ED2	1963
+WRCMD				  CODE	    0EC3	1952
+WRERR				  CODE	    17F6	2729
+WRITEERR			  CODE	    05FD	 835
+WRSCR				  CODE	    0E99	1920
+WRSCR1				  CODE	    0E9B	1922
+WRSCR2				  CODE	    0EA8	1931
+WRSCR3				  CODE	    0EAD	1935
+WRSTR				  CODE	    0E6B	1883
+WRSTR1				  CODE	    0E6D	1885
+WRSTR2				  CODE	    0E7A	1894
+WRSTR3				  CODE	    0E83	1902
