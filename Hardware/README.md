@@ -14,9 +14,9 @@ This file displays images of the X-Meter hardware components and related PC soft
 ## Schematics and PCB Layouts
 
 ### Version 1
-![v1 Schematic](./v1/schematic.png)
-![v1 PCB Layout](./v1/pcb.png)
+![v1 Schematic](./X-METER1Eagle/prototype.jpg)
+![v1 PCB Layout](./X-METER1Eagle/XMETER1.jpg)
 
 ### Version 2
-![v2 Schematic](./v2/schematic.png)
-![v2 PCB Layout](./v2/pcb.png)
+![v2 Schematic](./X-METER2Eagle/pcb.png)
+![v2 PCB Layout](./X-METER2Eagle/schematic.jpg)
